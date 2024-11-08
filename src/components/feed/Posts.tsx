@@ -86,7 +86,7 @@ function PostBody({ channel, post }: { channel: Channel, post: Post }) {
     return (
         <>
             <Footnote weight="2" className="whitespace-pre-line">
-                {post.content.text.string}
+                {post.content.text?.string}
             </Footnote>
             <PostMedia post={post} />
         </>
