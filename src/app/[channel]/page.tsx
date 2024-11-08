@@ -1,5 +1,7 @@
 'use client';
 
+export const runtime = 'edge';
+
 import axios from 'axios';
 import useSWR from 'swr';
 
