@@ -14,7 +14,7 @@
     "deploy": "npm run pages:build && wrangler pages deploy"
   },
   "dependencies": {
-    "@vkontakte/icons": "^2.152.0",
+    "@vkontakte/icons": "^2.153.0",
     "@vkontakte/vkui": "^6.7.3",
     "axios": "^1.7.7",
     "clsx": "^2.1.1",
