@@ -1,0 +1,104 @@
+import { cn } from "@/lib/utils";
+
+import { useRouter } from "next/navigation";
+
+import {
+    Group,
+    SplitCol,
+    useAdaptivityConditionalRender,
+    Placeholder,
+    Avatar,
+    Button,
+    Paragraph,
+    Spacing,
+    Footnote,
+    Title as TitleVK,
+    DisplayTitle,
+    Gradient
+} from "@vkontakte/vkui";
+import { Icon20Verified } from "@vkontakte/icons";
+
+import { TitleProps, Body, Counters as CountersProps } from "@/types";
+import Link from "next/link";
+
+function Title({ children, verified }: TitleProps) {
+    return (
+        <div className="inline-flex">
+            <DisplayTitle level="1">{children}</DisplayTitle>
+            {verified && <Icon20Verified className="align-middle inline-block text-[--vkui--color_icon_accent] ml-1.5" />}
+        </div>
+    )
+}
+
+function Counters({ counters }: { counters: CountersProps }) {
+    return (
+        <div className="flex whitespace-nowrap overflow-hidden max-w-72">
+            {Object.entries(counters).map(([key, value], index) => (
+                <div key={index} className="inline-block whitespace-normal align-top basis-1/4 pr-5 box-border">
+                    <TitleVK level="3" className="inline-block w-full text-left">
+                        {value}
+                    </TitleVK>
+                    <Footnote className="vkuiPlaceholder__text inline-block capitalize align-top mt-1">
+                        {key}
+                    </Footnote>
+                </div>
+            ))}
+        </div>
+    )
+}
+
+function Footer() {
+    const footerLinks = [
+        { "name": "About", "href": "//telegram.org/faq" },
+        { "name": "Blog", "href": "//telegram.org/blog" },
+        { "name": "Apps", "href": "//telegram.org/apps" },
+        { "name": "Platform", "href": "//core.telegram.org" }
+    ];
+    return (
+        <div className="text-center pt-0 pb-2">
+            {footerLinks.map((item, index) => (
+                <div key={index} className="inline-block align-top px-2">
+                    <Footnote className="vkuiPlaceholder__text">
+                        <Link href={item.href}>
+                            {item.name}
+                        </Link>
+                    </Footnote>
+                </div>
+            ))}
+        </div>
+    )
+}
+
+export function Profile({ data }: { data: Body }) {
+    const { viewWidth } = useAdaptivityConditionalRender();
+    const router = useRouter();
+    return viewWidth.tabletPlus && (
+        <SplitCol className={cn(viewWidth.tabletPlus.className, "ScrollStickyWrapper")} width={280} maxWidth={280}>
+            <div className="fixed" style={{ width: "345px" }}>
+                <Group className="select-none p-0">
+                    <Gradient mode="tint" to="top" className="rounded-xl">
+                        <Placeholder
+                            className="pb-6"
+                            icon={<Avatar size={96} src={data.channel.avatar} />}
+                            header={<Title verified={data.channel.labels.includes("verified")}>{data.channel.title}</Title>}
+                            action={
+                                <>
+                                    <Counters counters={data.channel.counters} />
+                                    <Spacing size={12} />
+                                    <Paragraph className="select-text">{data.channel.description}</Paragraph>
+                                    <Spacing size={16} />
+                                    <Button size="l" mode="primary" onClick={() => { router.push(`https://t.me/${data.channel.username}`) }}>
+                                        Subscribe
+                                    </Button>
+                                </>
+                            }
+                        >
+                            @{data.channel.username}
+                        </Placeholder>
+                        <Footer />
+                    </Gradient>
+                </Group>
+            </div>
+        </SplitCol>
+    );
+}

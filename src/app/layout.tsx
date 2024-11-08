@@ -1,20 +1,37 @@
 import type { PropsWithChildren } from 'react';
-import type { Metadata } from 'next';
+import { Metadata, Viewport } from 'next';
 
-import { Root } from '@/components/Root/Root';
+import { siteConfig } from '@/config/site';
+
+import { Root } from '@/components/Root';
 
 import '@vkontakte/vkui/dist/vkui.css';
 import 'normalize.css/normalize.css';
 
 export const metadata: Metadata = {
-  title: 'Telegram Mini App',
-  description: 'This is an example of Telegram Mini App built with next.js',
-};
+  title: {
+    default: siteConfig.name,
+    template: `%s - ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png",
+  },
+}
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "white" },
+    { media: "(prefers-color-scheme: dark)", color: "black" },
+  ]
+}
 
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html>
-      <body>
+      <body className='antialiased'>
         <Root>
           {children}
         </Root>
