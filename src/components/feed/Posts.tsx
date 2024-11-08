@@ -1,8 +1,8 @@
 import formatDate from "@/helpers/date";
 import { Body, Channel, Post, TitleProps } from "@/types";
-import { Icon16Verified, Icon24MoreHorizontal } from "@vkontakte/icons";
+import { Icon16Verified, Icon16View, Icon24MoreHorizontal } from "@vkontakte/icons";
 
-import { Group, SplitCol, Flex, Avatar, Subhead, Headline, Footnote, Tappable, Spacing } from "@vkontakte/vkui";
+import { Group, SplitCol, Flex, Avatar, Subhead, Headline, Footnote, Tappable, Spacing, Caption } from "@vkontakte/vkui";
 
 function Title({ children, verified }: TitleProps) {
     return (
@@ -38,6 +38,7 @@ function MoreButton() {
                 <div className="relative">
                     <Tappable
                         onClick={console.log}
+                        className="rounded-lg"
                     >
                         <Icon24MoreHorizontal className="vkuiPlaceholder__text" />
                     </Tappable>
@@ -57,6 +58,32 @@ function PostHeader({ channel, post }: { channel: Channel, post: Post }) {
     )
 }
 
+function PostBody({ channel, post }: { channel: Channel, post: Post }) {
+    return (
+        <Footnote weight="2" className="whitespace-pre-line">
+            {post.content.text.string}
+        </Footnote>
+    )
+}
+
+function PostFooter({ post }: { post: Post }) {
+    return (
+        <div className="py-0 select-none">
+            <div className="flex items-center relative justify-between pt-3 pb-0">
+                <div></div>
+                <div className="flex items-center whitespace-nowrap overflow-hidden leading-[15px] h-3.5 vkuiPlaceholder__text">
+                    <span className="flex size-3.5 mr-1.5 vkuiPlaceholder__text">
+                        <Icon16View />
+                    </span>
+                    <Caption className="leading-[15px] h-3.5 text-sm/7 font-medium">
+                        {post.footer.views}
+                    </Caption>
+                </div>
+            </div>
+        </div>
+    )
+}
+
 export function Posts({ data }: { data: Body }) {
     const posts = data.content.posts.slice().reverse();
 
@@ -67,9 +94,9 @@ export function Posts({ data }: { data: Body }) {
                     <div className="py-2.5 px-4">
                         <PostHeader channel={data.channel} post={item} />
                         <Spacing />
-                        <Footnote key={index} weight="2" className="whitespace-pre-line">
-                            {item.content.text.string}
-                        </Footnote>
+                        <PostBody channel={data.channel} post={item} />
+                        <Spacing />
+                        <PostFooter post={item} />
                     </div>
                 </Group>
             ))}
