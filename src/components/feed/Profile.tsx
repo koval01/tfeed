@@ -25,7 +25,7 @@ function Title({ children, verified }: TitleProps) {
     return (
         <div className="inline-flex">
             <DisplayTitle level="1">{children}</DisplayTitle>
-            {verified && <Icon20Verified className="align-middle inline-block text-[--vkui--color_icon_accent] ml-1.5" />}
+            {verified && <Icon20Verified className="align-middle inline-block text-[--vkui--color_icon_accent] ml-1 relative top-0.5" />}
         </div>
     )
 }
