@@ -13,8 +13,12 @@ export const more = (channel: string, offset: number, refresh: boolean = false) 
     });
 }
 
-export const body = (channel: string, position: number | null = null) => {
-    return useSWR(`${process.env.NEXT_PUBLIC_API_HOST}/v1/body/${channel}/${position}`, fetcher, {
+export const body = (channel: string, position?: number) => {
+    const url = position === undefined
+        ? `${process.env.NEXT_PUBLIC_API_HOST}/v1/body/${channel}`
+        : `${process.env.NEXT_PUBLIC_API_HOST}/v1/body/${channel}?position=${position}`;
+
+    return useSWR(url, fetcher, {
         revalidateIfStale: false,
         revalidateOnFocus: false,
         revalidateOnReconnect: false
