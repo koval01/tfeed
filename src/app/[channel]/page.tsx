@@ -4,7 +4,7 @@ export const runtime = 'edge';
 
 import { ChannelPageProps } from '@/types/channel';
 
-import { body } from '@/components/feed/fetcher';
+import { useBody } from '@/components/feed/fetcher';
 import { Feed } from "@/components/feed";
 import { Error } from "@/components/Error";
 
@@ -12,7 +12,7 @@ import { PanelHeader, SplitCol, SplitLayout } from "@vkontakte/vkui";
 
 const ChannelPage: React.FC<ChannelPageProps> = ({ params }) => {
     const { channel } = params;
-    const { data, error, isLoading } = body(channel);
+    const { data, error, isLoading } = useBody(channel);
 
     return (
         <SplitLayout header={!error ? <PanelHeader delimiter="none" /> : null} className={isLoading ? "overflow-hidden" : ""}>

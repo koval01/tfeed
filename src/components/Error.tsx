@@ -31,8 +31,9 @@ function ErrorBody({ header, description, actions }: ErrorProps) {
 }
 
 export function Error({ header, description, actions, error }: ErrorProps) {
+    const router = useRouter();
+    
     if (error instanceof AxiosError) {
-        const router = useRouter();
         const errorData: ServerError = error.response?.data || {};
 
         return (

@@ -3,17 +3,18 @@ import useSWR from 'swr';
 
 const fetcher = (url: string) => axios.get(url).then(res => res.data);
 
-export const more = (channel: string, offset: number, refresh: boolean = false) => {
+export const useMore = (channel: string, offset: number, refresh: boolean = false) => {
     return useSWR(
-        `${process.env.NEXT_PUBLIC_API_HOST}/v1/more/${channel}/${!refresh ? "before" : "after"}/${offset}`, 
-    fetcher, {
+        `${process.env.NEXT_PUBLIC_API_HOST}/v1/more/${channel}/${!refresh ? "before" : "after"}/${offset}`,
+        fetcher, {
         revalidateIfStale: false,
         revalidateOnFocus: false,
         revalidateOnReconnect: false
-    });
+    }
+    );
 }
 
-export const body = (channel: string, position?: number) => {
+export const useBody = (channel: string, position?: number) => {
     const url = position === undefined
         ? `${process.env.NEXT_PUBLIC_API_HOST}/v1/body/${channel}`
         : `${process.env.NEXT_PUBLIC_API_HOST}/v1/body/${channel}?position=${position}`;
