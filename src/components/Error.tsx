@@ -11,20 +11,22 @@ import { useRouter } from "next/navigation";
 
 function ErrorBody({ header, description, actions }: ErrorProps) {
     return (
-        <Placeholder
-            icon={<Icons.logo className="size-16 md:size-24 lg:size-32 xl:size-40" />}
-            header={header}
-            action={!!actions ? (
-                <Button type="primary" size="l" onClick={actions.click}>
-                    {actions.name}
-                </Button>
-            ) : null}
-            className="select-none"
-        >
-            <Paragraph>
-                {description}
-            </Paragraph>
-        </Placeholder>
+        <div className="max-md:w-screen">
+            <Placeholder
+                icon={<Icons.logo className="size-16 md:size-24 lg:size-32 xl:size-40" />}
+                header={header}
+                action={!!actions ? (
+                    <Button type="primary" size="l" onClick={actions.click}>
+                        {actions.name}
+                    </Button>
+                ) : null}
+                className="select-none max-md:px-0"
+            >
+                <Paragraph>
+                    {description}
+                </Paragraph>
+            </Placeholder>
+        </div>
     );
 }
 
