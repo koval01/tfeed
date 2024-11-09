@@ -18,11 +18,11 @@ interface ChannelPageProps {
 
 const ChannelPage: React.FC<ChannelPageProps> = ({ params }) => {
     const { channel } = params;
-    const { data, error, isLoading } = useSWR(`https://telegram.koval.page/v1/body/${channel}`, fetcher, {
+    const { data, error, isLoading } = useSWR(`${process.env.NEXT_PUBLIC_API_HOST}/v1/body/${channel}`, fetcher, {
         revalidateIfStale: false,
         revalidateOnFocus: false,
         revalidateOnReconnect: false
-    })
+    });
 
     return (
         <SplitLayout header={<PanelHeader delimiter="none" />}>

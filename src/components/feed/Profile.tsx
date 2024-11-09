@@ -18,7 +18,7 @@ import {
 } from "@vkontakte/vkui";
 import { Icon20Verified } from "@vkontakte/icons";
 
-import { TitleProps, Body, Counters as CountersProps } from "@/types";
+import { TitleProps, Channel, Counters as CountersProps } from "@/types";
 import Link from "next/link";
 
 function Title({ children, verified }: TitleProps) {
@@ -69,9 +69,10 @@ function Footer() {
     )
 }
 
-export function Profile({ data }: { data: Body }) {
+export function Profile({ channel }: { channel: Channel }) {
     const { viewWidth } = useAdaptivityConditionalRender();
     const router = useRouter();
+
     return viewWidth.tabletPlus && (
         <SplitCol className={cn(viewWidth.tabletPlus.className, "ScrollStickyWrapper")} width={280} maxWidth={280}>
             <div className="fixed" style={{ width: "345px" }}>
@@ -79,21 +80,21 @@ export function Profile({ data }: { data: Body }) {
                     <Gradient mode="tint" to="top" className="rounded-xl">
                         <Placeholder
                             className="pb-6"
-                            icon={<Avatar size={96} src={data.channel.avatar} />}
-                            header={<Title verified={data.channel.labels.includes("verified")}>{data.channel.title}</Title>}
+                            icon={<Avatar size={96} src={channel.avatar} />}
+                            header={<Title verified={channel.labels.includes("verified")}>{channel.title}</Title>}
                             action={
                                 <>
-                                    <Counters counters={data.channel.counters} />
+                                    <Counters counters={channel.counters} />
                                     <Spacing size={12} />
-                                    <Paragraph className="select-text">{data.channel.description}</Paragraph>
+                                    <Paragraph className="select-text">{channel.description}</Paragraph>
                                     <Spacing size={16} />
-                                    <Button size="l" mode="primary" onClick={() => { router.push(`https://t.me/${data.channel.username}`) }}>
+                                    <Button size="l" mode="primary" onClick={() => { router.push(`https://t.me/${channel.username}`) }}>
                                         Subscribe
                                     </Button>
                                 </>
                             }
                         >
-                            @{data.channel.username}
+                            @{channel.username}
                         </Placeholder>
                         <Footer />
                     </Gradient>

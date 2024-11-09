@@ -92,17 +92,15 @@ function PostBody({ channel, post }: { channel: Channel, post: Post }) {
     )
 }
 
-export function Posts({ data }: { data: Body }) {
-    const posts = data.content.posts.slice().reverse();
-
+export function Posts({ channel, posts }: { channel: Channel, posts: Post[] }) {
     return (
         <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>
             {posts.map((item, index) => (
                 <Group key={index}>
                     <div className="py-2.5 px-4">
-                        <PostHeader channel={data.channel} post={item} />
+                        <PostHeader channel={channel} post={item} />
                         <Spacing />
-                        <PostBody channel={data.channel} post={item} />
+                        <PostBody channel={channel} post={item} />
                         <Spacing />
                         <PostFooter post={item} />
                     </div>
