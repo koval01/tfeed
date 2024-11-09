@@ -73,7 +73,7 @@ interface Poll {
     options: PollOptions[];
 }
 
-interface Media {
+export interface Media {
     url: string;
     thumb: string;
     waves: string;

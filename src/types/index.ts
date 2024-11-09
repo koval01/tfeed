@@ -1,2 +1,2 @@
 export type { TitleProps } from "./profile";
-export type { Body, Counters, Channel, Post } from "./body";
+export type { Body, Counters, Channel, Post, Media } from "./body";

@@ -1,7 +1,8 @@
 import formatDate from "@/helpers/date";
-import { Body, Channel, Post, TitleProps } from "@/types";
-import { Icon16Verified, Icon16View, Icon24MoreHorizontal } from "@vkontakte/icons";
 
+import { Body, Channel, Post, TitleProps } from "@/types";
+
+import { Icon16Verified, Icon16View, Icon24MoreHorizontal } from "@vkontakte/icons";
 import { Group, SplitCol, Flex, Avatar, Subhead, Headline, Footnote, Tappable, Spacing, Caption } from "@vkontakte/vkui";
 
 function Title({ children, verified }: TitleProps) {
@@ -77,9 +78,7 @@ function PostFooter({ post }: { post: Post }) {
 }
 
 function PostMedia({ post }: { post: Post }) {
-    return (
-        <></>
-    )
+    return <></>;
 }
 
 function PostBody({ channel, post }: { channel: Channel, post: Post }) {
