@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
-
 import { Body, Post } from "@/types";
 
-import { Flex, Panel, PanelHeader, Spinner, SplitLayout } from "@vkontakte/vkui";
+import { Panel, PanelHeader, SplitLayout } from "@vkontakte/vkui";
+
+import { 
+    Posts as PostsSkeleton, 
+    Profile as ProfileSkeleton 
+} from "./Skeleton";
 
 import { MainNav } from "@/components/main-nav";
 import { Posts } from "./Posts";
@@ -18,9 +22,10 @@ export function Feed({ data, error, isLoading }: { data: Body, error: any, isLoa
             <PanelHeader before={<MainNav />}></PanelHeader>
             <SplitLayout center>
                 {isLoading || error ? (
-                    <Flex aria-busy={true} aria-live="polite" direction="column" gap={32} margin="auto">
-                        <Spinner size="medium" />
-                    </Flex>
+                    <>
+                        <PostsSkeleton />
+                        <ProfileSkeleton />
+                    </>
                 ) : (
                     <>
                         <Posts channel={data.channel} posts={items} />
