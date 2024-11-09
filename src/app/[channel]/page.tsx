@@ -2,27 +2,16 @@
 
 export const runtime = 'edge';
 
-import axios from 'axios';
-import useSWR from 'swr';
+import { ChannelPageProps } from '@/types/channel';
 
+import { body } from '@/components/feed/fetcher';
 import { Feed } from "@/components/feed";
+
 import { PanelHeader, SplitCol, SplitLayout } from "@vkontakte/vkui";
-
-const fetcher = (url: string) => axios.get(url).then(res => res.data)
-
-interface ChannelPageProps {
-    params: {
-        channel: string;
-    };
-}
 
 const ChannelPage: React.FC<ChannelPageProps> = ({ params }) => {
     const { channel } = params;
-    const { data, error, isLoading } = useSWR(`${process.env.NEXT_PUBLIC_API_HOST}/v1/body/${channel}`, fetcher, {
-        revalidateIfStale: false,
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false
-    });
+    const { data, error, isLoading } = body(channel);
 
     return (
         <SplitLayout header={<PanelHeader delimiter="none" />}>
