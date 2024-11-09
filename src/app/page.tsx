@@ -1,15 +1,29 @@
 'use client';
 
-import { Feed } from "@/components/feed";
-import { Group, PanelHeader, SplitCol, SplitLayout } from "@vkontakte/vkui";
+import { FixedCenter } from "@/components/fixed-center";
+
+import { 
+  DisplayTitle,
+  Headline,
+  Placeholder, 
+  SplitCol, 
+  SplitLayout 
+} from "@vkontakte/vkui";
 
 export default function Home() {
   return (
-    <SplitLayout header={<PanelHeader delimiter="none" />}>
+    <SplitLayout>
       <SplitCol autoSpaced>
-        <Group>
-          Nothing
-        </Group>
+        <FixedCenter>
+          <Placeholder>
+            <DisplayTitle className="select-none">
+              Nothing
+            </DisplayTitle>
+          </Placeholder>
+          <Headline className="text-center">
+            Unfortunately the main page is empty for now, it is still under development.
+          </Headline>
+        </FixedCenter>
       </SplitCol>
     </SplitLayout>
   );

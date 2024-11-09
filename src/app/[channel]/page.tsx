@@ -6,6 +6,7 @@ import { ChannelPageProps } from '@/types/channel';
 
 import { body } from '@/components/feed/fetcher';
 import { Feed } from "@/components/feed";
+import { Error } from "@/components/Error";
 
 import { PanelHeader, SplitCol, SplitLayout } from "@vkontakte/vkui";
 
@@ -14,9 +15,9 @@ const ChannelPage: React.FC<ChannelPageProps> = ({ params }) => {
     const { data, error, isLoading } = body(channel);
 
     return (
-        <SplitLayout header={<PanelHeader delimiter="none" />} className={isLoading ? "overflow-hidden" : ""}>
+        <SplitLayout header={!error ? <PanelHeader delimiter="none" /> : null} className={isLoading ? "overflow-hidden" : ""}>
             <SplitCol autoSpaced>
-                <Feed data={data} error={error} isLoading={isLoading} />
+                {!error ? <Feed data={data} isLoading={isLoading} /> : <Error error={error} />}
             </SplitCol>
         </SplitLayout>
     );

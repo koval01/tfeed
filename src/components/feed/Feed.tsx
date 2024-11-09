@@ -12,7 +12,7 @@ import { MainNav } from "@/components/main-nav";
 import { Posts } from "./Posts";
 import { Profile } from "./Profile";
 
-export function Feed({ data, error, isLoading }: { data: Body, error: any, isLoading: boolean }) {
+export function Feed({ data, isLoading }: { data: Body, isLoading: boolean }) {
     const [items, setItems] = useState<Post[]>(() => []);
     
     useEffect(() => setItems((prevItems) => [...data?.content?.posts?.slice().reverse() || [], ...prevItems]), [data]);
@@ -21,7 +21,7 @@ export function Feed({ data, error, isLoading }: { data: Body, error: any, isLoa
         <Panel>
             <PanelHeader before={<MainNav />}></PanelHeader>
             <SplitLayout center>
-                {isLoading || error ? (
+                {isLoading ? (
                     <>
                         <PostsSkeleton />
                         <ProfileSkeleton />

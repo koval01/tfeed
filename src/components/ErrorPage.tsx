@@ -2,6 +2,8 @@
 
 import { useEffect } from 'react';
 
+import { Error } from './Error';
+
 export function ErrorPage({
   error,
   reset,
@@ -15,14 +17,10 @@ export function ErrorPage({
   }, [error]);
 
   return (
-    <div className="p-2">
-      <b>An unhandled error occurred!</b>
-      <blockquote>
-        <pre>
-          {error.message}
-        </pre>
-      </blockquote>
-      {reset && <button onClick={() => reset()}>Try again</button>}
-    </div>
-  );
+    <Error header="An unhandled error occurred!" description={error.message} actions={
+      !reset ? undefined :
+        {
+          click: reset, name: "Try again"
+        }} />
+  )
 }
