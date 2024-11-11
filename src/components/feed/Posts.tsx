@@ -3,7 +3,7 @@ import formatDate from "@/helpers/date";
 import { Body, Channel, Post, TitleProps } from "@/types";
 
 import { Icon16Verified, Icon16View, Icon24MoreHorizontal } from "@vkontakte/icons";
-import { Group, SplitCol, Flex, Avatar, Subhead, Headline, Footnote, Tappable, Spacing, Caption } from "@vkontakte/vkui";
+import { Group, SplitCol, Flex, Avatar, Subhead, Headline, Footnote, Tappable, Spacing, Caption, PullToRefresh } from "@vkontakte/vkui";
 
 function Title({ children, verified }: TitleProps) {
     return (
@@ -92,20 +92,22 @@ function PostBody({ channel, post }: { channel: Channel, post: Post }) {
     )
 }
 
-export function Posts({ channel, posts }: { channel: Channel, posts: Post[] }) {
+export function Posts({ channel, posts, onRefresh, isFetching }: { channel: Channel, posts: Post[], onRefresh: () => void, isFetching: boolean }) {
     return (
         <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>
-            {posts.map((item, index) => (
-                <Group key={index}>
-                    <div className="py-2.5 px-4">
-                        <PostHeader channel={channel} post={item} />
-                        <Spacing />
-                        <PostBody channel={channel} post={item} />
-                        <Spacing />
-                        <PostFooter post={item} />
-                    </div>
-                </Group>
-            ))}
+            <PullToRefresh onRefresh={onRefresh} isFetching={isFetching}>
+                {posts.map((item, index) => (
+                    <Group key={index}>
+                        <div className="py-2.5 px-4">
+                            <PostHeader channel={channel} post={item} />
+                            <Spacing />
+                            <PostBody channel={channel} post={item} />
+                            <Spacing />
+                            <PostFooter post={item} />
+                        </div>
+                    </Group>
+                ))}
+            </PullToRefresh>
         </SplitCol>
     );
 }

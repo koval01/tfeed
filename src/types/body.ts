@@ -21,9 +21,9 @@ interface Meta {
     offset: Offset | null;
 }
 
-interface Offset {
-    before: number;
-    after: number;
+export interface Offset {
+    before?: number;
+    after?: number;
 }
 
 export interface Post {

@@ -10,9 +10,9 @@ const useInternalSWR = (url: string) => useSWR(
     revalidateOnReconnect: false
 });
 
-export const useMore = (channel: string, offset: number, refresh: boolean = false) => {
+export const getMore = async (channel: string, offset: number, refresh: boolean = false) => {
     const url = `${process.env.NEXT_PUBLIC_API_HOST}/v1/more/${channel}/${!refresh ? "before" : "after"}/${offset}`;
-    return useInternalSWR(url);
+    return await fetcher(url);
 }
 
 export const useBody = (channel: string, position?: number) => {
