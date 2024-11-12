@@ -11,43 +11,30 @@ export const onRefresh = async (
     setIsFetching: (value: SetStateAction<boolean>) => void,
     setPosts: (value: SetStateAction<Post[]>) => void,
     setOffset: (value: SetStateAction<Offset>) => void,
-    showErrorSnackbar: (message: string, Icon?: FC, iconColor?: string | null) => void
+    showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string | null) => void
 ) => {
     if (!channelUsername || !offset.after) return;
-
     setIsFetching(true);
 
     try {
         const data = await getMore(channelUsername, offset.after, true);
-
         const posts = data?.posts?.slice().reverse() || [];
-        setPosts((prevPosts) => [...posts, ...prevPosts]);
-        setOffset((prevOffset) => ({
-            ...prevOffset,
-            after: data?.posts[0]?.id,
-        }));
 
-        showErrorSnackbar(
-            "The feed has been updated successfully.",
-            Icon28CheckCircleFill,
-            null
-        );
+        setPosts(prevPosts => [...posts, ...prevPosts]);
+        setOffset(prevOffset => ({ ...prevOffset, after: data?.posts[0]?.id }));
+
+        showErrorSnackbar?.("The feed has been updated successfully.", Icon28CheckCircleFill, null);
     } catch (err) {
-        if (err instanceof AxiosError) {
-            if (err.response?.status === 404) {
-                showErrorSnackbar(
-                    "The feed has been updated, but there are no new entries yet.",
-                    Icon28SearchStarsOutline,
-                    "--vkui--color_icon_accent"
-                );
-            } else {
-                console.error("Error refreshing data", err);
-                showErrorSnackbar(`Error refreshing data. Status: ${err.response?.statusText || err.message}`);
-            }
-        } else {
-            console.error("Error refreshing data", err);
-            showErrorSnackbar(`Error refreshing data.`);
-        }
+        const is404 = err instanceof AxiosError && err.response?.status === 404;
+        if (!is404) console.error("Error refreshing data", err);
+        
+        showErrorSnackbar?.(
+            is404
+                ? "The feed has been updated, but there are no new entries yet."
+                : `Error refreshing data${err instanceof AxiosError ? `. Status: ${err.response?.statusText || err.message}` : '.'}`,
+            is404 ? Icon28SearchStarsOutline : undefined,
+            is404 ? "--vkui--color_icon_accent" : null
+        );
     } finally {
         setIsFetching(false);
     }
