@@ -43,16 +43,14 @@ export function Feed({ data, isLoading }: { data: Body, isLoading: boolean }) {
         setChannelUsername(data?.channel?.username);
     }, [data]);
 
-    const refreshPosts = async (showError = false) => {
-        await onRefreshAction(
-            channelUsername,
-            offset,
-            setIsFetching,
-            setPosts,
-            setOffset,
-            showError ? showErrorSnackbar : void 0
-        );
-    };
+    const refreshPosts = async (showError = false) => await onRefreshAction(
+        channelUsername,
+        offset,
+        setIsFetching,
+        setPosts,
+        setOffset,
+        showError ? showErrorSnackbar : void 0
+    );
 
     useEffect(() => {
         const backgroundRefresh = async () => {
