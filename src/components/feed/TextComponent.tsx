@@ -4,7 +4,7 @@ import type { DOMNode, Element, HTMLReactParserOptions, Text } from 'html-react-
 
 import styles from '@/styles/emoji.module.css';
 
-export function TextComponent({ htmlString }: { htmlString: string }) {
+export function TextComponent({ htmlString }: { htmlString?: string }) {
     const options: HTMLReactParserOptions = {
         replace: (domNode: DOMNode) => {
             if ((domNode as Element).name === 'a' && (domNode as Element).attribs?.href) {
@@ -35,7 +35,7 @@ export function TextComponent({ htmlString }: { htmlString: string }) {
         },
     };
 
-    return (
+    return htmlString && (
         <div>
             <Footnote weight="2" className="whitespace-pre-line">
                 {parse(htmlString, options)}
