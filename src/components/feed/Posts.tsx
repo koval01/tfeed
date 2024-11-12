@@ -3,8 +3,10 @@ import formatDate from "@/helpers/date";
 import { Channel, Post, TitleProps } from "@/types";
 
 import { Avatar } from "@/components/Avatar";
+import { TextComponent } from "@/components/feed/TextComponent";
+
 import { Icon16Verified, Icon16View, Icon20UserPenOutline, Icon24ShareOutline } from "@vkontakte/icons";
-import { Group, SplitCol, Flex, Subhead, Headline, Footnote, Tappable, Spacing, Caption, PullToRefresh, Link } from "@vkontakte/vkui";
+import { Group, SplitCol, Flex, Subhead, Headline, Tappable, Spacing, Caption, PullToRefresh, Link } from "@vkontakte/vkui";
 
 function Title({ children, verified }: TitleProps) {
     return (
@@ -80,14 +82,16 @@ function PostFooter({ post }: { post: Post }) {
                         </Caption>
                     </div>
                 ) : <div />}
-                <div className="flex items-center whitespace-nowrap overflow-hidden leading-[15px] h-3.5 vkuiPlaceholder__text">
-                    <span className="flex size-3.5 mr-1.5 vkuiPlaceholder__text">
-                        <Icon16View />
-                    </span>
-                    <Caption className="relative leading-[15px] h-3.5 text-sm/7 font-medium">
-                        {post.footer.views}
-                    </Caption>
-                </div>
+                {post.footer.views && (
+                    <div className="flex items-center whitespace-nowrap overflow-hidden leading-[15px] h-3.5 vkuiPlaceholder__text">
+                        <span className="flex size-3.5 mr-1.5 vkuiPlaceholder__text">
+                            <Icon16View />
+                        </span>
+                        <Caption className="relative leading-[15px] h-3.5 text-sm/7 font-medium">
+                            {post.footer.views}
+                        </Caption>
+                    </div>
+                )}
             </div>
         </div>
     )
@@ -100,9 +104,7 @@ function PostMedia({ post }: { post: Post }) {
 function PostBody({ channel, post }: { channel: Channel, post: Post }) {
     return (
         <>
-            <Footnote weight="2" className="whitespace-pre-line">
-                {post.content.text?.string}
-            </Footnote>
+            <TextComponent htmlString={post.content.text?.html} />
             <PostMedia post={post} />
         </>
     )
