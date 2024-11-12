@@ -2,8 +2,9 @@ import formatDate from "@/helpers/date";
 
 import { Channel, Post, TitleProps } from "@/types";
 
+import { Avatar } from "@/components/Avatar";
 import { Icon16Verified, Icon16View, Icon20UserPenOutline, Icon24ShareOutline } from "@vkontakte/icons";
-import { Group, SplitCol, Flex, Avatar, Subhead, Headline, Footnote, Tappable, Spacing, Caption, PullToRefresh, Link } from "@vkontakte/vkui";
+import { Group, SplitCol, Flex, Subhead, Headline, Footnote, Tappable, Spacing, Caption, PullToRefresh, Link } from "@vkontakte/vkui";
 
 function Title({ children, verified }: TitleProps) {
     return (
@@ -52,7 +53,9 @@ function MoreButton({ channel, post }: { channel: Channel, post: Post }) {
 function PostHeader({ channel, post }: { channel: Channel, post: Post }) {
     return (
         <Flex className="flex-row select-none">
-            <Avatar src={channel.avatar} size={40} className="mr-3" />
+            <div className="mr-3">
+                <Avatar src={channel.avatar} size={40} name={channel.title} />
+            </div>
             <HeadProfile channel={channel} post={post} />
             <MoreButton channel={channel} post={post} />
         </Flex>
