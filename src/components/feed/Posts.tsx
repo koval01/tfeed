@@ -1,9 +1,9 @@
 import formatDate from "@/helpers/date";
 
-import { Body, Channel, Post, TitleProps } from "@/types";
+import { Channel, Post, TitleProps } from "@/types";
 
-import { Icon16Verified, Icon16View, Icon24MoreHorizontal } from "@vkontakte/icons";
-import { Group, SplitCol, Flex, Avatar, Subhead, Headline, Footnote, Tappable, Spacing, Caption, PullToRefresh } from "@vkontakte/vkui";
+import { Icon16Verified, Icon16View, Icon20UserPenOutline, Icon24ShareOutline } from "@vkontakte/icons";
+import { Group, SplitCol, Flex, Avatar, Subhead, Headline, Footnote, Tappable, Spacing, Caption, PullToRefresh, Link } from "@vkontakte/vkui";
 
 function Title({ children, verified }: TitleProps) {
     return (
@@ -30,7 +30,7 @@ function HeadProfile({ channel, post }: { channel: Channel, post: Post }) {
     )
 }
 
-function MoreButton() {
+function MoreButton({ channel, post }: { channel: Channel, post: Post }) {
     return (
         <div className="relative flex" style={{
             flex: "0 0 auto"
@@ -38,10 +38,10 @@ function MoreButton() {
             <div className="flex items-center">
                 <div className="relative">
                     <Tappable
-                        onClick={console.log}
+                        onClick={() => window.open(`https://t.me/${channel.username}/${post.id}`, "_blank")}
                         className="rounded-lg"
                     >
-                        <Icon24MoreHorizontal className="vkuiPlaceholder__text" />
+                        <Icon24ShareOutline className="vkuiPlaceholder__text" />
                     </Tappable>
                 </div>
             </div>
@@ -54,7 +54,7 @@ function PostHeader({ channel, post }: { channel: Channel, post: Post }) {
         <Flex className="flex-row select-none">
             <Avatar src={channel.avatar} size={40} className="mr-3" />
             <HeadProfile channel={channel} post={post} />
-            <MoreButton />
+            <MoreButton channel={channel} post={post} />
         </Flex>
     )
 }
@@ -63,12 +63,23 @@ function PostFooter({ post }: { post: Post }) {
     return (
         <div className="py-0 select-none">
             <div className="flex items-center relative justify-between pt-3 pb-0">
-                <div></div>
+                {post.forwarded ? (
+                    <div className="flex items-center leading-[15px] h-3.5 vkuiPlaceholder__text">
+                        <span className="flex size-4 mr-1.5 vkuiPlaceholder__text">
+                            <Icon20UserPenOutline />
+                        </span>
+                        <Caption className="relative top-0.5 leading-[15px] h-3.5 text-sm/7 font-medium">
+                            <Link href={post.forwarded.url}>
+                                {post.forwarded.name}
+                            </Link>
+                        </Caption>
+                    </div>
+                ) : <div />}
                 <div className="flex items-center whitespace-nowrap overflow-hidden leading-[15px] h-3.5 vkuiPlaceholder__text">
                     <span className="flex size-3.5 mr-1.5 vkuiPlaceholder__text">
                         <Icon16View />
                     </span>
-                    <Caption className="leading-[15px] h-3.5 text-sm/7 font-medium">
+                    <Caption className="relative leading-[15px] h-3.5 text-sm/7 font-medium">
                         {post.footer.views}
                     </Caption>
                 </div>
