@@ -7,9 +7,9 @@
     white-space: nowrap;
     overflow: hidden;
     position: relative;
-    background: no-repeat -1000px -1000px;
-    background-size: 1.25em 1.25em;
-    text-indent: -10em;
-    padding: 3px 3px 3px 2px;
-    margin: -3px -2px;
+    background: no-repeat;
+    background-size: contain;
+    /* text-indent: -10em; */
+    /* padding: 3px 3px 3px 2px; */
+    /* margin: -3px -2px; */
 }
