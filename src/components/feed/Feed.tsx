@@ -25,10 +25,10 @@ export function Feed({ data, isLoading }: { data: Body, isLoading: boolean }) {
 
     const showErrorSnackbar = useCallback((message: string, Icon?: FC, iconColor?: string | null) => {
         if (!snackbar)
-            setSnackbar(<ErrorSnackbar 
-                text={message} 
-                onClose={() => setSnackbar(null)} 
-                Icon={Icon ?? Icon} 
+            setSnackbar(<ErrorSnackbar
+                text={message}
+                onClose={() => setSnackbar(null)}
+                Icon={Icon ?? Icon}
                 iconColor={iconColor ?? iconColor}
             />);
     }, [snackbar]);
@@ -43,14 +43,25 @@ export function Feed({ data, isLoading }: { data: Body, isLoading: boolean }) {
         setChannelUsername(data?.channel?.username);
     }, [data]);
 
-    const onRefresh = async () => await onRefreshAction(
-        channelUsername, 
-        offset, 
-        setIsFetching, 
-        setPosts, 
-        setOffset, 
-        showErrorSnackbar
-    );
+    const refreshPosts = async (showError = false) => {
+        await onRefreshAction(
+            channelUsername,
+            offset,
+            setIsFetching,
+            setPosts,
+            setOffset,
+            showError ? showErrorSnackbar : void 0
+        );
+    };
+
+    useEffect(() => {
+        const backgroundRefresh = async () => {
+            await refreshPosts();
+        };
+
+        const intervalId = setInterval(backgroundRefresh, 1e4);
+        return () => clearInterval(intervalId);
+    }, [channelUsername, offset]);
 
     return (
         <Panel>
@@ -63,7 +74,7 @@ export function Feed({ data, isLoading }: { data: Body, isLoading: boolean }) {
                     </>
                 ) : (
                     <>
-                        <Posts channel={data.channel} posts={posts} onRefresh={onRefresh} isFetching={isFetching} />
+                        <Posts channel={data.channel} posts={posts} onRefresh={() => refreshPosts(true)} isFetching={isFetching} />
                         <Profile channel={data.channel} />
                         {snackbar}
                     </>
