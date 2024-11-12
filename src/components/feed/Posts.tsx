@@ -69,9 +69,11 @@ function PostFooter({ post }: { post: Post }) {
                             <Icon20UserPenOutline />
                         </span>
                         <Caption className="relative top-0.5 leading-[15px] h-3.5 text-sm/7 font-medium">
-                            <Link href={post.forwarded.url}>
-                                {post.forwarded.name}
-                            </Link>
+                            {post.forwarded.url ? (
+                                <Link href={post.forwarded.url}>
+                                    {post.forwarded.name}
+                                </Link>
+                            ) : post.forwarded.name}
                         </Caption>
                     </div>
                 ) : <div />}
