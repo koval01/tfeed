@@ -7,7 +7,6 @@ import {
     SplitCol,
     useAdaptivityConditionalRender,
     Placeholder,
-    Avatar,
     Button,
     Paragraph,
     Spacing,
@@ -17,6 +16,8 @@ import {
     Gradient
 } from "@vkontakte/vkui";
 import { Icon20Verified } from "@vkontakte/icons";
+
+import { Avatar } from "@/components/Avatar";
 
 import { TitleProps, Channel, Counters as CountersProps } from "@/types";
 import Link from "next/link";

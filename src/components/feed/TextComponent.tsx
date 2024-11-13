@@ -3,6 +3,7 @@ import parse from 'html-react-parser';
 import type { DOMNode, Element, HTMLReactParserOptions, Text } from 'html-react-parser';
 
 import styles from '@/styles/emoji.module.css';
+import { nextImage } from '@/helpers/nextImage';
 
 export function TextComponent({ htmlString }: { htmlString?: string }) {
     const options: HTMLReactParserOptions = {
@@ -23,10 +24,11 @@ export function TextComponent({ htmlString }: { htmlString?: string }) {
 
                 const text = element.children[0] && (element.children[0] as Text).data;
 
+                const emojiUrl = nextImage(`https:${emojiBackground}`, 40);
                 return (
                     <span
                         className={styles.emoji}
-                        style={{ backgroundImage: `url(https:${emojiBackground})` }}
+                        style={{ backgroundImage: `url(${emojiUrl})` }}
                     >
                         {text}
                     </span>
