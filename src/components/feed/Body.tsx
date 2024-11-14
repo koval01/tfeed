@@ -7,10 +7,16 @@ import { Caption, Flex, Headline, Subhead, Tappable } from "@vkontakte/vkui";
 import { Avatar } from "@/components/Avatar";
 
 const Title = ({ children, verified }: TitleProps) => (
-    <>
-        <Headline level="2" weight="1">{children}</Headline>
-        {verified && <Icon16Verified className="align-top inline-block text-[--vkui--color_icon_accent] ml-1" />}
-    </>
+    <div className="overflow-hidden text-ellipsis leading-4 font-medium" style={{ display: "inherit", fontSize: "13px" }}>
+        <Headline level="2" className="inline-flex max-w-full overflow-hidden text-ellipsis leading-4" style={{ fontSize: "13px" }}>
+            {children}
+        </Headline>
+        {verified && (
+            <div className="flex items-center size-4 ml-1">
+                <Icon16Verified className="inline-flex text-[--vkui--color_icon_accent]" />
+            </div>
+        )}
+    </div>
 )
 
 const HeadProfile = ({ channel, post }: PostBodyProps) => (
@@ -20,7 +26,7 @@ const HeadProfile = ({ channel, post }: PostBodyProps) => (
                 <Title verified={channel.labels.includes("verified")}>{channel.title}</Title>
             </div>
         </div>
-        <Subhead className="vkuiPlaceholder__text">
+        <Subhead className="vkuiPlaceholder__text overflow-hidden text-ellipsis font-normal" style={{ fontSize: "13px" }}>
             {formatDate(post.footer.date.unix)}
         </Subhead>
     </div>
