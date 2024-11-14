@@ -66,35 +66,46 @@ const Footer = () => {
     )
 }
 
+const ActionBlock = ({ channel }: { channel: Channel }) => {
+    const router = useRouter();
+
+    return (
+        <>
+            <Counters counters={channel.counters} />
+            <Spacing size={12} />
+            {/* */}
+            <Paragraph className="select-text">{channel.description}</Paragraph>
+            <Spacing size={16} />
+            {/* */}
+            <Button size="l" mode="primary" onClick={() => { router.push(`https://t.me/${channel.username}`) }}>
+                Subscribe
+            </Button>
+        </>
+    )
+}
+
+const Body = ({ channel }: { channel: Channel }) => (
+    <Gradient mode="tint" to="top" className="rounded-xl">
+        <Placeholder
+            className="pb-6"
+            icon={<Avatar size={96} src={channel.avatar} />}
+            header={<Title verified={channel.labels.includes("verified")}>{channel.title}</Title>}
+            action={<ActionBlock channel={channel} />}
+        >
+            @{channel.username}
+        </Placeholder>
+        <Footer />
+    </Gradient>
+)
+
 export const Profile = ({ channel }: { channel: Channel }) => {
     const { viewWidth } = useAdaptivityConditionalRender();
-    const router = useRouter();
 
     return viewWidth.tabletPlus && (
         <SplitCol className={cn(viewWidth.tabletPlus.className, "ScrollStickyWrapper")} width={280} maxWidth={280}>
             <div className="fixed" style={{ width: "345px" }}>
                 <Group className="select-none p-0">
-                    <Gradient mode="tint" to="top" className="rounded-xl">
-                        <Placeholder
-                            className="pb-6"
-                            icon={<Avatar size={96} src={channel.avatar} />}
-                            header={<Title verified={channel.labels.includes("verified")}>{channel.title}</Title>}
-                            action={
-                                <>
-                                    <Counters counters={channel.counters} />
-                                    <Spacing size={12} />
-                                    <Paragraph className="select-text">{channel.description}</Paragraph>
-                                    <Spacing size={16} />
-                                    <Button size="l" mode="primary" onClick={() => { router.push(`https://t.me/${channel.username}`) }}>
-                                        Subscribe
-                                    </Button>
-                                </>
-                            }
-                        >
-                            @{channel.username}
-                        </Placeholder>
-                        <Footer />
-                    </Gradient>
+                    <Body channel={channel} />
                 </Group>
             </div>
         </SplitCol>
