@@ -1,10 +1,13 @@
-import { TextComponent } from "@/components/feed/TextComponent";
 import formatDate from "@/helpers/date";
 import { Post, TitleProps } from "@/types";
-import { PostBodyProps } from "@/types/feed/post";
+
 import { Icon16Verified, Icon16View, Icon24ShareOutline } from "@vkontakte/icons";
 import { Caption, Flex, Headline, Subhead, Tappable } from "@vkontakte/vkui";
+
 import { Avatar } from "@/components/Avatar";
+import { Verified } from "@/components/feed/Verified";
+import { PostBodyProps } from "@/types/feed/post";
+import { TextComponent } from "@/components/feed/TextComponent";
 
 const Title = ({ children, verified }: TitleProps) => (
     <div className="overflow-hidden text-ellipsis leading-4 font-medium" style={{ display: "inherit", fontSize: "13px" }}>
@@ -13,7 +16,7 @@ const Title = ({ children, verified }: TitleProps) => (
         </Headline>
         {verified && (
             <div className="flex items-center size-4 ml-1">
-                <Icon16Verified className="inline-flex text-[--vkui--color_icon_accent]" />
+                <Verified className="inline-flex text-[--vkui--color_icon_accent]" Icon={Icon16Verified} />
             </div>
         )}
     </div>

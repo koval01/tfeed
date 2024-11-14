@@ -18,14 +18,21 @@ import {
 import { Icon20Verified } from "@vkontakte/icons";
 
 import { Avatar } from "@/components/Avatar";
+import { Verified as VerifiedTT } from "@/components/feed/Verified";
 
 import { TitleProps, Channel, Counters as CountersProps } from "@/types";
 import Link from "next/link";
 
+const Verified = ({ verified }: { verified: boolean }) => (
+    verified && <VerifiedTT 
+        className="align-middle inline-block text-[--vkui--color_icon_accent] ml-1 relative top-0.5" 
+        Icon={Icon20Verified} />
+)
+
 const Title = ({ children, verified }: TitleProps) => (
     <div className="inline-flex">
         <DisplayTitle level="1">{children}</DisplayTitle>
-        {verified && <Icon20Verified className="align-middle inline-block text-[--vkui--color_icon_accent] ml-1 relative top-0.5" />}
+        <Verified verified={verified} />
     </div>
 )
 
