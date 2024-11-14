@@ -9,7 +9,7 @@ import { Icons } from "@/components/icons";
 import { useRouter } from "next/navigation";
 
 
-function ErrorBody({ header, description, actions }: ErrorProps) {
+const ErrorBody = ({ header, description, actions }: ErrorProps) => {
     return (
         <div className="max-md:w-screen">
             <Placeholder
@@ -30,7 +30,7 @@ function ErrorBody({ header, description, actions }: ErrorProps) {
     );
 }
 
-export function Error({ header, description, actions, error }: ErrorProps) {
+export const Error = ({ header, description, actions, error }: ErrorProps) => {
     const router = useRouter();
     
     if (error instanceof AxiosError) {

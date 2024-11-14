@@ -5,7 +5,7 @@ import type { DOMNode, Element, HTMLReactParserOptions, Text } from 'html-react-
 import styles from '@/styles/emoji.module.css';
 import { nextImage } from '@/helpers/nextImage';
 
-export function TextComponent({ htmlString }: { htmlString?: string }) {
+export const TextComponent = ({ htmlString }: { htmlString?: string }) => {
     const options: HTMLReactParserOptions = {
         replace: (domNode: DOMNode) => {
             if ((domNode as Element).name === 'a' && (domNode as Element).attribs?.href) {

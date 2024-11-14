@@ -28,7 +28,7 @@ export const viewport: Viewport = {
   ]
 }
 
-export default function RootLayout({ children }: PropsWithChildren) {
+const RootLayout = ({ children }: PropsWithChildren) => {
   return (
     <html>
       <body className='antialiased'>
@@ -39,3 +39,5 @@ export default function RootLayout({ children }: PropsWithChildren) {
     </html>
   );
 }
+
+export default RootLayout;

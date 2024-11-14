@@ -10,12 +10,12 @@ import {
 } from "./Skeleton";
 
 import { MainNav } from "@/components/main-nav";
-import { Posts } from "./Posts";
+import { Posts } from "./Post";
 import { Profile } from "./Profile";
 
 import ErrorSnackbar from "../ErrorSnackbar";
 
-export function Feed({ data, isLoading }: { data: Body, isLoading: boolean }) {
+export const Feed = ({ data, isLoading }: { data: Body, isLoading: boolean }) => {
     const [posts, setPosts] = useState<Post[]>([]);
     const [offset, setOffset] = useState<Offset>({});
     const [channelUsername, setChannelUsername] = useState<string>();

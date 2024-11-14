@@ -17,27 +17,23 @@ import { ErrorPage } from '@/components/ErrorPage';
 
 import { useDidMount } from '@/hooks/useDidMount';
 
-function App(props: PropsWithChildren) {
-  return (
-    <ConfigProvider>
-      <AdaptivityProvider>
-        <AppRoot>
-          {props.children}
-        </AppRoot>
-      </AdaptivityProvider>
-    </ConfigProvider>
-  );
-}
+const App = (props: PropsWithChildren) => (
+  <ConfigProvider>
+    <AdaptivityProvider>
+      <AppRoot>
+        {props.children}
+      </AppRoot>
+    </AdaptivityProvider>
+  </ConfigProvider>
+);
 
-function RootInner({ children }: PropsWithChildren) {
-  return (
-    <App>
-      {children}
-    </App>
-  );
-}
+const RootInner = ({ children }: PropsWithChildren) => (
+  <App>
+    {children}
+  </App>
+);
 
-export function Root(props: PropsWithChildren) {
+export const Root = (props: PropsWithChildren) => {
   const didMount = useDidMount();
 
   return didMount ? (

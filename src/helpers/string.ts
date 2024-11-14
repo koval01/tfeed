@@ -1,4 +1,4 @@
-export function stringToHash(str: string): number {
+export const stringToHash = (str: string): number => {
     let hash = 0;
     if (str.length === 0) return hash;
     for (let i = 0; i < str.length; i++) {
@@ -9,7 +9,7 @@ export function stringToHash(str: string): number {
     return hash;
 }
 
-export function getInitials(name: string | undefined): string {
+export const getInitials = (name: string | undefined): string => {
     if (!name) return "NN";
     const words = name.split(" ");
     const initials = words.map(word => word[0].toUpperCase()).join("");

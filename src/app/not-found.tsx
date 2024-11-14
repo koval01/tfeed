@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Error } from "@/components/Error";
 
-export default function NotFound() {
+const NotFound = () => {
     const router = useRouter();
 
     return (
@@ -12,3 +12,5 @@ export default function NotFound() {
         }} />
     )
 }
+
+export default NotFound;

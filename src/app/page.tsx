@@ -10,7 +10,7 @@ import {
   SplitLayout 
 } from "@vkontakte/vkui";
 
-export default function Home() {
+const Home = () => {
   return (
     <SplitLayout>
       <SplitCol autoSpaced>
@@ -28,3 +28,5 @@ export default function Home() {
     </SplitLayout>
   );
 }
+
+export default Home;

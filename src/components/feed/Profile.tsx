@@ -22,33 +22,29 @@ import { Avatar } from "@/components/Avatar";
 import { TitleProps, Channel, Counters as CountersProps } from "@/types";
 import Link from "next/link";
 
-function Title({ children, verified }: TitleProps) {
-    return (
-        <div className="inline-flex">
-            <DisplayTitle level="1">{children}</DisplayTitle>
-            {verified && <Icon20Verified className="align-middle inline-block text-[--vkui--color_icon_accent] ml-1 relative top-0.5" />}
-        </div>
-    )
-}
+const Title = ({ children, verified }: TitleProps) => (
+    <div className="inline-flex">
+        <DisplayTitle level="1">{children}</DisplayTitle>
+        {verified && <Icon20Verified className="align-middle inline-block text-[--vkui--color_icon_accent] ml-1 relative top-0.5" />}
+    </div>
+)
 
-function Counters({ counters }: { counters: CountersProps }) {
-    return (
-        <div className="flex whitespace-nowrap overflow-hidden max-w-72">
-            {Object.entries(counters).map(([key, value], index) => (
-                <div key={index} className="inline-block whitespace-normal align-top basis-1/4 pr-5 box-border">
-                    <TitleVK level="3" className="inline-block w-full text-left">
-                        {value}
-                    </TitleVK>
-                    <Footnote className="vkuiPlaceholder__text inline-block capitalize align-top mt-1">
-                        {key}
-                    </Footnote>
-                </div>
-            ))}
-        </div>
-    )
-}
+const Counters = ({ counters }: { counters: CountersProps }) => (
+    <div className="flex whitespace-nowrap overflow-hidden max-w-72">
+        {Object.entries(counters).map(([key, value], index) => (
+            <div key={index} className="inline-block whitespace-normal align-top basis-1/4 pr-5 box-border">
+                <TitleVK level="3" className="inline-block w-full text-left">
+                    {value}
+                </TitleVK>
+                <Footnote className="vkuiPlaceholder__text inline-block capitalize align-top mt-1">
+                    {key}
+                </Footnote>
+            </div>
+        ))}
+    </div>
+)
 
-function Footer() {
+const Footer = () => {
     const footerLinks = [
         { "name": "About", "href": "//telegram.org/faq" },
         { "name": "Blog", "href": "//telegram.org/blog" },
@@ -70,7 +66,7 @@ function Footer() {
     )
 }
 
-export function Profile({ channel }: { channel: Channel }) {
+export const Profile = ({ channel }: { channel: Channel }) => {
     const { viewWidth } = useAdaptivityConditionalRender();
     const router = useRouter();
 

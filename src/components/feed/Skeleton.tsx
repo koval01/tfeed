@@ -13,7 +13,7 @@ import {
     Footnote
 } from "@vkontakte/vkui";
 
-export function Profile() {
+export const Profile = () => {
     const { viewWidth } = useAdaptivityConditionalRender();
 
     return viewWidth.tabletPlus && (
@@ -45,48 +45,42 @@ export function Profile() {
     );
 }
 
-function PostHeader() {
-    return (
-        <Flex className="flex-row select-none">
-            <Skeleton width={40} height={40} className="mr-3 rounded-full" />
-            <div className="flex flex-col flex-auto mr-2.5">
-                <div>
-                    <Title level="3">
-                        <Skeleton width={180} />
-                    </Title>
-                </div>
-                <div>
-                    <Skeleton width={80} height={13} />
-                </div>
+const PostHeader = () => (
+    <Flex className="flex-row select-none">
+        <Skeleton width={40} height={40} className="mr-3 rounded-full" />
+        <div className="flex flex-col flex-auto mr-2.5">
+            <div>
+                <Title level="3">
+                    <Skeleton width={180} />
+                </Title>
             </div>
-        </Flex>
-    )
-}
+            <div>
+                <Skeleton width={80} height={13} />
+            </div>
+        </div>
+    </Flex>
+);
 
-function PostBody() {
-    return (
-        <Footnote weight="2" className="whitespace-pre-line">
-            <Skeleton width="95%" />
-            <Skeleton width="100%" />
-            <Skeleton width="90%" />
-            <Skeleton width="80%" />
-            <Skeleton width="85%" />
-        </Footnote>
-    )
-}
+const PostBody = () => (
+    <Footnote weight="2" className="whitespace-pre-line">
+        <Skeleton width="95%" />
+        <Skeleton width="100%" />
+        <Skeleton width="90%" />
+        <Skeleton width="80%" />
+        <Skeleton width="85%" />
+    </Footnote>
+);
 
-export function Posts() {
-    return (
-        <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>
-            {[...Array(10)].map((_, index) => (
-                <Group key={index}>
-                    <div className="py-2.5 px-4">
-                        <PostHeader />
-                        <Spacing />
-                        <PostBody />
-                    </div>
-                </Group>
-            ))}
-        </SplitCol>
-    );
-}
+export const Posts = () => (
+    <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>
+        {[...Array(10)].map((_, index) => (
+            <Group key={index}>
+                <div className="py-2.5 px-4">
+                    <PostHeader />
+                    <Spacing />
+                    <PostBody />
+                </div>
+            </Group>
+        ))}
+    </SplitCol>
+);

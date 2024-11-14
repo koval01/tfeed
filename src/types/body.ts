@@ -33,14 +33,14 @@ export interface Post {
     forwarded: Forwarded;
 }
 
-interface Forwarded {
+export interface Forwarded {
     name: string;
     url: string;
 }
 
-interface Footer {
-    views: string;
-    author: string;
+export interface Footer {
+    views?: string;
+    author?: string;
     date: FooterDate;
 }
 
