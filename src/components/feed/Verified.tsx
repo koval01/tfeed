@@ -19,7 +19,7 @@ const Header = () => (
 const Content = () => (
     <div className="mt-2">
         <Subhead className="text-left">
-            This pop-up window is a confirmation that this action channel is verified.
+            This pop-up window is a confirmation that this channel is really verified.
         </Subhead>
     </div>
 )
