@@ -32,10 +32,8 @@ export const Forward = ({ children, post }: PropsWithChildren<{ post: Post }>) =
                 <Headline>
                     <LinkPost className="text-[--vkui--color_text_primary]" forwarded={post.forwarded}>{post.forwarded.name}</LinkPost>
                 </Headline>
-                <Subhead className="vkuiPlaceholder__text">
-                    <LinkPost className="vkuiPlaceholder__text" forwarded={post.forwarded}>
-                        forwarded message
-                    </LinkPost>
+                <Subhead className="vkuiPlaceholder__text select-none">
+                    forwarded message
                 </Subhead>
             </div>
         </div>
