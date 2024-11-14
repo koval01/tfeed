@@ -25,14 +25,16 @@ import Link from "next/link";
 
 const Verified = ({ verified }: { verified: boolean }) => (
     verified && <VerifiedTT 
-        className="align-middle inline-block text-[--vkui--color_icon_accent] ml-1 relative top-0.5" 
+        className="align-middle inline-block text-[--vkui--color_icon_accent]" 
         Icon={Icon20Verified} />
 )
 
 const Title = ({ children, verified }: TitleProps) => (
-    <div className="inline-flex">
+    <div className="inline-flex leading-7">
         <DisplayTitle level="1">{children}</DisplayTitle>
-        <Verified verified={verified} />
+        <div className="inline ml-1">
+            <Verified verified={verified} />
+        </div>
     </div>
 )
 

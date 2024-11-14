@@ -15,7 +15,7 @@ const Title = ({ children, verified }: TitleProps) => (
             {children}
         </Headline>
         {verified && (
-            <div className="flex items-center size-4 ml-1">
+            <div className="inline-block align-middle items-center size-4 ml-1">
                 <Verified className="inline-flex text-[--vkui--color_icon_accent]" Icon={Icon16Verified} />
             </div>
         )}
