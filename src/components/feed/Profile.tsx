@@ -97,7 +97,7 @@ const Body = ({ channel }: { channel: Channel }) => (
     <Gradient mode="tint" to="top" className="rounded-xl">
         <Placeholder
             className="pb-6"
-            icon={<Avatar size={96} src={channel.avatar} />}
+            icon={<Avatar size={96} src={channel.avatar} name={channel.title} />}
             header={<Title verified={channel.labels.includes("verified")}>{channel.title}</Title>}
             action={<ActionBlock channel={channel} />}
         >
