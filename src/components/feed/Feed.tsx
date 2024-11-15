@@ -59,7 +59,7 @@ export const Feed = ({ data, isLoading }: { data: Body, isLoading: boolean }) =>
 
         const intervalId = setInterval(backgroundRefresh, 1e4);
         return () => clearInterval(intervalId);
-    }, [channelUsername, offset]);
+    }, [channelUsername, offset, refreshPosts]);
 
     return (
         <Panel>

@@ -11,7 +11,7 @@ interface LinkPostProps extends PropsWithChildren {
 }
 
 const AvatarObject = () => (
-    <Avatar size={40} fallbackIcon={<Icon28ReplyOutline style={{ margin: 0 }} />} />
+    <Avatar width={24} height={24} fallbackIcon={<Icon28ReplyOutline style={{ margin: 0 }} />} />
 )
 
 const LinkPost = ({ children, className, forwarded }: LinkPostProps) => (
