@@ -4,10 +4,15 @@ export interface Body {
     meta: Meta;
 }
 
+interface ParsedAndRaw {
+    string: string;
+    html: string;
+}
+
 export interface Channel {
     username: string;
-    title: string;
-    description: string;
+    title: ParsedAndRaw;
+    description: ParsedAndRaw;
     avatar: string | undefined;
     counters: Counters;
     labels: string[];

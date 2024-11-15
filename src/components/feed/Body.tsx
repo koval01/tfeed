@@ -1,8 +1,8 @@
 import formatDate from "@/helpers/date";
-import { Post, TitleProps } from "@/types";
+import { Channel, Post, TitleProps } from "@/types";
 
 import { Icon16Verified, Icon16View, Icon24ShareOutline } from "@vkontakte/icons";
-import { Caption, Flex, Headline, Subhead, Tappable } from "@vkontakte/vkui";
+import { Caption, Flex, Footnote, Headline, Subhead, Tappable } from "@vkontakte/vkui";
 
 import { Avatar } from "@/components/Avatar";
 import { Verified } from "@/components/feed/Verified";
@@ -22,11 +22,17 @@ const Title = ({ children, verified }: TitleProps) => (
     </div>
 )
 
+const ChannelTitle = ({ channel }: { channel: Channel }) => (
+    <Title verified={channel.labels.includes("verified")}>
+        <TextComponent htmlString={channel.title.html} />
+    </Title>
+)
+
 const HeadProfile = ({ channel, post }: PostBodyProps) => (
     <div className="flex flex-col mr-2.5 whitespace-nowrap min-w-0 flex-auto">
         <div className="flex overflow-hidden text-ellipsis min-w-full items-center">
             <div className="inline-flex min-w-full">
-                <Title verified={channel.labels.includes("verified")}>{channel.title}</Title>
+                <ChannelTitle channel={channel} />
             </div>
         </div>
         <Subhead className="vkuiPlaceholder__text overflow-hidden text-ellipsis font-normal" style={{ fontSize: "13px" }}>
@@ -55,7 +61,7 @@ const MoreButton = ({ channel, post }: PostBodyProps) => (
 export const PostHeader = ({ channel, post }: PostBodyProps) => (
     <Flex className="flex-row select-none">
         <div className="mr-3">
-            <Avatar src={channel.avatar} size={40} name={channel.title} />
+            <Avatar src={channel.avatar} size={40} name={channel.title.string} />
         </div>
         <HeadProfile channel={channel} post={post} />
         <MoreButton channel={channel} post={post} />
@@ -85,9 +91,17 @@ export const PostFooter = ({ post }: { post: Post }) => (
 
 const PostMedia = ({ post }: { post: Post }) => <></>;
 
+const PostText = ({ post }: { post: Post }) => (
+    <div>
+        <Footnote weight="2" className="whitespace-pre-line">
+            <TextComponent htmlString={post.content.text?.html} />
+        </Footnote>
+    </div>
+)
+
 export const PostContent = ({ channel, post }: PostBodyProps) => (
     <>
-        <TextComponent htmlString={post.content.text?.html} />
+        <PostText post={post} />
         <PostMedia post={post} />
     </>
 )

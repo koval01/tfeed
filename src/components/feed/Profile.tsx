@@ -19,6 +19,7 @@ import { Icon20Verified } from "@vkontakte/icons";
 
 import { Avatar } from "@/components/Avatar";
 import { Verified as VerifiedTT } from "@/components/feed/Verified";
+import { TextComponent } from "@/components/feed/TextComponent";
 
 import { TitleProps, Channel, Counters as CountersProps } from "@/types";
 import Link from "next/link";
@@ -75,6 +76,12 @@ const Footer = () => {
     )
 }
 
+const Description = ({ channel }: { channel: Channel }) => (
+    <Paragraph className="select-text">
+        <TextComponent htmlString={channel.description.html} />
+    </Paragraph>
+)
+
 const ActionBlock = ({ channel }: { channel: Channel }) => {
     const router = useRouter();
 
@@ -83,7 +90,7 @@ const ActionBlock = ({ channel }: { channel: Channel }) => {
             <Counters counters={channel.counters} />
             <Spacing size={12} />
             {/* */}
-            <Paragraph className="select-text">{channel.description}</Paragraph>
+            <Description channel={channel} />
             <Spacing size={16} />
             {/* */}
             <Button size="l" mode="primary" onClick={() => { router.push(`https://t.me/${channel.username}`) }}>
@@ -93,12 +100,18 @@ const ActionBlock = ({ channel }: { channel: Channel }) => {
     )
 }
 
+const ChannelTitle = ({ channel }: { channel: Channel }) => (
+    <Title verified={channel.labels.includes("verified")}>
+        <TextComponent htmlString={channel.title.html} />
+    </Title>
+)
+
 const Body = ({ channel }: { channel: Channel }) => (
     <Gradient mode="tint" to="top" className="rounded-xl">
         <Placeholder
             className="pb-6"
-            icon={<Avatar size={96} src={channel.avatar} name={channel.title} />}
-            header={<Title verified={channel.labels.includes("verified")}>{channel.title}</Title>}
+            icon={<Avatar size={96} src={channel.avatar} name={channel.title.string} />}
+            header={<ChannelTitle channel={channel} />}
             action={<ActionBlock channel={channel} />}
         >
             @{channel.username}

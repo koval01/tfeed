@@ -1,6 +1,6 @@
 import { Footnote, Link } from '@vkontakte/vkui';
 import parse from 'html-react-parser';
-import type { DOMNode, Element, HTMLReactParserOptions, Text } from 'html-react-parser';
+import type { DOMNode, domToReact, Element, HTMLReactParserOptions, Text } from 'html-react-parser';
 
 import styles from '@/styles/emoji.module.css';
 import { nextImage } from '@/helpers/nextImage';
@@ -109,16 +109,10 @@ const getParserOptions = (): HTMLReactParserOptions => ({
  * and renders it with custom handlers for <a> (links) and <i> (emoji) elements.
  * @param htmlString - The HTML string to be parsed and rendered.
  */
-export const TextComponent = ({ htmlString }: { htmlString?: string }) => {
+export const TextComponent = ({ htmlString }: { htmlString?: string }): ReturnType<typeof domToReact> | null => {
     if (!htmlString) return null; // Return nothing if no HTML string is provided
 
     const parserOptions = getParserOptions();
 
-    return (
-        <div>
-            <Footnote weight="2" className="whitespace-pre-line">
-                {parse(htmlString, parserOptions)}
-            </Footnote>
-        </div>
-    );
+    return parse(htmlString, parserOptions);
 };
