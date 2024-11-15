@@ -1,19 +1,19 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import { Body, Offset, Post } from "@/types";
 
-import { onRefresh as onRefreshAction } from "./actions";
+import { onRefresh as onRefreshAction } from "@/components/feed/actions";
 import { Panel, PanelHeader, SplitLayout } from "@vkontakte/vkui";
 
 import {
     Posts as PostsSkeleton,
     Profile as ProfileSkeleton
-} from "./Skeleton";
+} from "@/components/feed/Skeleton";
 
 import { MainNav } from "@/components/main-nav";
-import { Posts } from "./Post";
-import { Profile } from "./Profile";
+import { Posts } from "@/components/feed/Post";
+import { Profile } from "@/components/feed/Profile";
 
-import ErrorSnackbar from "../ErrorSnackbar";
+import ErrorSnackbar from "@/components/ErrorSnackbar";
 
 export const Feed = ({ data, isLoading }: { data: Body, isLoading: boolean }) => {
     const [posts, setPosts] = useState<Post[]>([]);
