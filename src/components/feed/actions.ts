@@ -1,7 +1,10 @@
 import { Icon28CheckCircleFill, Icon28SearchStarsOutline } from '@vkontakte/icons';
+
 import { Offset, Post } from "@/types";
 import { AxiosError } from 'axios';
-import { getMore } from './fetcher';
+
+import { getMore } from '@/components/feed/fetcher';
+
 import { FC, SetStateAction } from 'react';
 
 class PostFetcher {
@@ -52,8 +55,8 @@ class PostFetcher {
 
         this.showErrorSnackbar?.(
             message,
-            is404 ? Icon28SearchStarsOutline : undefined,
-            is404 ? "--vkui--color_icon_accent" : undefined
+            is404 ? Icon28SearchStarsOutline : void 0,
+            is404 ? "--vkui--color_icon_accent" : null
         );
     }
 
