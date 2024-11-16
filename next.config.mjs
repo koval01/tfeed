@@ -21,7 +21,7 @@ export default {
                 pathname: '/file/**'
             }
         ],
-        imageSizes: [40, 96]
+        imageSizes: [36, 40, 96]
     },
     compiler: {
         removeConsole: production,

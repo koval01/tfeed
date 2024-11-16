@@ -8,6 +8,7 @@ import { Icon20VerifiedProps } from "@vkontakte/icons/dist/typings/20/verified_2
 interface VerifiedProps {
     className: string;
     Icon: FC<Icon20VerifiedProps> | FC<Icon16VerifiedProps>;
+    channelName?: string;
 }
 
 const Header = () => (
@@ -16,18 +17,25 @@ const Header = () => (
     </span>
 )
 
-const Content = () => (
+const Message = ({ channelName }: { channelName?: string }) => (
+    channelName ?
+        <>This popup confirms that the <b className="text-[--vkui--color_icon_accent]">{channelName}</b> is indeed verified.</>
+        :
+        "This pop-up window is a confirmation that this channel is really verified."
+)
+
+const Content = ({ channelName }: { channelName?: string }) => (
     <div className="mt-2">
         <Subhead className="text-left">
-            This pop-up window is a confirmation that this channel is really verified.
+            <Message channelName={channelName} />
         </Subhead>
     </div>
 )
 
-export const Verified = ({ className, Icon }: VerifiedProps) => (
+export const Verified = ({ className, Icon, channelName }: VerifiedProps) => (
     <Tooltip 
         header={<Header />} 
-        text={<Content />}
+        text={<Content channelName={channelName} />}
     >
         <Icon className={className} />
     </Tooltip>

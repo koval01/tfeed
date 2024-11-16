@@ -1,0 +1,13 @@
+tg-spoiler {
+    --anim-dur: .45s;
+    --anim: var(--anim-dur) ease;
+    --anim-fn: text-show;
+    --bg-anim-fn: bg-hide;
+    padding: 1px 0;
+    border-radius: 1px;
+}
+
+tg-spoiler {
+    padding: 2px 0 3px;
+}
+

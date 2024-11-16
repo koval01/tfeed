@@ -9,21 +9,25 @@ import { Verified } from "@/components/feed/Verified";
 import { PostBodyProps } from "@/types/feed/post";
 import { TextComponent } from "@/components/feed/TextComponent";
 
-const Title = ({ children, verified }: TitleProps) => (
+const Title = ({ children, verified, channelName }: TitleProps) => (
     <div className="overflow-hidden text-ellipsis leading-4 font-medium" style={{ display: "inherit", fontSize: "13px" }}>
         <Headline level="2" className="inline-flex max-w-full overflow-hidden text-ellipsis leading-4" style={{ fontSize: "13px" }}>
             {children}
         </Headline>
         {verified && (
-            <div className="inline-block align-middle items-center size-4 ml-1">
-                <Verified className="inline-flex text-[--vkui--color_icon_accent]" Icon={Icon16Verified} />
+            <div className="inline-block align-middle items-center size-4 ml-1 leading-3">
+                <Verified 
+                    className="inline-flex text-[--vkui--color_icon_accent]" 
+                    Icon={Icon16Verified} 
+                    channelName={channelName} 
+                />
             </div>
         )}
     </div>
 )
 
 const ChannelTitle = ({ channel }: { channel: Channel }) => (
-    <Title verified={channel.labels.includes("verified")}>
+    <Title verified={channel.labels.includes("verified")} channelName={channel.title.string}>
         <TextComponent htmlString={channel.title.html} />
     </Title>
 )
@@ -83,7 +87,8 @@ const PostViews = ({ views }: { views?: string }) => (
 
 export const PostFooter = ({ post }: { post: Post }) => (
     <div className="py-0 select-none">
-        <div className="flex items-center relative justify-between pt-3 pb-0">
+        <div className="flex items-center relative justify-between max-md:pt-1 pt-3 pb-0">
+            <div />
             <PostViews views={post.footer.views} />
         </div>
     </div>

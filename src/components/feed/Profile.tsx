@@ -1,11 +1,6 @@
-import { cn } from "@/lib/utils";
-
-import { useRouter } from "next/navigation";
-
 import {
     Group,
     SplitCol,
-    useAdaptivityConditionalRender,
     Placeholder,
     Button,
     Paragraph,
@@ -82,23 +77,19 @@ const Description = ({ channel }: { channel: Channel }) => (
     </Paragraph>
 )
 
-const ActionBlock = ({ channel }: { channel: Channel }) => {
-    const router = useRouter();
-
-    return (
-        <>
-            <Counters counters={channel.counters} />
-            <Spacing size={12} />
-            {/* */}
-            <Description channel={channel} />
-            <Spacing size={16} />
-            {/* */}
-            <Button size="l" mode="primary" onClick={() => { router.push(`https://t.me/${channel.username}`) }}>
-                Subscribe
-            </Button>
-        </>
-    )
-}
+const ActionBlock = ({ channel }: { channel: Channel }) => (
+    <>
+        <Counters counters={channel.counters} />
+        <Spacing size={12} />
+        {/* */}
+        <Description channel={channel} />
+        <Spacing size={16} />
+        {/* */}
+        <Button size="l" mode="primary" onClick={() => { window.open(`https://t.me/${channel.username}`, "_blank") }}>
+            Subscribe
+        </Button>
+    </>
+)
 
 const ChannelTitle = ({ channel }: { channel: Channel }) => (
     <Title verified={channel.labels.includes("verified")}>
@@ -120,16 +111,12 @@ const Body = ({ channel }: { channel: Channel }) => (
     </Gradient>
 )
 
-export const Profile = ({ channel }: { channel: Channel }) => {
-    const { viewWidth } = useAdaptivityConditionalRender();
-
-    return viewWidth.tabletPlus && (
-        <SplitCol className={cn(viewWidth.tabletPlus.className, "ScrollStickyWrapper")} width={280} maxWidth={280}>
-            <div className="fixed" style={{ width: "345px" }}>
-                <Group className="select-none p-0">
-                    <Body channel={channel} />
-                </Group>
-            </div>
-        </SplitCol>
-    );
-}
+export const Profile = ({ channel }: { channel: Channel }) => (
+    <SplitCol className="max-lg:hidden ScrollStickyWrapper" width={280} maxWidth={280}>
+        <div className="fixed" style={{ width: "345px" }}>
+            <Group className="select-none p-0">
+                <Body channel={channel} />
+            </Group>
+        </div>
+    </SplitCol>
+)

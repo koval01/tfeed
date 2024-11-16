@@ -11,7 +11,7 @@ interface LinkPostProps extends PropsWithChildren {
 }
 
 const AvatarObject = () => (
-    <Avatar width={24} height={24} fallbackIcon={<Icon28ReplyOutline style={{ margin: 0 }} />} />
+    <Avatar fallbackIcon={<Icon28ReplyOutline style={{ margin: 0 }} />} className="!size-10" />
 )
 
 const LinkPost = ({ children, className, forwarded }: LinkPostProps) => (
@@ -41,6 +41,6 @@ export const Forward = ({ children, post }: PropsWithChildren<{ post: Post }>) =
         </div>
         <Spacing />
         {children}
-        <Spacing />
+        <Spacing size={6} />
     </div>
 );

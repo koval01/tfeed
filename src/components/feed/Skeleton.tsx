@@ -84,3 +84,17 @@ export const Posts = () => (
         ))}
     </SplitCol>
 );
+
+export const ChannelNavSkeleton = () => (
+    <div className="block select-none items-center space-x-2 md:pl-0 pl-2 overflow-hidden py-1.5">
+        <div className="inline-block overflow-hidden float-left mr-2 relative">
+            <Skeleton width={36} height={36} className="rounded-full" />
+        </div>
+        <div className="flex pt-2">
+            <Skeleton width={120} height={13} />
+        </div>
+        <div className="mb-0.5 mt-px">
+            <Skeleton width={100} height={10} />
+        </div>
+    </div>
+)

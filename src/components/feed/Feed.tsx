@@ -5,11 +5,12 @@ import { onRefresh as onRefreshAction } from "@/components/feed/actions";
 import { Panel, PanelHeader, SplitLayout } from "@vkontakte/vkui";
 
 import {
+    ChannelNavSkeleton,
     Posts as PostsSkeleton,
     Profile as ProfileSkeleton
 } from "@/components/feed/Skeleton";
 
-import { MainNav } from "@/components/main-nav";
+import { ChannelNav, SubscribeButton } from "@/components/feed/Nav";
 import { Posts } from "@/components/feed/Post";
 import { Profile } from "@/components/feed/Profile";
 
@@ -43,14 +44,16 @@ export const Feed = ({ data, isLoading }: { data: Body, isLoading: boolean }) =>
         setChannelUsername(data?.channel?.username);
     }, [data]);
 
-    const refreshPosts = async (showError = false) => await onRefreshAction(
-        channelUsername,
-        offset,
-        setIsFetching,
-        setPosts,
-        setOffset,
-        showError ? showErrorSnackbar : void 0
-    );
+    const refreshPosts = useCallback(async (showError = false) => {
+        await onRefreshAction(
+            channelUsername,
+            offset,
+            setIsFetching,
+            setPosts,
+            setOffset,
+            showError ? showErrorSnackbar : void 0
+        );
+    }, [channelUsername, offset, showErrorSnackbar]);
 
     useEffect(() => {
         const backgroundRefresh = async () => {
@@ -59,11 +62,20 @@ export const Feed = ({ data, isLoading }: { data: Body, isLoading: boolean }) =>
 
         const intervalId = setInterval(backgroundRefresh, 1e4);
         return () => clearInterval(intervalId);
-    }, [channelUsername, offset, refreshPosts]);
+    }, [refreshPosts]);
 
     return (
         <Panel>
-            <PanelHeader before={<MainNav />}></PanelHeader>
+            <PanelHeader
+                before={
+                    isLoading ? <ChannelNavSkeleton /> : <ChannelNav channel={data.channel} />
+                }
+                after={
+                    <div className="inline-block items-center overflow-hidden lg:hidden">
+                        <SubscribeButton channel={data?.channel} />
+                    </div>
+                }
+            />
             <SplitLayout center>
                 {isLoading ? (
                     <>

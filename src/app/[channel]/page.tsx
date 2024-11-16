@@ -15,7 +15,10 @@ const ChannelPage: React.FC<ChannelPageProps> = ({ params }) => {
     const { data, error, isLoading } = useBody(channel);
 
     return (
-        <SplitLayout header={!error ? <PanelHeader delimiter="none" /> : null} className={isLoading ? "overflow-hidden" : ""}>
+        <SplitLayout 
+            header={!error ? <PanelHeader delimiter="none" /> : null} 
+            className={isLoading ? "overflow-hidden" : ""}
+        >
             <SplitCol autoSpaced>
                 {!error ? <Feed data={data} isLoading={isLoading} /> : <Error error={error} />}
             </SplitCol>
