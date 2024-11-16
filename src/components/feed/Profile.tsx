@@ -73,7 +73,7 @@ const Footer = () => {
 
 const Description = ({ channel }: { channel: Channel }) => (
     <Paragraph className="select-text">
-        <TextComponent htmlString={channel.description.html} />
+        {!!channel.description && <TextComponent htmlString={channel.description.html} />}
     </Paragraph>
 )
 
