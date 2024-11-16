@@ -91,7 +91,7 @@ class PostFetcher {
         const posts = await this.fetchPosts(offset.before, "before", setIsFetchingMore);
         if (posts && posts.length > 0) {
             this.updatePostsAndOffset(posts, "before");
-        } else {
+        } else if (posts !== null) {
             setNoMorePosts(true);
             this.showErrorSnackbar?.("No more posts available.", Icon28SearchStarsOutline, "--vkui--color_icon_accent");
         }
