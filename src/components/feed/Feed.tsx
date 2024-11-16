@@ -28,15 +28,14 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
     const [channelUsername, setChannelUsername] = useState<string>();
     const [snackbar, setSnackbar] = useState<React.ReactElement | null>(null);
 
-    const showErrorSnackbar = useCallback((message: string) => {
-        if (!snackbar) {
-            setSnackbar(
-                <ErrorSnackbar
-                    text={message}
-                    onClose={() => setSnackbar(null)}
-                />
-            );
-        }
+    const showErrorSnackbar = useCallback((message: string, Icon?: FC, iconColor?: string | null) => {
+        if (!snackbar)
+            setSnackbar(<ErrorSnackbar
+                text={message}
+                onClose={() => setSnackbar(null)}
+                Icon={Icon ?? Icon}
+                iconColor={iconColor ?? iconColor}
+            />);
     }, [snackbar]);
 
     const {
