@@ -1,7 +1,12 @@
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { Body, Offset, Post } from "@/types";
 
-import { onRefresh as onRefreshAction } from "@/components/feed/actions";
+import {
+    onRefresh as onRefreshAction,
+    onMore as onMoreAction
+} from "@/components/feed/actions";
+import { throttle } from 'lodash';
+
 import { Panel, PanelHeader, SplitLayout } from "@vkontakte/vkui";
 
 import {
@@ -22,7 +27,15 @@ export const Feed = ({ data, isLoading }: { data: Body, isLoading: boolean }) =>
     const [channelUsername, setChannelUsername] = useState<string>();
 
     const [isFetching, setIsFetching] = useState<boolean>(false);
+    const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
+    const [noMorePosts, setNoMorePosts] = useState<boolean>(false);
+
+    const isFetchingMoreRef = useRef(isFetchingMore);
     const [snackbar, setSnackbar] = useState<React.JSX.Element | null>(null);
+
+    useEffect(() => {
+        isFetchingMoreRef.current = isFetchingMore;
+    }, [isFetchingMore]);
 
     const showErrorSnackbar = useCallback((message: string, Icon?: FC, iconColor?: string | null) => {
         if (!snackbar)
@@ -64,6 +77,36 @@ export const Feed = ({ data, isLoading }: { data: Body, isLoading: boolean }) =>
         return () => clearInterval(intervalId);
     }, [refreshPosts]);
 
+    const loadMorePosts = useCallback(async () => {
+        if (isFetchingMoreRef.current || isFetching) return;
+
+        await onMoreAction(
+            channelUsername,
+            offset,
+            setIsFetchingMore,
+            setPosts,
+            setOffset,
+            setNoMorePosts,
+            showErrorSnackbar
+        );
+    }, [channelUsername, offset, isFetching, showErrorSnackbar]);
+
+    useEffect(() => {
+        const handleScroll = throttle(() => {
+            const scrollTop = document.documentElement.scrollTop;
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            const offsetCondition = documentHeight - scrollTop - windowHeight < 15e2;
+
+            if (offsetCondition && !noMorePosts && !isFetchingMoreRef.current) {
+                loadMorePosts();
+            }
+        }, 5e2);
+
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [loadMorePosts]);
+
     return (
         <Panel>
             <PanelHeader
@@ -84,7 +127,14 @@ export const Feed = ({ data, isLoading }: { data: Body, isLoading: boolean }) =>
                     </>
                 ) : (
                     <>
-                        <Posts channel={data.channel} posts={posts} onRefresh={() => refreshPosts(true)} isFetching={isFetching} />
+                        <Posts
+                            channel={data.channel}
+                            posts={posts}
+                            onRefresh={() => refreshPosts(true)}
+                            isFetching={isFetching}
+                            isFetchingMore={isFetchingMore}
+                            noMorePosts={noMorePosts}
+                        />
                         <Profile channel={data.channel} />
                         {snackbar}
                     </>

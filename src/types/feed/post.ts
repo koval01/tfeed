@@ -5,6 +5,8 @@ export interface PostsProps {
     posts: Post[];
     onRefresh: () => void;
     isFetching: boolean;
+    isFetchingMore: boolean;
+    noMorePosts: boolean;
 }
 
 export interface PostBodyProps { channel: Channel, post: Post }
