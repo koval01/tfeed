@@ -9,4 +9,14 @@ export interface PostsProps {
     noMorePosts: boolean;
 }
 
+export interface PostProps {
+    item: Post;
+    channel: Channel;
+}
+
+export interface LoadingMoreProps {
+    isFetchingMore: boolean;
+    noMorePosts: boolean;
+}
+
 export interface PostBodyProps { channel: Channel, post: Post }
