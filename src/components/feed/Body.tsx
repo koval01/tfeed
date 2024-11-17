@@ -1,7 +1,11 @@
+import { FC } from "react";
+import type { ClassValue } from "clsx";
+
 import formatDate from "@/helpers/date";
+import { cn } from "@/lib/utils";
 import { Channel, Post, TitleProps } from "@/types";
 
-import { Icon16Verified, Icon16View, Icon24ShareOutline } from "@vkontakte/icons";
+import { Icon16Verified, Icon16View, Icon20SignatureOutline, Icon24ShareOutline } from "@vkontakte/icons";
 import { Caption, Flex, Footnote, Headline, Subhead, Tappable } from "@vkontakte/vkui";
 
 import { Avatar } from "@/components/Avatar";
@@ -72,23 +76,34 @@ export const PostHeader = ({ channel, post }: PostBodyProps) => (
     </Flex>
 )
 
+const FooterComponent = ({ Icon, context, iconSize = 14, className }: { Icon: FC, context: string, iconSize?: number, className?: ClassValue }) => (
+    <div className={cn("flex items-center whitespace-nowrap overflow-hidden leading-[15px] h-3.5 vkuiPlaceholder__text", className)}>
+        <span className="flex vkuiPlaceholder__text" style={{ width: iconSize, height: iconSize }}>
+            <Icon />
+        </span>
+        <Caption className="relative leading-[15px] h-3.5 text-sm/7 font-medium">
+            {context}
+        </Caption>
+    </div>
+)
+
 const PostViews = ({ views }: { views?: string }) => (
-    views && (
-        <div className="flex items-center whitespace-nowrap overflow-hidden leading-[15px] h-3.5 vkuiPlaceholder__text">
-            <span className="flex size-3.5 mr-1.5 vkuiPlaceholder__text">
-                <Icon16View />
-            </span>
-            <Caption className="relative leading-[15px] h-3.5 text-sm/7 font-medium">
-                {views}
-            </Caption>
-        </div>
-    )
+    views && <FooterComponent Icon={Icon16View} context={views} className="space-x-1.5" />
+)
+
+const PostAuthor = ({ author }: { author?: string }) => (
+    author ? <FooterComponent 
+        Icon={Icon20SignatureOutline} 
+        context={author} 
+        iconSize={16} 
+        className="space-x-1" 
+    /> : <div />
 )
 
 export const PostFooter = ({ post }: { post: Post }) => (
     <div className="py-0 select-none">
         <div className="flex items-center relative justify-between max-md:pt-1 pt-3 pb-0">
-            <div />
+            <PostAuthor author={post.footer.author} />
             <PostViews views={post.footer.views} />
         </div>
     </div>
