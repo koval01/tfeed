@@ -60,7 +60,7 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
     }, [data, initializePosts]);
 
     useEffect(() => {
-        const intervalId = setInterval(() => refreshPosts(), 10000);
+        const intervalId = setInterval(() => refreshPosts(), 1e5);
         return () => clearInterval(intervalId);
     }, [refreshPosts]);
 
