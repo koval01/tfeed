@@ -19,14 +19,14 @@ const PostBody = ({ channel, post }: PostBodyProps) => (
 const LoadingMoreButton = ({ isFetchingMore }: { isFetchingMore: boolean }) => (
     <div className="flex justify-center">
         <Button
-            size="l"
+            size="s"
             appearance="neutral"
             loading={isFetchingMore}
-            loader={<ThreeDot variant="pulsate" color="#818c99" style={{ fontSize: "6px" }} />}
+            loader={<ThreeDot variant="pulsate" color="#818c99" style={{ fontSize: "4px" }} />}
             disabled={isFetchingMore}
-            className="min-w-28"
+            className="w-24 h-[30px]"
         >
-            <Subhead weight="1" className="vkuiPlaceholder__text">
+            <Subhead weight="1" className="text-xs vkuiPlaceholder__text">
                 Load more
             </Subhead>
         </Button>
