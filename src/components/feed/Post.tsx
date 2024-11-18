@@ -3,7 +3,9 @@ import { PostBodyProps, PostsProps, PostProps, LoadingMoreProps } from "@/types/
 import { Forward } from "@/components/feed/Forward";
 import { PostContent, PostFooter, PostHeader } from "@/components/feed/Body";
 
-import { Group, SplitCol, Spacing, PullToRefresh, Button, Subhead } from "@vkontakte/vkui";
+import { Group, SplitCol, Spacing, PullToRefresh, Subhead } from "@vkontakte/vkui";
+import { Button } from "@/components/Button";
+import { ThreeDot } from "react-loading-indicators";
 
 const PostBody = ({ channel, post }: PostBodyProps) => (
     post.forwarded ?
@@ -20,6 +22,7 @@ const LoadingMoreButton = ({ isFetchingMore }: { isFetchingMore: boolean }) => (
             size="l"
             appearance="neutral"
             loading={isFetchingMore}
+            loader={<ThreeDot variant="pulsate" color="#818c99" style={{ fontSize: "6px" }} />}
             disabled={isFetchingMore}
             className="min-w-28"
         >
