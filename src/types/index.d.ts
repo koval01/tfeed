@@ -11,3 +11,5 @@ export type {
     Forwarded,
     Footer
 } from "@/types/body";
+
+export type { Preview } from "@/types/preview";

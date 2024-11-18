@@ -13,7 +13,14 @@ export const metadata: Metadata = {
     default: siteConfig.name,
     template: `%s - ${siteConfig.name}`,
   },
+  applicationName: siteConfig.name,
   description: siteConfig.description,
+  openGraph: {
+    siteName: siteConfig.name
+  },
+  twitter: {
+    site: "@Telegram"
+  },
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon-16x16.png",
@@ -26,12 +33,12 @@ export const metadata: Metadata = {
     ios: {
       app_store_id: 686449807,
       app_name: "Telegram Messenger",
-      url: "tg://resolve?domain=durov"
+      url: "tg://resolve?domain=telegram"
     },
     android: {
       package: "org.telegram.messenger",
       app_name: "Telegram",
-      url: "tg://resolve?domain=durov"
+      url: "tg://resolve?domain=telegram"
     }
   }
 }
