@@ -15,6 +15,7 @@ export const metadata: Metadata = {
   },
   applicationName: siteConfig.name,
   description: siteConfig.description,
+  keywords: siteConfig.keywords,
   openGraph: {
     siteName: siteConfig.name
   },
