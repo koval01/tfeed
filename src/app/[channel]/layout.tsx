@@ -64,7 +64,7 @@ export const generateMetadata = async ({ params }: { params: { channel: string }
         console.error(`Failed to generate metadata for channel "${channel}":`, error);
 
         // Fallback metadata
-        return buildMetadata(channel, `Channel @${channel}`, `Channel of user @${channel}`);
+        return buildMetadata(channel);
     }
 };
 

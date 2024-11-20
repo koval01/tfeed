@@ -10,18 +10,22 @@ import {
   SplitLayout 
 } from "@vkontakte/vkui";
 
+import { useTranslation } from "react-i18next";
+
 const Home = () => {
+  const { t } = useTranslation();
+  
   return (
     <SplitLayout>
       <SplitCol autoSpaced>
         <FixedCenter>
           <Placeholder>
             <DisplayTitle className="select-none">
-              Nothing
+              {t("Nothing")}
             </DisplayTitle>
           </Placeholder>
           <Headline className="text-center">
-            Unfortunately the main page is empty for now, it is still under development.
+            {t("MainSubText")}
           </Headline>
         </FixedCenter>
       </SplitCol>

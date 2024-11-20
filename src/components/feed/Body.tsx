@@ -1,9 +1,10 @@
 import { FC } from "react";
 import type { ClassValue } from "clsx";
 
-import formatDate from "@/helpers/date";
 import { cn } from "@/lib/utils";
 import { Channel, Post, TitleProps } from "@/types";
+
+import { useFormattedDate } from "@/hooks/useFormattedDate";
 
 import { Icon16Verified, Icon16View, Icon20SignatureOutline, Icon24ShareOutline } from "@vkontakte/icons";
 import { Caption, Flex, Footnote, Headline, Subhead, Tappable } from "@vkontakte/vkui";
@@ -20,10 +21,10 @@ const Title = ({ children, verified, channelName }: TitleProps) => (
         </Headline>
         {verified && (
             <div className="inline-block align-middle items-center size-4 ml-1 leading-3">
-                <Verified 
-                    className="inline-flex text-[--vkui--color_icon_accent]" 
-                    Icon={Icon16Verified} 
-                    channelName={channelName} 
+                <Verified
+                    className="inline-flex text-[--vkui--color_icon_accent]"
+                    Icon={Icon16Verified}
+                    channelName={channelName}
                 />
             </div>
         )}
@@ -36,18 +37,22 @@ const ChannelTitle = ({ channel }: { channel: Channel }) => (
     </Title>
 )
 
-const HeadProfile = ({ channel, post }: PostBodyProps) => (
-    <div className="flex flex-col mr-2.5 whitespace-nowrap min-w-0 flex-auto">
-        <div className="flex overflow-hidden text-ellipsis min-w-full items-center">
-            <div className="inline-flex min-w-full">
-                <ChannelTitle channel={channel} />
+const HeadProfile = ({ channel, post }: PostBodyProps) => {
+    const formattedDate = useFormattedDate(post.footer.date.unix);
+
+    return (
+        <div className="flex flex-col mr-2.5 whitespace-nowrap min-w-0 flex-auto">
+            <div className="flex overflow-hidden text-ellipsis min-w-full items-center">
+                <div className="inline-flex min-w-full">
+                    <ChannelTitle channel={channel} />
+                </div>
             </div>
+            <Subhead className="vkuiPlaceholder__text overflow-hidden text-ellipsis font-normal" style={{ fontSize: "13px" }}>
+                {formattedDate}
+            </Subhead>
         </div>
-        <Subhead className="vkuiPlaceholder__text overflow-hidden text-ellipsis font-normal" style={{ fontSize: "13px" }}>
-            {formatDate(post.footer.date.unix)}
-        </Subhead>
-    </div>
-)
+    )
+}
 
 const MoreButton = ({ channel, post }: PostBodyProps) => (
     <div className="relative flex" style={{
@@ -92,11 +97,11 @@ const PostViews = ({ views }: { views?: string }) => (
 )
 
 const PostAuthor = ({ author }: { author?: string }) => (
-    author ? <FooterComponent 
-        Icon={Icon20SignatureOutline} 
-        context={author} 
-        iconSize={16} 
-        className="space-x-1" 
+    author ? <FooterComponent
+        Icon={Icon20SignatureOutline}
+        context={author}
+        iconSize={16}
+        className="space-x-1"
     /> : <div />
 )
 

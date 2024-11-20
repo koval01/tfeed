@@ -6,6 +6,11 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import calendar from "dayjs/plugin/calendar";
 
+import 'dayjs/locale/en';
+import 'dayjs/locale/de';
+import 'dayjs/locale/ru';
+import 'dayjs/locale/uk';
+
 dayjs.extend(relativeTime);
 dayjs.extend(updateLocale);
 dayjs.extend(localizedFormat);
@@ -13,9 +18,16 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(calendar);
 
-const formatDate = (unixTimestamp: number, userTimezone?: string) => {
+export const formatDate = (
+    unixTimestamp: number,
+    t: (key: string) => string,
+    i18n: { language: string },
+    userTimezone?: string
+): string => {
     const date = dayjs.unix(unixTimestamp);
     const now = dayjs();
+
+    dayjs.locale(i18n.language);
 
     let nowInUserTimezone = now;
     let dateInUserTimezone = date;
@@ -32,31 +44,27 @@ const formatDate = (unixTimestamp: number, userTimezone?: string) => {
     // Always use 24-hour format
     dayjs.updateLocale("en", {
         calendar: {
-            sameDay: "[Today at] HH:mm",
-            lastDay: "[Yesterday at] HH:mm",
-            nextWeek: "dddd [at] HH:mm",
-            lastWeek: "MMM D [at] HH:mm",
-            sameElse: "MMM D [at] HH:mm, YYYY",
+            sameDay: `[${t("Today at")}] HH:mm`,
+            lastDay: `[${t("Yesterday at")}] HH:mm`,
+            nextWeek: `dddd [${t("time_at")}] HH:mm`,
+            lastWeek: `MMM D [${t("time_at")}] HH:mm`,
+            sameElse: `MMM D [${t("time_at")}] HH:mm, YYYY`,
         },
     });
 
     if (nowInUserTimezone.diff(dateInUserTimezone, 'second') < 60) {
-        return 'Just now';
-    } else if (nowInUserTimezone.diff(dateInUserTimezone, 'minute') < 60) {
-        return `${nowInUserTimezone.diff(dateInUserTimezone, 'minute')} minute${nowInUserTimezone.diff(dateInUserTimezone, 'minute') > 1 ? 's' : ''} ago`;
-    } else if (nowInUserTimezone.diff(dateInUserTimezone, 'hour') < 24) {
-        return `${nowInUserTimezone.diff(dateInUserTimezone, 'hour')} hour${nowInUserTimezone.diff(dateInUserTimezone, 'hour') > 1 ? 's' : ''} ago`;
+        return t('Just now');
+    } else if (nowInUserTimezone.diff(dateInUserTimezone, 'hour') <= 20) {
+        return date.fromNow();
     } else if (nowInUserTimezone.diff(dateInUserTimezone, 'day') < 7) {
         return dateInUserTimezone.calendar(null, {
-            sameDay: '[Today at] HH:mm',
-            lastDay: '[Yesterday at] HH:mm',
-            nextWeek: 'dddd [at] HH:mm',
-            lastWeek: 'MMM D [at] HH:mm',
-            sameElse: 'MMM D [at] HH:mm, YYYY'
+            sameDay: `[${t("Today at")}] HH:mm`,
+            lastDay: `[${t("Yesterday at")}] HH:mm`,
+            nextWeek: `dddd [${t("time_at")}] HH:mm`,
+            lastWeek: `MMM D [${t("time_at")}] HH:mm`,
+            sameElse: `MMM D [${t("time_at")}] HH:mm, YYYY`,
         });
     } else {
         return dateInUserTimezone.format('MMM D, YYYY');
     }
 };
-
-export default formatDate;

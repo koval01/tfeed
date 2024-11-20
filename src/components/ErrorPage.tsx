@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 
 import { Error } from './Error';
+import { useTranslation } from 'react-i18next';
 
 export const ErrorPage = ({
   error,
@@ -16,11 +17,13 @@ export const ErrorPage = ({
     console.error(error);
   }, [error]);
 
+  const { t } = useTranslation();
+
   return (
-    <Error header="An unhandled error occurred!" description={error.message} actions={
+    <Error header={t("UnhandledError")} description={error.message} actions={
       !reset ? undefined :
         {
-          click: reset, name: "Try again"
+          click: reset, name: t("Try again")
         }} />
   )
 }

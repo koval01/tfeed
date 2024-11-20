@@ -2,13 +2,15 @@
 
 import { useRouter } from "next/navigation";
 import { Error } from "@/components/Error";
+import { useTranslation } from "react-i18next";
 
 const NotFound = () => {
     const router = useRouter();
+    const { t } = useTranslation();
 
     return (
-        <Error header="Not Found" description="Could not find requested resource" actions={{
-            click: () => router.push("/"), name: "Go to home"
+        <Error header={t("Not Found")} description={t("NotFoundSubText")} actions={{
+            click: () => router.push("/"), name: t("Go to home")
         }} />
     )
 }

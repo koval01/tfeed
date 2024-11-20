@@ -7,6 +7,7 @@ import { FixedCenter } from "@/components/fixed-center";
 import { Icons } from "@/components/icons";
 
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 
 const ErrorBody = ({ header, description, actions }: ErrorProps) => {
@@ -32,15 +33,23 @@ const ErrorBody = ({ header, description, actions }: ErrorProps) => {
 
 export const Error = ({ header, description, actions, error }: ErrorProps) => {
     const router = useRouter();
-    
+    const { t } = useTranslation();
+
     if (error instanceof AxiosError) {
         const errorData: ServerError = error.response?.data || {};
 
+        const statusCodeMatch = error.message.match(/status code (\d+)/);
+        const statusCode = statusCodeMatch ? statusCodeMatch[1] : "400";
+
         return (
             <FixedCenter>
-                <ErrorBody header={errorData?.detail || ""} description={error.message} actions={{
-                    click: () => router.push("/"), name: "Go to home"
-                }} />
+                <ErrorBody
+                    header={t(errorData?.detail || "")}
+                    description={t('error_message', { statusCode })}
+                    actions={{
+                        click: () => router.push("/"), name: t("Go to home")
+                    }}
+                />
             </FixedCenter>
         );
     }
