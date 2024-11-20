@@ -7,7 +7,7 @@ import { Channel, Post, TitleProps } from "@/types";
 import { useFormattedDate } from "@/hooks/useFormattedDate";
 
 import { Icon16Verified, Icon16View, Icon20SignatureOutline, Icon24ShareOutline } from "@vkontakte/icons";
-import { Caption, Flex, Footnote, Headline, Subhead, Tappable } from "@vkontakte/vkui";
+import { Caption, EllipsisText, Flex, Footnote, Headline, Subhead, Tappable } from "@vkontakte/vkui";
 
 import { Avatar } from "@/components/Avatar";
 import { Verified } from "@/components/feed/Verified";
@@ -33,7 +33,9 @@ const Title = ({ children, verified, channelName }: TitleProps) => (
 
 const ChannelTitle = ({ channel }: { channel: Channel }) => (
     <Title verified={channel.labels.includes("verified")} channelName={channel.title.string}>
-        <TextComponent htmlString={channel.title.html} />
+        <EllipsisText className="max-sm:max-w-40 max-md:max-w-72 lg:max-w-[380px] md:max-w-[60vw]">
+            <TextComponent htmlString={channel.title.html} />
+        </EllipsisText>
     </Title>
 )
 

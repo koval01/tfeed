@@ -5,7 +5,7 @@ import { Verified } from "@/components/feed/Verified";
 import { Avatar } from "@/components/Avatar";
 
 import { Icon16Verified } from "@vkontakte/icons";
-import { Button, Headline } from "@vkontakte/vkui";
+import { Button, EllipsisText, Headline } from "@vkontakte/vkui";
 
 import { useRouter } from "next/navigation";
 
@@ -36,7 +36,9 @@ const SubscribersCounter = ({ channel }: { channel: Channel }) => (
 
 const ChannelTitle = ({ channel }: { channel: Channel }) => (
     <Title verified={channel.labels.includes("verified")}>
-        <TextComponent htmlString={channel.title.html} />
+        <EllipsisText className="max-w-[calc(50vw-52px)]">
+            <TextComponent htmlString={channel.title.html} />
+        </EllipsisText>
     </Title>
 )
 
