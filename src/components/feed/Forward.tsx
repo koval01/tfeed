@@ -3,7 +3,9 @@ import { PropsWithChildren } from "react";
 import type { Post, Forwarded } from "@/types";
 
 import { Icon28ReplyOutline } from "@vkontakte/icons";
-import { Avatar, Headline, Link, Spacing, Subhead } from "@vkontakte/vkui";
+import { Avatar, EllipsisText, Headline, Link, Spacing, Subhead } from "@vkontakte/vkui";
+
+import { useTranslation } from "react-i18next";
 
 interface LinkPostProps extends PropsWithChildren {
     className?: string;
@@ -22,7 +24,10 @@ const LinkPost = ({ children, className, forwarded }: LinkPostProps) => (
     ) : children
 )
 
-export const Forward = ({ children, post }: PropsWithChildren<{ post: Post }>) => (
+export const Forward = ({ children, post }: PropsWithChildren<{ post: Post }>) => { 
+    const { t } = useTranslation();
+    
+    return(
     <div className="mt-3 pl-3 border-solid border-l-2 border-[#001433]/[.12] dark:border-white/[.24]">
         <div className="min-h-10">
             <div className="block float-left">
@@ -30,12 +35,14 @@ export const Forward = ({ children, post }: PropsWithChildren<{ post: Post }>) =
             </div>
             <div className="ml-[52px] mt-[3px]">
                 <Headline>
-                    <LinkPost className="text-[--vkui--color_text_accent]" forwarded={post.forwarded}>
-                        {post.forwarded.name}
-                    </LinkPost>
+                    <EllipsisText className="text-[--vkui--color_text_accent]">
+                        <LinkPost className="text-[--vkui--color_text_accent]" forwarded={post.forwarded}>
+                            {post.forwarded.name}
+                        </LinkPost>
+                    </EllipsisText>
                 </Headline>
                 <Subhead className="vkuiPlaceholder__text select-none">
-                    forwarded message
+                    {t("forwarded message")}
                 </Subhead>
             </div>
         </div>
@@ -43,4 +50,5 @@ export const Forward = ({ children, post }: PropsWithChildren<{ post: Post }>) =
         {children}
         <Spacing size={6} />
     </div>
-);
+)
+};

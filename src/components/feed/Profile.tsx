@@ -19,9 +19,11 @@ import { TextComponent } from "@/components/feed/TextComponent";
 import { TitleProps, Channel, Counters as CountersProps } from "@/types";
 import Link from "next/link";
 
+import { useTranslation } from "react-i18next";
+
 const Verified = ({ verified }: { verified: boolean }) => (
-    verified && <VerifiedTT 
-        className="align-middle inline-block text-[--vkui--color_icon_accent]" 
+    verified && <VerifiedTT
+        className="align-middle inline-block text-[--vkui--color_icon_accent]"
         Icon={Icon20Verified} />
 )
 
@@ -34,20 +36,24 @@ const Title = ({ children, verified }: TitleProps) => (
     </div>
 )
 
-const Counters = ({ counters }: { counters: CountersProps }) => (
-    <div className="flex whitespace-nowrap overflow-hidden max-w-72">
-        {Object.entries(counters).map(([key, value], index) => (
-            <div key={index} className="inline-block whitespace-normal align-top basis-1/4 pr-5 box-border">
-                <TitleVK level="3" className="inline-block w-full text-left">
-                    {value}
-                </TitleVK>
-                <Footnote className="vkuiPlaceholder__text inline-block capitalize align-top mt-1">
-                    {key}
-                </Footnote>
-            </div>
-        ))}
-    </div>
-)
+const Counters = ({ counters }: { counters: CountersProps }) => {
+    const { t } = useTranslation();
+
+    return (
+        <div className="flex whitespace-nowrap overflow-hidden max-w-72">
+            {Object.entries(counters).map(([key, value], index) => (
+                <div key={index} className="inline-block whitespace-normal align-top basis-1/4 pr-5 box-border">
+                    <TitleVK level="3" className="inline-block w-full text-left">
+                        {value}
+                    </TitleVK>
+                    <Footnote className="vkuiPlaceholder__text inline-block capitalize align-top mt-1">
+                        {t(key)}
+                    </Footnote>
+                </div>
+            ))}
+        </div>
+    )
+}
 
 const Footer = () => {
     const footerLinks = [
@@ -56,13 +62,15 @@ const Footer = () => {
         { "name": "Apps", "href": "//telegram.org/apps" },
         { "name": "Platform", "href": "//core.telegram.org" }
     ];
+    const { t } = useTranslation();
+
     return (
         <div className="text-center pt-0 pb-2">
             {footerLinks.map((item, index) => (
                 <div key={index} className="inline-block align-top px-2">
                     <Footnote className="vkuiPlaceholder__text">
                         <Link href={item.href}>
-                            {item.name}
+                            {t(item.name)}
                         </Link>
                     </Footnote>
                 </div>
@@ -77,19 +85,23 @@ const Description = ({ channel }: { channel: Channel }) => (
     </Paragraph>
 )
 
-const ActionBlock = ({ channel }: { channel: Channel }) => (
-    <>
-        <Counters counters={channel.counters} />
-        <Spacing size={12} />
-        {/* */}
-        <Description channel={channel} />
-        <Spacing size={16} />
-        {/* */}
-        <Button size="l" mode="primary" onClick={() => { window.open(`https://t.me/${channel.username}`, "_blank") }}>
-            Subscribe
-        </Button>
-    </>
-)
+const ActionBlock = ({ channel }: { channel: Channel }) => {
+    const { t } = useTranslation();
+
+    return (
+        <>
+            <Counters counters={channel.counters} />
+            <Spacing size={12} />
+            {/* */}
+            <Description channel={channel} />
+            <Spacing size={16} />
+            {/* */}
+            <Button size="l" mode="primary" onClick={() => { window.open(`https://t.me/${channel.username}`, "_blank") }}>
+                {t("Subscribe")}
+            </Button>
+        </>
+    )
+}
 
 const ChannelTitle = ({ channel }: { channel: Channel }) => (
     <Title verified={channel.labels.includes("verified")}>

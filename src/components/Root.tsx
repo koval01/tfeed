@@ -35,7 +35,7 @@ i18nHook.init({
 
 const App = (props: PropsWithChildren) => {
   useEffect(() => {
-    i18nHook.changeLanguage(navigator.language.split("-")[0])
+    i18nHook.changeLanguage(navigator.language.split("-")[0]);
   }, []);
 
   return (
