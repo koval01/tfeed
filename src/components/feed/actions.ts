@@ -25,13 +25,13 @@ class PostFetcher {
         this.showErrorSnackbar = showErrorSnackbar;
     }
 
-    private async fetchPosts(offsetKey: number | undefined, direction: "after" | "before", setIsFetching: (value: SetStateAction<boolean>) => void) {
+    private async fetchPosts(offsetKey: number | undefined, direction: "after" | "before", setIsFetching: (value: SetStateAction<boolean>) => void, turnstileToken: string) {
         if (!this.channelUsername || !offsetKey) return;
 
         setIsFetching(true);
 
         try {
-            const data = await getMore(this.channelUsername, offsetKey, direction);
+            const data = await getMore(this.channelUsername, offsetKey, direction, turnstileToken);
             const posts = data?.posts?.slice().reverse() || [];
 
             return posts;
@@ -75,8 +75,8 @@ class PostFetcher {
         }));
     }
 
-    async refresh(offset: Offset, setIsFetching: (value: SetStateAction<boolean>) => void) {
-        const posts = await this.fetchPosts(offset.after, "after", setIsFetching);
+    async refresh(offset: Offset, setIsFetching: (value: SetStateAction<boolean>) => void, turnstileToken: string) {
+        const posts = await this.fetchPosts(offset.after, "after", setIsFetching, turnstileToken);
         if (posts) {
             this.updatePostsAndOffset(posts, "after");
             this.showErrorSnackbar?.("The feed has been updated successfully.", Icon28CheckCircleFill);
@@ -86,9 +86,10 @@ class PostFetcher {
     async loadMore(
         offset: Offset,
         setIsFetchingMore: (value: SetStateAction<boolean>) => void,
-        setNoMorePosts: (value: SetStateAction<boolean>) => void
+        setNoMorePosts: (value: SetStateAction<boolean>) => void,
+        turnstileToken: string
     ) {
-        const posts = await this.fetchPosts(offset.before, "before", setIsFetchingMore);
+        const posts = await this.fetchPosts(offset.before, "before", setIsFetchingMore, turnstileToken);
         if (posts && posts.length > 0) {
             this.updatePostsAndOffset(posts, "before");
         } else if (posts !== null) {
@@ -101,24 +102,26 @@ class PostFetcher {
 export const onRefresh = async (
     channelUsername: string | undefined,
     offset: Offset,
+    turnstileToken: string,
     setIsFetching: (value: SetStateAction<boolean>) => void,
     setPosts: (value: SetStateAction<Post[]>) => void,
     setOffset: (value: SetStateAction<Offset>) => void,
-    showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string | null) => void
+    showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string | null) => void,
 ) => {
     const postFetcher = new PostFetcher(channelUsername, setPosts, setOffset, showErrorSnackbar);
-    await postFetcher.refresh(offset, setIsFetching);
+    await postFetcher.refresh(offset, setIsFetching, turnstileToken);
 };
 
 export const onMore = async (
     channelUsername: string | undefined,
     offset: Offset,
+    turnstileToken: string,
     setIsFetchingMore: (value: SetStateAction<boolean>) => void,
     setPosts: (value: SetStateAction<Post[]>) => void,
     setOffset: (value: SetStateAction<Offset>) => void,
     setNoMorePosts: (value: SetStateAction<boolean>) => void,
-    showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string | null) => void
+    showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string | null) => void,
 ) => {
     const postFetcher = new PostFetcher(channelUsername, setPosts, setOffset, showErrorSnackbar);
-    await postFetcher.loadMore(offset, setIsFetchingMore, setNoMorePosts);
+    await postFetcher.loadMore(offset, setIsFetchingMore, setNoMorePosts, turnstileToken);
 };

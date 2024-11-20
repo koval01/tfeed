@@ -1,6 +1,7 @@
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 
 import { Body } from "@/types";
+import type { TurnstileInstance } from '@marsidev/react-turnstile';
 
 import { Panel, SplitLayout } from "@vkontakte/vkui";
 
@@ -13,8 +14,8 @@ import {
 } from "@/components/feed/Skeleton";
 
 import { FeedHeader } from "@/components/feed/FeedHeader";
-
 import ErrorSnackbar from "@/components/ErrorSnackbar";
+import { Turnstile } from '@marsidev/react-turnstile';
 
 import { usePosts } from "@/hooks/usePosts";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
@@ -25,6 +26,7 @@ interface FeedProps {
 }
 
 export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
+    const refTurnstile = useRef<TurnstileInstance | null>(null);
     const [channelUsername, setChannelUsername] = useState<string>();
     const [snackbar, setSnackbar] = useState<React.ReactElement | null>(null);
 
@@ -46,7 +48,7 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
         refreshPosts,
         loadMorePosts,
         initializePosts
-    } = usePosts(channelUsername, showErrorSnackbar);
+    } = usePosts(channelUsername, showErrorSnackbar, refTurnstile);
 
     useInfiniteScroll({
         onLoadMore: loadMorePosts,
@@ -63,6 +65,11 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
         const intervalId = setInterval(() => refreshPosts(), 1e5);
         return () => clearInterval(intervalId);
     }, [refreshPosts]);
+
+    useEffect(() => {
+        refTurnstile.current?.render();
+        return () => refTurnstile.current?.remove();
+    }, [refTurnstile]);
 
     return (
         <Panel>
@@ -87,6 +94,7 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
                         {snackbar}
                     </>
                 )}
+                <Turnstile ref={refTurnstile} siteKey={process.env.NEXT_PUBLIC_TURNSTILE_KEY as string} />
             </SplitLayout>
         </Panel>
     );
