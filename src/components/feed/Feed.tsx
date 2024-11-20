@@ -1,7 +1,7 @@
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { FC, MutableRefObject, useCallback, useEffect, useState } from "react";
 
-import { Body } from "@/types";
-import type { TurnstileInstance } from '@marsidev/react-turnstile';
+import type { Body } from "@/types";
+import type { TurnstileInstance } from "@marsidev/react-turnstile";
 
 import { Panel, SplitLayout } from "@vkontakte/vkui";
 
@@ -15,7 +15,6 @@ import {
 
 import { FeedHeader } from "@/components/feed/FeedHeader";
 import ErrorSnackbar from "@/components/ErrorSnackbar";
-import { Turnstile } from '@marsidev/react-turnstile';
 
 import { usePosts } from "@/hooks/usePosts";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
@@ -23,10 +22,10 @@ import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 interface FeedProps {
     data: Body;
     isLoading: boolean;
+    refTurnstile: MutableRefObject<TurnstileInstance | null>
 }
 
-export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
-    const refTurnstile = useRef<TurnstileInstance | null>(null);
+export const Feed: FC<FeedProps> = ({ data, isLoading, refTurnstile }) => {
     const [channelUsername, setChannelUsername] = useState<string>();
     const [snackbar, setSnackbar] = useState<React.ReactElement | null>(null);
 
@@ -94,7 +93,6 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
                         {snackbar}
                     </>
                 )}
-                <Turnstile ref={refTurnstile} siteKey={process.env.NEXT_PUBLIC_TURNSTILE_KEY as string} />
             </SplitLayout>
         </Panel>
     );
