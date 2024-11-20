@@ -1,5 +1,6 @@
 export const runtime = 'edge';
 
+import { apiRequest } from "@/helpers/api";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -21,18 +22,14 @@ const paramsSchema = z.object({
 });
 
 export async function GET(
-    request: Request,
+    _: Request,
     { params }: { params: { channelId: string; direction: string; offset: string } }
 ) {
     try {
         paramsSchema.parse(params);
+        const body = await apiRequest("GET", `more/${params.channelId}/${params.direction}/${params.offset}`);
 
-        return NextResponse.json({
-            message: "More feed retrieved successfully",
-            channelId: params.channelId,
-            direction: params.direction,
-            offset: params.offset,
-        });
+        return NextResponse.json(body);
     } catch (error: any) {
         return NextResponse.json(
             { error: error.errors || "Invalid request" },

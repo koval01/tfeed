@@ -1,5 +1,6 @@
 export const runtime = 'edge';
 
+import { apiRequest } from "@/helpers/api";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -35,11 +36,17 @@ export async function GET(
         // Validate the query parameters using the querySchema
         const query = querySchema.parse(Object.fromEntries(url.searchParams));
 
-        return NextResponse.json({
-            message: "Channel feed retrieved successfully",
-            channelId: params.channelId,
-            position: query.position,  // if position is not provided - skip
+        const response = await fetch(
+            query.position === undefined
+                ? `${process.env.NEXT_PUBLIC_API_HOST}/v1/body/${params.channelId}`
+                : `${process.env.NEXT_PUBLIC_API_HOST}/v1/body/${params.channelId}?position=${query.position}`, 
+        {
+            headers: { "BackEndSecret": process.env.BACKEND_SECRET || "" }
         });
+
+        const body = await apiRequest("GET", `body/${params.channelId}`, {position: query.position});
+
+        return NextResponse.json(body);
     } catch (error: any) {
         return NextResponse.json(
             { error: error.errors || "Invalid request" },

@@ -22,7 +22,7 @@ const useInternalSWR = (url: string | null, turnstileToken?: string) => {
 };
 
 export const getMore = async (channel: string, offset: number, direction: "before" | "after" = "after", turnstileToken: string) => {
-    const url = `${process.env.NEXT_PUBLIC_API_HOST}/v1/more/${channel}/${direction}/${offset}`;
+    const url = `/api/v1/feed/more/${channel}/${direction}/${offset}`;
     return await fetcher(url, turnstileToken);
 }
 
@@ -47,8 +47,8 @@ export const useBody = (
 
     const url =
         position === undefined
-            ? `${process.env.NEXT_PUBLIC_API_HOST}/v1/body/${channel}`
-            : `${process.env.NEXT_PUBLIC_API_HOST}/v1/body/${channel}?position=${position}`;
+            ? `/api/v1/feed/body/${channel}`
+            : `/api/v1/feed/body/${channel}?position=${position}`;
 
     // Always call `useInternalSWR` but handle `null` keys
     const swrResponse = useInternalSWR(url, turnstileToken);
