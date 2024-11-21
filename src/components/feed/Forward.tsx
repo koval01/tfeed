@@ -6,6 +6,7 @@ import { Icon28ReplyOutline } from "@vkontakte/icons";
 import { Avatar, EllipsisText, Headline, Link, Spacing, Subhead } from "@vkontakte/vkui";
 
 import { useTranslation } from "react-i18next";
+import { TextComponent } from "@/components/feed/TextComponent";
 
 interface LinkPostProps extends PropsWithChildren {
     className?: string;
@@ -24,6 +25,16 @@ const LinkPost = ({ children, className, forwarded }: LinkPostProps) => (
     ) : children
 )
 
+const ForwardName = ({ forwarded }: { forwarded: Forwarded }) => (
+    <Headline>
+        <EllipsisText className="text-[--vkui--color_text_accent]">
+            <LinkPost className="text-[--vkui--color_text_accent]" forwarded={forwarded}>
+                <TextComponent htmlString={forwarded.name.html} />
+            </LinkPost>
+        </EllipsisText>
+    </Headline>
+);
+
 export const Forward = ({ children, post }: PropsWithChildren<{ post: Post }>) => { 
     const { t } = useTranslation();
     
@@ -34,13 +45,7 @@ export const Forward = ({ children, post }: PropsWithChildren<{ post: Post }>) =
                 <LinkPost forwarded={post.forwarded}><AvatarObject /></LinkPost>
             </div>
             <div className="ml-[52px] mt-[3px]">
-                <Headline>
-                    <EllipsisText className="text-[--vkui--color_text_accent]">
-                        <LinkPost className="text-[--vkui--color_text_accent]" forwarded={post.forwarded}>
-                            {post.forwarded.name}
-                        </LinkPost>
-                    </EllipsisText>
-                </Headline>
+                <ForwardName forwarded={post.forwarded} />
                 <Subhead className="vkuiPlaceholder__text select-none">
                     {t("forwarded message")}
                 </Subhead>
