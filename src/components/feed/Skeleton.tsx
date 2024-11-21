@@ -1,49 +1,42 @@
-import { cn } from "@/lib/utils";
-
 import {
-    Group, 
-    Paragraph, 
-    Placeholder, 
-    Spacing, 
-    SplitCol, 
+    Group,
+    Paragraph,
+    Placeholder,
+    Spacing,
+    SplitCol,
     Title,
     Skeleton,
-    useAdaptivityConditionalRender, 
     Flex,
     Footnote
 } from "@vkontakte/vkui";
 
-export const Profile = () => {
-    const { viewWidth } = useAdaptivityConditionalRender();
+export const Profile = () => (
+    <SplitCol className="max-lg:hidden ScrollStickyWrapper" width={280} maxWidth={280}>
+        <div className="fixed w-[345px]">
+            <Group className="select-none p-0">
+                <Placeholder
+                    icon={<Skeleton width={96} height={96} className="rounded-full" />}
+                    header={<Title><Skeleton width={250} /></Title>}
+                    action={
+                        <>
 
-    return viewWidth.tabletPlus && (
-        <SplitCol className={cn(viewWidth.tabletPlus.className, "ScrollStickyWrapper")} width={280} maxWidth={280}>
-            <div className="fixed w-[345px]">
-                <Group className="select-none p-0">
-                    <Placeholder
-                        icon={<Skeleton width={96} height={96} className="rounded-full" />}
-                        header={<Title><Skeleton width={250} /></Title>}
-                        action={
-                            <>
-
-                                <Spacing size={12} />
-                                <Paragraph>
-                                    <Skeleton width={170} />
-                                    <Skeleton width={200} />
-                                    <Skeleton width={140} />
-                                </Paragraph>
-                                <Spacing size={16} />
-                                <Skeleton width={110} height={36} />
-                            </>
-                        }
-                    >
-                        <Skeleton width={120} />
-                    </Placeholder>
-                </Group>
-            </div>
-        </SplitCol>
-    );
-}
+                            <Spacing size={12} />
+                            <Paragraph>
+                                <Skeleton width={170} />
+                                <Skeleton width={200} />
+                                <Skeleton width={140} />
+                            </Paragraph>
+                            <Spacing size={16} />
+                            <Skeleton width={110} height={36} />
+                        </>
+                    }
+                >
+                    <Skeleton width={120} />
+                </Placeholder>
+            </Group>
+        </div>
+    </SplitCol>
+);
 
 const PostHeader = () => (
     <Flex className="flex-row select-none">
@@ -73,15 +66,17 @@ const PostBody = () => (
 
 export const Posts = () => (
     <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>
-        {[...Array(10)].map((_, index) => (
-            <Group key={index}>
-                <div className="py-2.5 px-4">
-                    <PostHeader />
-                    <Spacing />
-                    <PostBody />
-                </div>
-            </Group>
-        ))}
+        <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto">
+            {[...Array(10)].map((_, index) => (
+                <Group key={index}>
+                    <div className="py-2.5 px-4">
+                        <PostHeader />
+                        <Spacing />
+                        <PostBody />
+                    </div>
+                </Group>
+            ))}
+        </div>
     </SplitCol>
 );
 
