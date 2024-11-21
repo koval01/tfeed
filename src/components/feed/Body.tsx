@@ -1,19 +1,32 @@
-import { FC } from "react";
-import type { ClassValue } from "clsx";
+import type { FooterComponentProps, PostBodyProps } from "@/types/feed/post";
+import type { Channel, Post, TitleProps } from "@/types";
 
 import { cn } from "@/lib/utils";
-import { Channel, Post, TitleProps } from "@/types";
 
 import { useFormattedDate } from "@/hooks/useFormattedDate";
 
-import { Icon16Verified, Icon16View, Icon20SignatureOutline, Icon24ShareOutline } from "@vkontakte/icons";
-import { Caption, EllipsisText, Flex, Footnote, Headline, Subhead, Tappable } from "@vkontakte/vkui";
+import {
+    Icon16Verified,
+    Icon16View,
+    Icon20SignatureOutline,
+    Icon24ShareOutline
+} from "@vkontakte/icons";
+import {
+    Caption,
+    EllipsisText,
+    Flex,
+    Footnote,
+    Headline,
+    Subhead,
+    Tappable
+} from "@vkontakte/vkui";
 
 import { Avatar } from "@/components/Avatar";
-import { Verified } from "@/components/feed/Verified";
-import { PostBodyProps } from "@/types/feed/post";
-import { TextComponent } from "@/components/feed/TextComponent";
+import { Poll } from "@/components/feed/Poll";
 import { VKMediaGrid } from "@/components/Media";
+import { Verified } from "@/components/feed/Verified";
+import { TextComponent } from "@/components/feed/TextComponent";
+
 import { convertMediaArray } from "@/helpers/mediaConvert";
 
 const Title = ({ children, verified, channelName }: TitleProps) => (
@@ -58,22 +71,23 @@ const HeadProfile = ({ channel, post }: PostBodyProps) => {
     )
 }
 
-const MoreButton = ({ channel, post }: PostBodyProps) => (
-    <div className="relative flex" style={{
-        flex: "0 0 auto"
-    }}>
-        <div className="flex items-center">
-            <div className="relative">
-                <Tappable
-                    onClick={() => window.open(`https://t.me/${channel.username}/${post.id}`, "_blank")}
-                    className="rounded-lg"
-                >
-                    <Icon24ShareOutline className="vkuiPlaceholder__text" />
-                </Tappable>
+const MoreButton = ({ channel, post }: PostBodyProps) => {
+    const redirect = () => window.open(`https://t.me/${channel.username}/${post.id}`, "_blank");
+
+    return (
+        <div className="relative flex" style={{
+            flex: "0 0 auto"
+        }}>
+            <div className="flex items-center">
+                <div className="relative">
+                    <Tappable onClick={redirect} className="rounded-lg">
+                        <Icon24ShareOutline className="vkuiPlaceholder__text" />
+                    </Tappable>
+                </div>
             </div>
         </div>
-    </div>
-)
+    )
+}
 
 export const PostHeader = ({ channel, post }: PostBodyProps) => (
     <Flex className="flex-row select-none">
@@ -85,8 +99,10 @@ export const PostHeader = ({ channel, post }: PostBodyProps) => (
     </Flex>
 )
 
-const FooterComponent = ({ Icon, context, iconSize = 14, className }: { Icon: FC, context: string, iconSize?: number, className?: ClassValue }) => (
-    <div className={cn("flex items-center whitespace-nowrap overflow-hidden leading-[15px] h-3.5 vkuiPlaceholder__text", className)}>
+const FooterComponent = ({ Icon, context, iconSize = 14, className }: FooterComponentProps) => (
+    <div className={
+        cn("flex items-center whitespace-nowrap overflow-hidden leading-[15px] h-3.5 vkuiPlaceholder__text", className)
+    }>
         <span className="flex vkuiPlaceholder__text" style={{ width: iconSize, height: iconSize }}>
             <Icon />
         </span>
@@ -120,7 +136,7 @@ export const PostFooter = ({ post }: { post: Post }) => (
 
 const PostMedia = ({ post }: { post: Post }) => {
     if (!post.content.media) return null;
-    
+
     const images = convertMediaArray(post.content.media);
     return <VKMediaGrid images={images} />
 };
@@ -133,9 +149,15 @@ const PostText = ({ post }: { post: Post }) => (
     </div>
 )
 
+const PostPoll = ({ post }: { post: Post }) => {
+    if (!post.content.poll) return null;
+    return <Poll poll={post.content.poll} />;
+}
+
 export const PostContent = ({ channel, post }: PostBodyProps) => (
     <>
         <PostText post={post} />
         <PostMedia post={post} />
+        <PostPoll post={post} />
     </>
 )

@@ -26,6 +26,7 @@ export const i18nStrings = {
             "Try again": "Erneut versuchen",
             "UnhandledError": "Ein unbehandelter Fehler ist aufgetreten!",
             "forwarded message": "weitergeleitete Nachricht",
+            "Anonymous Poll": "Anonyme Umfrage",
         }
     },
     "ru": {
@@ -41,6 +42,7 @@ export const i18nStrings = {
             "Try again": "Попробуйте еще раз",
             "UnhandledError": "Произошла непредвиденная ошибка!",
             "forwarded message": "пересланное сообщение",
+            "Anonymous Poll": "Анонимный опрос",
         }
     },
     "uk": {
@@ -56,6 +58,7 @@ export const i18nStrings = {
             "Try again": "Спробуйте ще раз",
             "UnhandledError": "Виникла непередбачувана помилка!",
             "forwarded message": "переслане повідомлення",
+            "Anonymous Poll": "Анонімне опитування",
         }
     }
 }
