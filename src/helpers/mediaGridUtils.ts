@@ -1,8 +1,9 @@
+import { cn } from "@/lib/utils";
+
 /**
  * Utility functions for VKMediaGrid component
  */
 
-// TypeScript types for layout configuration
 type LayoutConfig = {
     rows: number;
     perRow: number[];
@@ -29,10 +30,16 @@ export const getItemClass = (index: number, totalCount: number, perRow: number[]
         // First row items
         classes.push('MediaGrid__thumb--firstRowItem');
         if (index === 0) {
-            classes.push(`MediaGrid__thumb--topLeft ${totalCount === 1 ? 'MediaGrid__thumb--allSide' : totalCount === 2 ? 'MediaGrid__thumb--bottomLeft' : ''}`);
+            classes.push(cn(
+                "MediaGrid__thumb--topLeft",
+                totalCount === 1 ? 'MediaGrid__thumb--allSide' : totalCount === 2 ? 'MediaGrid__thumb--bottomLeft' : ''
+            ));
         }
         if (index === 1) {
-            classes.push(`MediaGrid__thumb--topRight ${totalCount === 2 ? 'MediaGrid__thumb--bottomRight' : ''}`);
+            classes.push(cn(
+                "MediaGrid__thumb--topRight",
+                totalCount === 2 ? 'MediaGrid__thumb--bottomRight' : ''
+            ));
         }
     } else {
         // Second row items
