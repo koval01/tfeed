@@ -13,6 +13,8 @@ import { Avatar } from "@/components/Avatar";
 import { Verified } from "@/components/feed/Verified";
 import { PostBodyProps } from "@/types/feed/post";
 import { TextComponent } from "@/components/feed/TextComponent";
+import { VKMediaGrid } from "@/components/Media";
+import { convertMediaArray } from "@/helpers/mediaConvert";
 
 const Title = ({ children, verified, channelName }: TitleProps) => (
     <div className="overflow-hidden text-ellipsis leading-4 font-medium" style={{ display: "inherit", fontSize: "13px" }}>
@@ -116,7 +118,12 @@ export const PostFooter = ({ post }: { post: Post }) => (
     </div>
 )
 
-const PostMedia = ({ post }: { post: Post }) => <></>;
+const PostMedia = ({ post }: { post: Post }) => {
+    if (!post.content.media) return null;
+    
+    const images = convertMediaArray(post.content.media);
+    return <VKMediaGrid images={images} />
+};
 
 const PostText = ({ post }: { post: Post }) => (
     <div>

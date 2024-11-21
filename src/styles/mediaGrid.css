@@ -1,0 +1,92 @@
+* {
+    --post-primary-attachments-margin-top: 12px;
+}
+
+.MediaGridContainerWeb--post {
+    margin-top: var(--post-primary-attachments-margin-top, 12px);
+}
+
+.MediaGrid--twoRow {
+    --mg-first-row-count: 2;
+    --mg-second-row-count: 3;
+}
+
+.MediaGrid {
+    --mg-border-radius-wrapper: 8px;
+    --mg-grid-width: 100%;
+    --mg-spacer: 2px;
+    display: flex;
+    flex-flow: row wrap;
+    width: var(--mg-grid-width);
+    border-radius: var(--mg-border-radius-wrapper);
+    box-sizing: border-box;
+}
+
+.MediaGrid__thumb {
+    --mg-ratio: 1;
+    --mg-margin: 0;
+    --mg-width: var(--mg-grid-width, 100%);
+    --mg-height: calc(var(--mg-width)/var(--mg-ratio));
+    --mg-border-radius-inner: 2px;
+    --mg-row-count: 2;
+    --mg-max-gray-fields-width: 20%;
+    width: var(--mg-width);
+    height: 0;
+    overflow: hidden;
+    padding-top: var(--mg-height);
+    margin: var(--mg-margin);
+    position: relative;
+    border-radius: var(--mg-border-radius-inner);
+}
+
+.MediaGrid__thumb--firstRowItem {
+    --grid-width-divided-by-row-count: var(--mg-grid-width, 100%) / var(--mg-first-row-count, 2);
+    --spacer-divided-by-row-count: var(--mg-spacer, 2px) / var(--mg-first-row-count, 2);
+    --mg-width: calc(var(--grid-width-divided-by-row-count) - var(--spacer-divided-by-row-count));
+}
+
+.MediaGrid__thumb--secondRowItem {
+    --mg-margin: var(--mg-spacer, 2px) 0 0 var(--mg-spacer, 2px);
+    --mg-height: calc((var(--mg-grid-width, 100%)/var(--mg-second-row-count, 3))/var(--mg-ratio, 1));
+    --spacer-divided-by-row-count: var(--mg-spacer, 2px) / var(--mg-second-row-count, 3);
+    --mg-width: calc(var(--mg-grid-width, 100%)/var(--mg-second-row-count, 3) - (var(--mg-second-row-count, 3) - 1)*var(--spacer-divided-by-row-count));
+}
+
+.MediaGrid__thumb--topLeft {
+    border-top-left-radius: var(--mg-border-radius-wrapper, 8px);
+}
+
+.MediaGrid__thumb--topRight {
+    border-top-right-radius: var(--mg-border-radius-wrapper, 8px);
+}
+
+.MediaGrid__thumb--bottomLeft {
+    border-bottom-left-radius: var(--mg-border-radius-wrapper, 8px);
+}
+
+.MediaGrid__thumb--bottomRight {
+    border-bottom-right-radius: var(--mg-border-radius-wrapper, 8px);
+}
+
+.MediaGrid__thumb--allSide {
+    border-radius: var(--mg-border-radius-wrapper, 8px);
+}
+
+.MediaGrid__thumb--firstRowItem+.MediaGrid__thumb--firstRowItem {
+    --mg-margin: 0 0 0 var(--mg-spacer, 2px);
+}
+
+.MediaGrid__thumb--secondRowItemFirstColumn {
+    --mg-margin: var(--mg-spacer, 2px) 0 0 0;
+}
+
+.MediaGrid__imageElement {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    object-fit: cover;
+    object-position: center;
+}
