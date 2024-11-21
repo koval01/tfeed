@@ -39,7 +39,7 @@ export interface Post {
 }
 
 export interface Forwarded {
-    name: string;
+    name: ParsedAndRaw;
     url: string;
 }
 
@@ -66,13 +66,13 @@ interface Inline {
     url: string;
 }
 
-interface PollOptions {
+export interface PollOptions {
     name: string;
     percent: number;
 }
 
-interface Poll {
-    name: string;
+export interface Poll {
+    question: string;
     type: string;
     votes: string;
     options: PollOptions[];

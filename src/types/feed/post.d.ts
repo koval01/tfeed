@@ -1,4 +1,6 @@
-import { Channel, Post } from "@/types/body";
+import type { FC } from "react";
+import type { ClassValue } from "clsx";
+import type { Channel, Post } from "@/types/body";
 
 export interface PostsProps {
     channel: Channel;
@@ -17,6 +19,13 @@ export interface PostProps {
 export interface LoadingMoreProps {
     isFetchingMore: boolean;
     noMorePosts: boolean;
+}
+
+export interface FooterComponentProps {
+    Icon: FC;
+    context: string;
+    iconSize?: number;
+    className?: ClassValue;
 }
 
 export interface PostBodyProps { channel: Channel, post: Post }

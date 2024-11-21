@@ -6,6 +6,8 @@ export type {
     Counters, 
     Channel, 
     Post, 
+    Poll,
+    PollOptions,
     Media, 
     Offset, 
     Forwarded,
