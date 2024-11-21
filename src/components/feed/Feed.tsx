@@ -28,7 +28,7 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
     const [channelUsername, setChannelUsername] = useState<string>();
     const [snackbar, setSnackbar] = useState<React.ReactElement | null>(null);
 
-    const showErrorSnackbar = useCallback((message: string, Icon?: FC, iconColor?: string | null) => {
+    const showErrorSnackbar = useCallback((message: string, Icon?: FC, iconColor?: string) => {
         if (!snackbar)
             setSnackbar(<ErrorSnackbar
                 text={message}

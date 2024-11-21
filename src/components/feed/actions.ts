@@ -11,13 +11,13 @@ class PostFetcher {
     private channelUsername: string | undefined;
     private setPosts: (value: SetStateAction<Post[]>) => void;
     private setOffset: (value: SetStateAction<Offset>) => void;
-    private showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string | null) => void;
+    private showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string) => void;
 
     constructor(
         channelUsername: string | undefined,
         setPosts: (value: SetStateAction<Post[]>) => void,
         setOffset: (value: SetStateAction<Offset>) => void,
-        showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string | null) => void
+        showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string) => void
     ) {
         this.channelUsername = channelUsername;
         this.setPosts = setPosts;
@@ -56,7 +56,7 @@ class PostFetcher {
         this.showErrorSnackbar?.(
             message,
             is404 ? Icon28SearchStarsOutline : void 0,
-            is404 ? "--vkui--color_icon_accent" : null
+            is404 ? "--vkui--color_icon_accent" : void 0
         );
     }
 
@@ -104,7 +104,7 @@ export const onRefresh = async (
     setIsFetching: (value: SetStateAction<boolean>) => void,
     setPosts: (value: SetStateAction<Post[]>) => void,
     setOffset: (value: SetStateAction<Offset>) => void,
-    showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string | null) => void
+    showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string) => void
 ) => {
     const postFetcher = new PostFetcher(channelUsername, setPosts, setOffset, showErrorSnackbar);
     await postFetcher.refresh(offset, setIsFetching);
@@ -117,7 +117,7 @@ export const onMore = async (
     setPosts: (value: SetStateAction<Post[]>) => void,
     setOffset: (value: SetStateAction<Offset>) => void,
     setNoMorePosts: (value: SetStateAction<boolean>) => void,
-    showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string | null) => void
+    showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string) => void
 ) => {
     const postFetcher = new PostFetcher(channelUsername, setPosts, setOffset, showErrorSnackbar);
     await postFetcher.loadMore(offset, setIsFetchingMore, setNoMorePosts);

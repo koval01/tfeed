@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { throttle } from 'lodash';
 
 interface UseInfiniteScrollProps {
@@ -12,21 +12,36 @@ export const useInfiniteScroll = ({
     onLoadMore,
     isLoading,
     noMoreItems,
-    threshold = 1500
+    threshold = 2e3,
 }: UseInfiniteScrollProps): void => {
+    const onLoadMoreRef = useRef(onLoadMore);
+
     useEffect(() => {
-        const handleScroll = throttle(() => {
+        onLoadMoreRef.current = onLoadMore;
+    }, [onLoadMore]);
+
+    const throttledHandler = useRef(
+        throttle(async () => {
+            if (isLoading || noMoreItems) return;
+
             const scrollTop = document.documentElement.scrollTop;
             const windowHeight = window.innerHeight;
             const documentHeight = document.documentElement.scrollHeight;
-            const offsetCondition = documentHeight - scrollTop - windowHeight < threshold;
 
-            if (offsetCondition && !noMoreItems && !isLoading) {
-                onLoadMore();
+            if (documentHeight - scrollTop - windowHeight < threshold) {
+                await onLoadMoreRef.current();
             }
-        }, 500);
+        }, 1e3)
+    ).current;
 
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, [onLoadMore, isLoading, noMoreItems, threshold]);
+    useEffect(() => {
+        const handleScroll = () => throttledHandler();
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [throttledHandler]);
+
+    useEffect(() => {
+        return () => throttledHandler.cancel();
+    }, [throttledHandler]);
 };

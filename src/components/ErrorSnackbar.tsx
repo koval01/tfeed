@@ -8,7 +8,7 @@ interface ErrorSnackbarProps {
     text: string;
     onClose: () => void;
     Icon?: FC;
-    iconColor?: string | null;
+    iconColor?: string;
 }
 
 const ErrorSnackbar: FC<ErrorSnackbarProps> = ({ 
