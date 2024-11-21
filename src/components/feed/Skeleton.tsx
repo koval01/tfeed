@@ -18,7 +18,7 @@ export const Profile = () => {
 
     return viewWidth.tabletPlus && (
         <SplitCol className={cn(viewWidth.tabletPlus.className, "ScrollStickyWrapper")} width={280} maxWidth={280}>
-            <div className="fixed" style={{ width: "345px" }}>
+            <div className="fixed w-[345px]">
                 <Group className="select-none p-0">
                     <Placeholder
                         icon={<Skeleton width={96} height={96} className="rounded-full" />}

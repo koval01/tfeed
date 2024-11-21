@@ -17,8 +17,8 @@ import { VKMediaGrid } from "@/components/Media";
 import { convertMediaArray } from "@/helpers/mediaConvert";
 
 const Title = ({ children, verified, channelName }: TitleProps) => (
-    <div className="overflow-hidden text-ellipsis leading-4 font-medium" style={{ display: "inherit", fontSize: "13px" }}>
-        <Headline level="2" className="inline-flex max-w-full overflow-hidden text-ellipsis leading-4" style={{ fontSize: "13px" }}>
+    <div className="inline-flex overflow-hidden text-ellipsis text-[13px] leading-4 font-medium">
+        <Headline level="2" className="inline-flex max-w-full overflow-hidden text-ellipsis leading-4 text-[13px]">
             {children}
         </Headline>
         {verified && (
@@ -51,7 +51,7 @@ const HeadProfile = ({ channel, post }: PostBodyProps) => {
                     <ChannelTitle channel={channel} />
                 </div>
             </div>
-            <Subhead className="vkuiPlaceholder__text overflow-hidden text-ellipsis font-normal" style={{ fontSize: "13px" }}>
+            <Subhead className="vkuiPlaceholder__text overflow-hidden text-ellipsis font-normal text-[13px]">
                 {formattedDate}
             </Subhead>
         </div>

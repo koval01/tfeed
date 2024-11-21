@@ -54,8 +54,10 @@ const Post = ({ item, channel }: PostProps) => (
 export const Posts = ({ channel, posts, onRefresh, isFetching, isFetchingMore, noMorePosts }: PostsProps) => (
     <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>
         <PullToRefresh onRefresh={onRefresh} isFetching={isFetching}>
-            {posts.map((item, index) => <Post key={index} item={item} channel={channel} />)}
-            <LoadingMore isFetchingMore={isFetchingMore} noMorePosts={noMorePosts} />
+            <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto">
+                {posts.map((item, index) => <Post key={index} item={item} channel={channel} />)}
+                <LoadingMore isFetchingMore={isFetchingMore} noMorePosts={noMorePosts} />
+            </div>
         </PullToRefresh>
     </SplitCol>
 );

@@ -125,7 +125,7 @@ const Body = ({ channel }: { channel: Channel }) => (
 
 export const Profile = ({ channel }: { channel: Channel }) => (
     <SplitCol className="max-lg:hidden ScrollStickyWrapper" width={280} maxWidth={280}>
-        <div className="fixed" style={{ width: "345px" }}>
+        <div className="fixed w-[345px]">
             <Group className="select-none p-0">
                 <Body channel={channel} />
             </Group>
