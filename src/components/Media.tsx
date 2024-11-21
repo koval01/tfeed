@@ -1,11 +1,13 @@
 import React from 'react';
 import '@/styles/mediaGrid.css';
 
-import { 
-    getLayoutConfig, 
-    getItemClass, 
-    getSecondRowAspectRatio 
+import {
+    getLayoutConfig,
+    getItemClass,
+    getSecondRowAspectRatio
 } from '@/helpers/mediaGridUtils';
+
+import Image from 'next/image';
 
 type Image = {
     url: string;
@@ -37,7 +39,8 @@ export const VKMediaGrid: React.FC<VKMediaGridProps> = ({ images }) => {
                         className={getItemClass(index, imageCount, perRow)}
                         style={{ '--mg-ratio': index < 2 ? 1 : secondRowRatio } as React.CSSProperties}
                     >
-                        <img
+                        <Image
+                            fill
                             className="MediaGrid__imageElement"
                             src={image.url}
                             loading="lazy"

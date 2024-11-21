@@ -1,5 +1,3 @@
-import { nextImage } from "@/helpers/nextImage";
-
 type MediaInput = {
     url: string;
     thumb?: string;
@@ -23,7 +21,7 @@ export const convertMediaArray = (mediaArray: MediaInput[]): MediaOutput[] => {
     return mediaArray
         .filter(media => media.type === 'photo' || media.type === 'video')
         .map(media => ({
-            url: nextImage(media.type === 'photo' ? media.url : media.thumb || '', 512),
+            url: media.type === 'photo' ? media.url : media.thumb || '',
         }))
         .filter(media => media.url);
 };
