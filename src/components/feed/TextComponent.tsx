@@ -1,4 +1,4 @@
-import { Footnote, Link } from '@vkontakte/vkui';
+import { EllipsisText, Link } from '@vkontakte/vkui';
 import parse from 'html-react-parser';
 import type { DOMNode, domToReact, Element, HTMLReactParserOptions, Text } from 'html-react-parser';
 
@@ -44,7 +44,7 @@ const handleLinkElement = (element: Element): JSX.Element => {
 
     return (
         <Link href={element.attribs.href} target={element.attribs.target || '_self'} rel={element.attribs.rel || 'noopener'}>
-            {text}
+            <EllipsisText>{text}</EllipsisText>
         </Link>
     );
 };

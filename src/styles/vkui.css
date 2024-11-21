@@ -5,3 +5,7 @@
     position: relative;
     margin-left: var(--page-block-offset);
 }
+
+.vkuiPlaceholder__action {
+    max-width: 100%;
+}

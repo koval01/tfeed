@@ -89,7 +89,7 @@ const ActionBlock = ({ channel }: { channel: Channel }) => {
     const { t } = useTranslation();
 
     return (
-        <>
+        <div>
             <Counters counters={channel.counters} />
             <Spacing size={12} />
             {/* */}
@@ -99,7 +99,7 @@ const ActionBlock = ({ channel }: { channel: Channel }) => {
             <Button size="l" mode="primary" onClick={() => { window.open(`https://t.me/${channel.username}`, "_blank") }}>
                 {t("Subscribe")}
             </Button>
-        </>
+        </div>
     )
 }
 
