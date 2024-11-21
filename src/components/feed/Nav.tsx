@@ -7,7 +7,7 @@ import { Avatar } from "@/components/Avatar";
 import { Icon16Verified } from "@vkontakte/icons";
 import { Button, EllipsisText, Headline } from "@vkontakte/vkui";
 
-import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 const NavAvatar = ({ channel }: { channel: Channel }) => (
     <div className="inline-block overflow-hidden float-left mr-2 relative">
@@ -28,11 +28,15 @@ const Title = ({ children, verified }: TitleProps) => (
     </div>
 )
 
-const SubscribersCounter = ({ channel }: { channel: Channel }) => (
-    <div className="whitespace-nowrap text-ellipsis overflow-hidden text-[12px] leading-[14px] mb-0.5 mt-px vkuiPlaceholder__text">
-        {channel.counters.subscribers} subscribers
-    </div>
-)
+const SubscribersCounter = ({ channel }: { channel: Channel }) => {
+    const { t } = useTranslation();
+
+    return (
+        <div className="whitespace-nowrap text-ellipsis overflow-hidden text-[12px] leading-[14px] mb-0.5 mt-px vkuiPlaceholder__text">
+            {channel.counters.subscribers} {t("subscribers")}
+        </div>
+    )
+}
 
 const ChannelTitle = ({ channel }: { channel: Channel }) => (
     <Title verified={channel.labels.includes("verified")}>
@@ -42,17 +46,21 @@ const ChannelTitle = ({ channel }: { channel: Channel }) => (
     </Title>
 )
 
-export const SubscribeButton = ({ channel }: { channel: Channel }) => (
-    <div className="block mr-0 md:pr-0 pr-2 w-full">
-        <Button
-            appearance="accent-invariable"
-            size="s"
-            onClick={() => { window.open(`https://t.me/${channel.username}`, "_blank") }}
-        >
-            <Headline level="2">Subscribe</Headline>
-        </Button>
-    </div>
-)
+export const SubscribeButton = ({ channel }: { channel: Channel }) => {
+    const { t } = useTranslation();
+
+    return (
+        <div className="block mr-0 md:pr-0 pr-2 w-full">
+            <Button
+                appearance="accent-invariable"
+                size="s"
+                onClick={() => { window.open(`https://t.me/${channel.username}`, "_blank") }}
+            >
+                <Headline level="2">{t("Subscribe")}</Headline>
+            </Button>
+        </div>
+    )
+}
 
 const Nav = ({ channel }: { channel: Channel }) => (
     <div className="flex items-center relative justify-between space-x-2 md:pl-0 pl-2 overflow-hidden py-1.5">
