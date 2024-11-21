@@ -12,7 +12,7 @@ export const useInfiniteScroll = ({
     onLoadMore,
     isLoading,
     noMoreItems,
-    threshold = 2e3,
+    threshold = 3e3,
 }: UseInfiniteScrollProps): void => {
     const onLoadMoreRef = useRef(onLoadMore);
 
