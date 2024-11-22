@@ -8,6 +8,8 @@ import {
   AppRoot
 } from '@vkontakte/vkui';
 
+import StoreProvider from '@/components/StoreProvider';
+
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
@@ -50,9 +52,11 @@ const App = (props: PropsWithChildren) => {
 };
 
 const RootInner = ({ children }: PropsWithChildren) => (
-  <App>
-    {children}
-  </App>
+  <StoreProvider>
+    <App>
+      {children}
+    </App>
+  </StoreProvider>
 );
 
 export const Root = (props: PropsWithChildren) => {
