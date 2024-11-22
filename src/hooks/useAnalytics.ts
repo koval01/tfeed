@@ -15,16 +15,6 @@ const analyticsState = {
 };
 
 export const useAnalytics = () => {
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (analyticsState.analyticsQueue.length > 0 && !analyticsState.isSending) {
-                batchSendAnalytics();
-            }
-        }, 1e4);
-
-        return () => clearInterval(interval);
-    }, []);
-
     const handleVisibility = (entry: IntersectionObserverEntry, inView: boolean) => {
         const target = entry.target.children[0] as HTMLElement;
         if (!target) return;
@@ -65,8 +55,9 @@ export const useAnalytics = () => {
         analyticsState.isSending = true;
 
         try {
-            await sendToServer(dataToSend);
-            console.debug("Analytics sent successfully:", dataToSend);
+            if (process.env.NODE_ENV === "production")
+                await sendToServer(dataToSend);
+            console.debug("Analytics sent:", dataToSend);
             analyticsState.analyticsQueue = [];
             analyticsState.isSending = false;
         } catch (error) {
@@ -94,6 +85,16 @@ export const useAnalytics = () => {
             "credentials": "include"
         });
     };
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (analyticsState.analyticsQueue.length > 0 && !analyticsState.isSending) {
+                batchSendAnalytics();
+            }
+        }, 1e4);
+
+        return () => clearInterval(interval);
+    }, [batchSendAnalytics]);
 
     return { handleVisibility };
 };
