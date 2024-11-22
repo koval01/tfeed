@@ -1,43 +1,60 @@
-import { FC, useCallback, useEffect, useState } from "react";
-
-import { Body } from "@/types";
+import { type FC, useCallback, useEffect, useState } from "react";
+import type { Body } from "@/types";
 
 import { Panel, SplitLayout } from "@vkontakte/vkui";
 
-import { Posts } from "@/components/feed/Post";
-import { Profile } from "@/components/feed/Profile";
-
-import {
-    Posts as PostsSkeleton,
-    Profile as ProfileSkeleton
+import { 
+    Posts as PostsSkeleton, 
+    Profile as ProfileSkeleton 
 } from "@/components/feed/Skeleton";
 
-import { FeedHeader } from "@/components/feed/FeedHeader";
-
+import { Posts } from "@/components/feed/Post";
+import { Profile } from "@/components/feed/Profile";
 import ErrorSnackbar from "@/components/ErrorSnackbar";
+import { FeedHeader } from "@/components/feed/FeedHeader";
 
 import { usePosts } from "@/hooks/usePosts";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 interface FeedProps {
+    /**
+     * The initial data to populate the feed.
+     */
     data: Body;
+
+    /**
+     * Flag to indicate whether the initial data is being loaded.
+     */
     isLoading: boolean;
 }
 
+/**
+ * The Feed component displays a feed of posts with infinite scroll and error handling.
+ *
+ * @param props - Component props.
+ */
 export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
-    const [channelUsername, setChannelUsername] = useState<string>();
+    const [channelUsername, setChannelUsername] = useState<string | undefined>(undefined);
     const [snackbar, setSnackbar] = useState<React.ReactElement | null>(null);
 
-    const showErrorSnackbar = useCallback((message: string, Icon?: FC, iconColor?: string) => {
-        if (!snackbar)
-            setSnackbar(<ErrorSnackbar
-                text={message}
-                onClose={() => setSnackbar(null)}
-                Icon={Icon ?? Icon}
-                iconColor={iconColor ?? iconColor}
-            />);
-    }, [snackbar]);
+    // Function to show error notifications
+    const showErrorSnackbar = useCallback(
+        (message: string, Icon?: FC, iconColor?: string) => {
+            if (!snackbar) {
+                setSnackbar(
+                    <ErrorSnackbar
+                        text={message}
+                        onClose={() => setSnackbar(null)}
+                        Icon={Icon}
+                        iconColor={iconColor}
+                    />
+                );
+            }
+        },
+        [snackbar]
+    );
 
+    // Custom hook to manage posts
     const {
         posts,
         isFetching,
@@ -45,49 +62,61 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
         noMorePosts,
         refreshPosts,
         loadMorePosts,
-        initializePosts
+        initializePosts,
     } = usePosts(channelUsername, showErrorSnackbar);
 
+    // Infinite scroll setup
     useInfiniteScroll({
         onLoadMore: loadMorePosts,
         isLoading: isFetchingMore,
-        noMoreItems: noMorePosts
+        noMoreItems: noMorePosts,
     });
 
+    // Initialize posts and set the channel username on data change
     useEffect(() => {
-        initializePosts(data);
-        setChannelUsername(data?.channel?.username);
+        if (data) {
+            initializePosts(data);
+            setChannelUsername(data.channel?.username);
+        }
     }, [data, initializePosts]);
 
+    // Periodic refresh every 100 seconds
     useEffect(() => {
-        const intervalId = setInterval(() => refreshPosts(), 1e5);
-        return () => clearInterval(intervalId);
+        const refreshInterval = setInterval(refreshPosts, 100000);
+        return () => clearInterval(refreshInterval);
     }, [refreshPosts]);
 
     return (
         <Panel>
+            {/* Header */}
             <FeedHeader channel={data?.channel} isLoading={isLoading} />
+
+            {/* Main layout */}
             <SplitLayout center>
                 {isLoading ? (
+                    // Show skeletons during loading
                     <>
                         <PostsSkeleton />
                         <ProfileSkeleton />
                     </>
                 ) : (
+                    // Show posts and profile when data is ready
                     <>
                         <Posts
                             channel={data.channel}
                             posts={posts}
-                            onRefresh={() => refreshPosts(true)}
+                            onRefresh={refreshPosts}
                             isFetching={isFetching}
                             isFetchingMore={isFetchingMore}
                             noMorePosts={noMorePosts}
                         />
                         <Profile channel={data.channel} />
-                        {snackbar}
                     </>
                 )}
             </SplitLayout>
+
+            {/* Snackbar */}
+            {snackbar}
         </Panel>
     );
 };

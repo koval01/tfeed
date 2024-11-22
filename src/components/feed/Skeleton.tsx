@@ -1,3 +1,4 @@
+import React from "react";
 import {
     Group,
     Paragraph,
@@ -7,19 +8,38 @@ import {
     Title,
     Skeleton,
     Flex,
-    Footnote
+    Footnote,
 } from "@vkontakte/vkui";
 
-export const Profile = () => (
-    <SplitCol className="max-lg:hidden ScrollStickyWrapper" width={280} maxWidth={280}>
+/**
+ * **Profile Component**
+ * A skeleton placeholder for the user profile sidebar.
+ *
+ * @returns The Profile skeleton component.
+ */
+export const Profile: React.FC = () => (
+    <SplitCol
+        width={280}
+        maxWidth={280}
+        className="max-lg:hidden ScrollStickyWrapper"
+    >
         <div className="fixed w-[345px]">
             <Group className="select-none p-0">
                 <Placeholder
-                    icon={<Skeleton width={96} height={96} className="rounded-full" />}
-                    header={<Title><Skeleton width={250} /></Title>}
+                    icon={
+                        <Skeleton
+                            width={96}
+                            height={96}
+                            className="rounded-full"
+                        />
+                    }
+                    header={
+                        <Title>
+                            <Skeleton width={250} />
+                        </Title>
+                    }
                     action={
                         <>
-
                             <Spacing size={12} />
                             <Paragraph>
                                 <Skeleton width={170} />
@@ -38,23 +58,31 @@ export const Profile = () => (
     </SplitCol>
 );
 
-const PostHeader = () => (
+/**
+ * **PostHeader Component**
+ * Displays a skeleton placeholder for the post header, including a user avatar and name.
+ *
+ * @returns The PostHeader skeleton component.
+ */
+const PostHeader: React.FC = () => (
     <Flex className="flex-row select-none">
         <Skeleton width={40} height={40} className="mr-3 rounded-full" />
         <div className="flex flex-col flex-auto mr-2.5">
-            <div>
-                <Title level="3">
-                    <Skeleton width={180} />
-                </Title>
-            </div>
-            <div>
-                <Skeleton width={80} height={13} />
-            </div>
+            <Title level="3">
+                <Skeleton width={180} />
+            </Title>
+            <Skeleton width={80} height={13} />
         </div>
     </Flex>
 );
 
-const PostBody = () => (
+/**
+ * **PostBody Component**
+ * Displays a skeleton placeholder for the main body of a post.
+ *
+ * @returns The PostBody skeleton component.
+ */
+const PostBody: React.FC = () => (
     <Footnote weight="2" className="whitespace-pre-line">
         <Skeleton width="95%" />
         <Skeleton width="100%" />
@@ -64,10 +92,21 @@ const PostBody = () => (
     </Footnote>
 );
 
-export const Posts = () => (
-    <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>
+/**
+ * **Posts Component**
+ * Displays a skeleton placeholder for a list of posts.
+ *
+ * @returns The Posts skeleton component.
+ */
+export const Posts: React.FC = () => (
+    <SplitCol
+        width="100%"
+        maxWidth="560px"
+        stretchedOnMobile
+        autoSpaced
+    >
         <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto">
-            {[...Array(10)].map((_, index) => (
+            {Array.from({ length: 10 }).map((_, index) => (
                 <Group key={index}>
                     <div className="py-2.5 px-4">
                         <PostHeader />
@@ -80,8 +119,16 @@ export const Posts = () => (
     </SplitCol>
 );
 
-export const ChannelNavSkeleton = () => (
-    <div className="block select-none items-center space-x-2 md:pl-0 pl-2 overflow-hidden py-1.5">
+/**
+ * **ChannelNavSkeleton Component**
+ * A skeleton placeholder for a channel navigation bar.
+ *
+ * @returns The ChannelNavSkeleton component.
+ */
+export const ChannelNavSkeleton: React.FC = () => (
+    <div
+        className="block select-none items-center space-x-2 pl-2 overflow-hidden py-1"
+    >
         <div className="inline-block overflow-hidden float-left mr-2 relative">
             <Skeleton width={36} height={36} className="rounded-full" />
         </div>
@@ -92,4 +139,4 @@ export const ChannelNavSkeleton = () => (
             <Skeleton width={100} height={10} />
         </div>
     </div>
-)
+);

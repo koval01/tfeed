@@ -1,13 +1,18 @@
-import React from 'react';
-import { Metadata } from 'next';
+import React from "react";
+import { Metadata } from "next";
+import { Preview } from "@/types";
+import { AppLinksAndroid, AppLinksApple } from "next/dist/lib/metadata/types/extra-types";
+import { removeEmojies } from "@/helpers/string";
 
-import { Preview } from '@/types';
-import { AppLinksAndroid, AppLinksApple } from 'next/dist/lib/metadata/types/extra-types';
+export const runtime = "edge";
 
-import { removeEmojies } from '@/helpers/string';
-
-export const runtime = 'edge';
-
+/**
+ * Builds metadata for the given channel.
+ * @param channel - Channel username.
+ * @param title - Optional title for the metadata.
+ * @param description - Optional description for the metadata.
+ * @param avatar - Optional avatar URL for OpenGraph/Twitter cards.
+ */
 const buildMetadata = (
     channel: string,
     title?: string,
@@ -16,58 +21,70 @@ const buildMetadata = (
 ): Metadata => {
     const clearTitle = removeEmojies(title || `Channel @${channel}`);
     const baseDescription = description || `Channel of user @${channel}`;
+    
+    const channelUrl = `https://t.me/${channel}`;
+    const applicationUrl = `tg://resolve?domain=${channel}`;
+    const canonicalUrl = `https://tfeed.koval.page/${channel}`;
 
     return {
-        title: title || `Channel @${channel}`,
+        title: clearTitle,
         description: baseDescription,
         openGraph: {
             type: "website",
             title: clearTitle,
             description: baseDescription,
-            images: avatar
+            images: avatar || undefined,
         },
         twitter: {
+            card: "summary",
             title: clearTitle,
             description: baseDescription,
-            card: "summary",
-            images: avatar
+            images: avatar || undefined,
         },
-        authors: [{ name: clearTitle, url: `https://t.me/${channel}` }],
+        authors: [{ name: clearTitle, url: channelUrl }],
         creator: clearTitle,
-        alternates: { canonical: `https://tfeed.koval.page/${channel}` },
+        alternates: { canonical: canonicalUrl },
         appLinks: {
-            ios: { url: `tg://resolve?domain=${channel}` } as AppLinksApple,
-            android: { url: `tg://resolve?domain=${channel}` } as AppLinksAndroid
-        }
+            ios: { url: applicationUrl } as AppLinksApple,
+            android: { url: applicationUrl } as AppLinksAndroid,
+        },
     };
 };
 
+/**
+ * Fetches and generates metadata for a channel.
+ * @param params - Params containing the channel username.
+ * @returns Metadata for the channel.
+ */
 export const generateMetadata = async ({ params }: { params: { channel: string } }): Promise<Metadata> => {
     const { channel } = params;
+    const apiUrl = `${process.env.NEXT_PUBLIC_API_HOST}/v1/preview/${channel}`;
 
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/v1/preview/${channel}`, {
-            headers: { "BackEndSecret": process.env.BACKEND_SECRET || "" }
+        const response = await fetch(apiUrl, {
+            headers: { BackEndSecret: process.env.BACKEND_SECRET || "" },
         });
 
         if (!response.ok) {
-            console.error(`Error fetching metadata: ${response.status} ${response.statusText}`);
+            console.warn(`Error fetching metadata for "${channel}": ${response.status} ${response.statusText}`);
             throw new Error(`Failed to fetch metadata for channel ${channel}`);
         }
 
-        const metadata = await response.json() as Preview;
-        if (!metadata) throw new Error(`No metadata returned for channel ${channel}`);
-
+        const metadata: Preview = await response.json();
         const { title, description, avatar } = metadata.channel;
+
         return buildMetadata(channel, title, description, avatar);
     } catch (error) {
-        console.error(`Failed to generate metadata for channel "${channel}":`, error);
-
+        console.error(`Metadata generation failed for channel "${channel}":`, error);
         // Fallback metadata
         return buildMetadata(channel);
     }
 };
 
-const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => children;
+/**
+ * Layout component for rendering child elements.
+ * @param children - React children to render.
+ */
+const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => <>{children}</>;
 
 export default Layout;

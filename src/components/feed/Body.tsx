@@ -2,14 +2,13 @@ import type { FooterComponentProps, PostBodyProps } from "@/types/feed/post";
 import type { Channel, Post, TitleProps } from "@/types";
 
 import { cn } from "@/lib/utils";
-
 import { useFormattedDate } from "@/hooks/useFormattedDate";
 
 import {
     Icon16Verified,
     Icon16View,
     Icon20SignatureOutline,
-    Icon24ShareOutline
+    Icon24ShareOutline,
 } from "@vkontakte/icons";
 import {
     Caption,
@@ -18,7 +17,7 @@ import {
     Footnote,
     Headline,
     Subhead,
-    Tappable
+    Tappable,
 } from "@vkontakte/vkui";
 
 import { Avatar } from "@/components/Avatar";
@@ -29,9 +28,12 @@ import { TextComponent } from "@/components/feed/TextComponent";
 
 import { convertMediaArray } from "@/helpers/mediaConvert";
 
+/**
+ * Renders the title of a channel or post with optional verification status.
+ */
 const Title = ({ children, verified, channelName }: TitleProps) => (
     <div className="inline-flex overflow-hidden text-ellipsis text-[13px] leading-4 font-medium">
-        <Headline level="2" className="inline-flex max-w-full overflow-hidden text-ellipsis leading-4 text-[13px]">
+        <Headline level="2" className="inline-flex max-w-full overflow-hidden text-ellipsis text-[13px] leading-4">
             {children}
         </Headline>
         {verified && (
@@ -44,16 +46,25 @@ const Title = ({ children, verified, channelName }: TitleProps) => (
             </div>
         )}
     </div>
-)
+);
 
+/**
+ * Displays the channel's title and verification status.
+ */
 const ChannelTitle = ({ channel }: { channel: Channel }) => (
-    <Title verified={channel.labels.includes("verified")} channelName={channel.title.string}>
+    <Title
+        verified={channel.labels.includes("verified")}
+        channelName={channel.title.string}
+    >
         <EllipsisText className="max-sm:max-w-40 max-md:max-w-72 lg:max-w-[380px] md:max-w-[60vw]">
             <TextComponent htmlString={channel.title.html} />
         </EllipsisText>
     </Title>
-)
+);
 
+/**
+ * Renders the profile header with channel title and post date.
+ */
 const HeadProfile = ({ channel, post }: PostBodyProps) => {
     const formattedDate = useFormattedDate(post.footer.date.unix);
 
@@ -68,27 +79,32 @@ const HeadProfile = ({ channel, post }: PostBodyProps) => {
                 {formattedDate}
             </Subhead>
         </div>
-    )
-}
+    );
+};
 
+/**
+ * Renders a "more" button to redirect to a post on Telegram.
+ */
 const MoreButton = ({ channel, post }: PostBodyProps) => {
-    const redirect = () => window.open(`https://t.me/${channel.username}/${post.id}`, "_blank");
+    const handleRedirect = () =>
+        window.open(`https://t.me/${channel.username}/${post.id}`, "_blank");
 
     return (
-        <div className="relative flex" style={{
-            flex: "0 0 auto"
-        }}>
+        <div className="relative flex" style={{ flex: "0 0 auto" }}>
             <div className="flex items-center">
                 <div className="relative">
-                    <Tappable onClick={redirect} className="rounded-lg">
+                    <Tappable onClick={handleRedirect} className="rounded-lg">
                         <Icon24ShareOutline className="vkuiPlaceholder__text" />
                     </Tappable>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
+/**
+ * Renders the post header with an avatar, profile information, and more button.
+ */
 export const PostHeader = ({ channel, post }: PostBodyProps) => (
     <Flex className="flex-row select-none">
         <div className="mr-3">
@@ -97,12 +113,23 @@ export const PostHeader = ({ channel, post }: PostBodyProps) => (
         <HeadProfile channel={channel} post={post} />
         <MoreButton channel={channel} post={post} />
     </Flex>
-)
+);
 
-const FooterComponent = ({ Icon, context, iconSize = 14, className }: FooterComponentProps) => (
-    <div className={
-        cn("flex items-center whitespace-nowrap overflow-hidden leading-[15px] h-3.5 vkuiPlaceholder__text", className)
-    }>
+/**
+ * Generic footer component for displaying icon and context text.
+ */
+const FooterComponent = ({
+    Icon,
+    context,
+    iconSize = 14,
+    className,
+}: FooterComponentProps) => (
+    <div
+        className={cn(
+            "flex items-center whitespace-nowrap overflow-hidden leading-[15px] h-3.5 vkuiPlaceholder__text",
+            className
+        )}
+    >
         <span className="flex vkuiPlaceholder__text" style={{ width: iconSize, height: iconSize }}>
             <Icon />
         </span>
@@ -110,21 +137,32 @@ const FooterComponent = ({ Icon, context, iconSize = 14, className }: FooterComp
             {context}
         </Caption>
     </div>
-)
+);
 
-const PostViews = ({ views }: { views?: string }) => (
-    views && <FooterComponent Icon={Icon16View} context={views} className="space-x-1.5" />
-)
+/**
+ * Displays the view count in the post footer.
+ */
+const PostViews = ({ views }: { views?: string }) =>
+    views ? <FooterComponent Icon={Icon16View} context={views} className="space-x-1.5" /> : null;
 
-const PostAuthor = ({ author }: { author?: string }) => (
-    author ? <FooterComponent
-        Icon={Icon20SignatureOutline}
-        context={author}
-        iconSize={16}
-        className="space-x-1"
-    /> : <div />
-)
+/**
+ * Displays the author in the post footer.
+ */
+const PostAuthor = ({ author }: { author?: string }) =>
+    author ? (
+        <FooterComponent
+            Icon={Icon20SignatureOutline}
+            context={author}
+            iconSize={16}
+            className="space-x-1"
+        />
+    ) : (
+        <div />
+    );
 
+/**
+ * Renders the footer of the post with author and view count.
+ */
 export const PostFooter = ({ post }: { post: Post }) => (
     <div className="py-0 select-none">
         <div className="flex items-center relative justify-between max-md:pt-1 pt-3 pb-0">
@@ -132,32 +170,41 @@ export const PostFooter = ({ post }: { post: Post }) => (
             <PostViews views={post.footer.views} />
         </div>
     </div>
-)
+);
 
+/**
+ * Renders media content in the post.
+ */
 const PostMedia = ({ post }: { post: Post }) => {
     if (!post.content.media) return null;
-
     const images = convertMediaArray(post.content.media);
-    return <VKMediaGrid images={images} />
+    return <VKMediaGrid images={images} />;
 };
 
+/**
+ * Renders the text content of the post.
+ */
 const PostText = ({ post }: { post: Post }) => (
     <div>
         <Footnote weight="2" className="whitespace-pre-line">
             <TextComponent htmlString={post.content.text?.html} />
         </Footnote>
     </div>
-)
+);
 
-const PostPoll = ({ post }: { post: Post }) => {
-    if (!post.content.poll) return null;
-    return <Poll poll={post.content.poll} />;
-}
+/**
+ * Renders a poll in the post if it exists.
+ */
+const PostPoll = ({ post }: { post: Post }) =>
+    post.content.poll ? <Poll poll={post.content.poll} /> : null;
 
+/**
+ * Renders the main content of the post, including text, media, and poll.
+ */
 export const PostContent = ({ channel, post }: PostBodyProps) => (
     <>
         <PostText post={post} />
         <PostMedia post={post} />
         <PostPoll post={post} />
     </>
-)
+);

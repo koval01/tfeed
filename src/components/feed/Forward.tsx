@@ -1,5 +1,6 @@
-import { PropsWithChildren } from "react";
+import React from "react";
 
+import type { PropsWithChildren } from "react";
 import type { Post, Forwarded } from "@/types";
 
 import { Icon28ReplyOutline } from "@vkontakte/icons";
@@ -8,24 +9,42 @@ import { Avatar, EllipsisText, Headline, Link, Spacing, Subhead } from "@vkontak
 import { useTranslation } from "react-i18next";
 import { TextComponent } from "@/components/feed/TextComponent";
 
+/**
+ * Props for the `LinkPost` component.
+ */
 interface LinkPostProps extends PropsWithChildren {
+    /** Optional CSS class for styling. */
     className?: string;
+    /** Forwarded object containing the URL and name details. */
     forwarded: Forwarded;
 }
 
-const AvatarObject = () => (
-    <Avatar fallbackIcon={<Icon28ReplyOutline style={{ margin: 0 }} />} className="!size-10" />
-)
+/**
+ * Renders an avatar with a fallback icon.
+ */
+const AvatarObject: React.FC = () => (
+    <Avatar
+        fallbackIcon={<Icon28ReplyOutline style={{ margin: 0 }} />}
+        className="!size-10"
+    />
+);
 
-const LinkPost = ({ children, className, forwarded }: LinkPostProps) => (
+/**
+ * Wraps children with a link if a URL is provided in the `forwarded` prop.
+ */
+const LinkPost: React.FC<LinkPostProps> = ({ children, className, forwarded }) =>
     forwarded.url ? (
         <Link href={forwarded.url} className={className}>
             {children}
         </Link>
-    ) : children
-)
+    ) : (
+        <>{children}</>
+    );
 
-const ForwardName = ({ forwarded }: { forwarded: Forwarded }) => (
+/**
+ * Renders the name of the forwarded message with a link if available.
+ */
+const ForwardName: React.FC<{ forwarded: Forwarded }> = ({ forwarded }) => (
     <Headline>
         <EllipsisText className="text-[--vkui--color_text_accent]">
             <LinkPost className="text-[--vkui--color_text_accent]" forwarded={forwarded}>
@@ -35,25 +54,30 @@ const ForwardName = ({ forwarded }: { forwarded: Forwarded }) => (
     </Headline>
 );
 
-export const Forward = ({ children, post }: PropsWithChildren<{ post: Post }>) => { 
+/**
+ * The `Forward` component renders forwarded message details along with its children.
+ */
+export const Forward: React.FC<PropsWithChildren<{ post: Post }>> = ({ children, post }) => {
     const { t } = useTranslation();
-    
-    return(
-    <div className="mt-3 pl-3 border-solid border-l-2 border-[#001433]/[.12] dark:border-white/[.24]">
-        <div className="min-h-10">
-            <div className="block float-left">
-                <LinkPost forwarded={post.forwarded}><AvatarObject /></LinkPost>
+
+    return (
+        <div className="mt-3 pl-3 border-solid border-l-2 border-[#001433]/[.12] dark:border-white/[.24]">
+            <div className="min-h-10">
+                <div className="block float-left">
+                    <LinkPost forwarded={post.forwarded}>
+                        <AvatarObject />
+                    </LinkPost>
+                </div>
+                <div className="ml-[52px] mt-[3px]">
+                    <ForwardName forwarded={post.forwarded} />
+                    <Subhead className="vkuiPlaceholder__text select-none">
+                        {t("forwarded message")}
+                    </Subhead>
+                </div>
             </div>
-            <div className="ml-[52px] mt-[3px]">
-                <ForwardName forwarded={post.forwarded} />
-                <Subhead className="vkuiPlaceholder__text select-none">
-                    {t("forwarded message")}
-                </Subhead>
-            </div>
+            <Spacing />
+            {children}
+            <Spacing size={6} />
         </div>
-        <Spacing />
-        {children}
-        <Spacing size={6} />
-    </div>
-)
+    );
 };

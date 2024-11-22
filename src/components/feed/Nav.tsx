@@ -1,4 +1,5 @@
-import { Channel, TitleProps } from "@/types";
+import React from "react";
+import type { Channel, TitleProps } from "@/types";
 
 import { TextComponent } from "@/components/feed/TextComponent";
 import { Verified } from "@/components/feed/Verified";
@@ -9,44 +10,57 @@ import { Button, EllipsisText, Headline } from "@vkontakte/vkui";
 
 import { useTranslation } from "react-i18next";
 
-const NavAvatar = ({ channel }: { channel: Channel }) => (
+/**
+ * Renders a channel avatar.
+ */
+const NavAvatar: React.FC<{ channel: Channel }> = ({ channel }) => (
     <div className="inline-block items-baseline overflow-hidden float-left mr-2 relative">
         <Avatar src={channel.avatar} size={36} name={channel.title.string} />
     </div>
-)
+);
 
-const Title = ({ children, verified }: TitleProps) => (
+/**
+ * Renders the title with optional verification badge.
+ */
+const Title: React.FC<TitleProps> = ({ children, verified }) => (
     <div className="inline-flex items-super text-sm font-medium relative -top-1">
-        <div className="whitespace-nowrap text-ellipsis overflow-hidden">
-            {children}
-        </div>
+        <div className="whitespace-nowrap text-ellipsis overflow-hidden">{children}</div>
         {verified && (
             <div className="inline-block overflow-hidden size-4 ml-1 leading-none">
                 <Verified className="inline-flex text-[--vkui--color_icon_accent]" Icon={Icon16Verified} />
             </div>
         )}
     </div>
-)
+);
 
-const SubscribersCounter = ({ channel }: { channel: Channel }) => {
+/**
+ * Displays the subscriber count for a channel.
+ */
+const SubscribersCounter: React.FC<{ channel: Channel }> = ({ channel }) => {
     const { t } = useTranslation();
 
     return (
         <div className="whitespace-nowrap text-ellipsis overflow-hidden text-[12px] leading-[14px] pb-1 relative -top-1 vkuiPlaceholder__text">
             {channel.counters.subscribers} {t("subscribers")}
         </div>
-    )
-}
+    );
+};
 
-const ChannelTitle = ({ channel }: { channel: Channel }) => (
+/**
+ * Renders the channel's title with optional HTML content.
+ */
+const ChannelTitle: React.FC<{ channel: Channel }> = ({ channel }) => (
     <Title verified={channel.labels.includes("verified")}>
         <EllipsisText className="max-w-[calc(50vw-52px)]">
             <TextComponent htmlString={channel.title.html} />
         </EllipsisText>
     </Title>
-)
+);
 
-export const SubscribeButton = ({ channel }: { channel: Channel }) => {
+/**
+ * Renders a subscription button that redirects to the channel's Telegram page.
+ */
+export const SubscribeButton: React.FC<{ channel: Channel }> = ({ channel }) => {
     const { t } = useTranslation();
 
     return (
@@ -54,15 +68,18 @@ export const SubscribeButton = ({ channel }: { channel: Channel }) => {
             <Button
                 appearance="accent-invariable"
                 size="s"
-                onClick={() => { window.open(`https://t.me/${channel.username}`, "_blank") }}
+                onClick={() => window.open(`https://t.me/${channel.username}`, "_blank")}
             >
                 <Headline level="2">{t("Subscribe")}</Headline>
             </Button>
         </div>
-    )
-}
+    );
+};
 
-const Nav = ({ channel }: { channel: Channel }) => (
+/**
+ * Renders the navigation block for a channel, including avatar, title, and subscriber count.
+ */
+const Nav: React.FC<{ channel: Channel }> = ({ channel }) => (
     <div className="flex items-center relative justify-between space-x-2 overflow-hidden py-1.5 md:pt-3">
         <div className="block select-none items-center">
             <NavAvatar channel={channel} />
@@ -70,8 +87,10 @@ const Nav = ({ channel }: { channel: Channel }) => (
             <SubscribersCounter channel={channel} />
         </div>
     </div>
-)
+);
 
-export const ChannelNav = ({ channel }: { channel?: Channel }) => (
-    channel && <Nav channel={channel} />
-)
+/**
+ * A wrapper for displaying channel navigation if the channel exists.
+ */
+export const ChannelNav: React.FC<{ channel?: Channel }> = ({ channel }) =>
+    channel ? <Nav channel={channel} /> : null;

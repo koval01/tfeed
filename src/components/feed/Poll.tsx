@@ -1,17 +1,21 @@
+import React from "react";
 import type { Poll as PollProp, PollOptions } from "@/types";
 
-import { Icon20CheckSquareOutline } from "@vkontakte/icons";
-import {
-    Caption,
-    FormItem,
-    Headline,
-    Progress,
-    Subhead
+import { 
+    Headline, 
+    Subhead, 
+    Caption, 
+    FormItem, 
+    Progress 
 } from "@vkontakte/vkui";
 
 import { useTranslation } from "react-i18next";
 
-const PollHeader = ({ poll }: { poll: PollProp }) => {
+/**
+ * Header component for the Poll.
+ * Displays the poll question, type, and total votes.
+ */
+const PollHeader = ({ poll }: { poll: PollProp }): JSX.Element => {
     const { t } = useTranslation();
 
     return (
@@ -19,26 +23,19 @@ const PollHeader = ({ poll }: { poll: PollProp }) => {
             <Headline weight="1" level="2" className="text-[--vkui--color_text_contrast]">
                 {poll.question}
             </Headline>
-            <div className="flex space-x-1.5 text-[--vkui--color_text_muted]">
-                <div>
-                    <Subhead className="font-normal text-xs">
-                        {t(poll.type)}
-                    </Subhead>
-                </div>
-                <div>
-                    <span className="align-top leading-3 text-[--vkui--color_text_secondary]">|</span>
-                </div>
-                <div>
-                    <Caption>
-                        {poll.votes} {t("votes")}
-                    </Caption>
-                </div>
+            <div className="flex space-x-1.5 text-[--vkui--color_text_secondary]">
+                <Subhead className="font-normal text-xs">{t(poll.type)}</Subhead>
+                <span className="align-top leading-3">|</span>
+                <Caption>{poll.votes} {t("votes")}</Caption>
             </div>
         </>
     );
-}
+};
 
-const PollOption = ({ option }: { option: PollOptions }) => (
+/**
+ * Single poll option with a progress bar and percentage display.
+ */
+const PollOption = ({ option }: { option: PollOptions }): JSX.Element => (
     <div className="flex items-center relative justify-between max-md:pt-1 pt-3 pb-0">
         <div className="block w-full">
             <FormItem id="progresslabel" className="p-0 pr-2" top={option.name}>
@@ -49,15 +46,18 @@ const PollOption = ({ option }: { option: PollOptions }) => (
             {option.percent}%
         </div>
     </div>
-)
+);
 
-export const Poll = ({ poll }: { poll: PollProp }) => (
+/**
+ * Main Poll component that displays a question, its options, and voting statistics.
+ */
+export const Poll = ({ poll }: { poll: PollProp }): JSX.Element => (
     <div className="block mt-2 break-words text-sm">
         <PollHeader poll={poll} />
         <div className="block min-w-[240px] text-xs mb-2.5">
-            {poll.options.map((item, index) =>
+            {poll.options.map((item, index) => (
                 <PollOption key={index} option={item} />
-            )}
+            ))}
         </div>
     </div>
 );

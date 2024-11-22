@@ -1,25 +1,49 @@
-import type { PostBodyProps, PostsProps, PostProps, LoadingMoreProps } from "@/types/feed/post";
+import React from "react";
+import type { 
+    PostBodyProps, 
+    PostsProps, 
+    PostProps, 
+    LoadingMoreProps 
+} from "@/types/feed/post";
+
+import { 
+    Group, 
+    SplitCol, 
+    Spacing, 
+    PullToRefresh, 
+    Subhead 
+} from "@vkontakte/vkui";
+
+import { 
+    PostContent, 
+    PostFooter, 
+    PostHeader 
+} from "@/components/feed/Body";
 
 import { InView } from "react-intersection-observer";
 import { useAnalytics } from "@/hooks/useAnalytics";
 
 import { Forward } from "@/components/feed/Forward";
-import { PostContent, PostFooter, PostHeader } from "@/components/feed/Body";
-
-import { Group, SplitCol, Spacing, PullToRefresh, Subhead } from "@vkontakte/vkui";
 import { Button } from "@/components/Button";
 import { ThreeDot } from "react-loading-indicators";
 
-const PostBody = ({ channel, post }: PostBodyProps) => (
-    post.forwarded ?
+/**
+ * Displays the content of a single post, including forwarded content if applicable.
+ */
+const PostBody = ({ channel, post }: PostBodyProps): JSX.Element => (
+    post.forwarded ? (
         <Forward post={post}>
             <PostContent channel={channel} post={post} />
         </Forward>
-        :
+    ) : (
         <PostContent channel={channel} post={post} />
-)
+    )
+);
 
-const LoadingMoreButton = ({ isFetchingMore }: { isFetchingMore: boolean }) => (
+/**
+ * Button for loading more posts, with a loader when fetching.
+ */
+const LoadingMoreButton = ({ isFetchingMore }: { isFetchingMore: boolean }): JSX.Element => (
     <div className="flex justify-center">
         <Button
             size="s"
@@ -29,20 +53,24 @@ const LoadingMoreButton = ({ isFetchingMore }: { isFetchingMore: boolean }) => (
             disabled={isFetchingMore}
             className="w-24 h-[30px]"
         >
-            <Subhead weight="1" className="text-xs vkuiPlaceholder__text">
-                Load more
-            </Subhead>
+            <Subhead weight="1" className="text-xs vkuiPlaceholder__text">Load more</Subhead>
         </Button>
     </div>
-)
+);
 
-const LoadingMore = ({ isFetchingMore, noMorePosts }: LoadingMoreProps) => (
+/**
+ * Displays the loading state or button to load more posts.
+ */
+const LoadingMore = ({ isFetchingMore, noMorePosts }: LoadingMoreProps): JSX.Element => (
     <Group mode="plain" className="my-1 md:my-3 lg:my-5">
         {!noMorePosts && <LoadingMoreButton isFetchingMore={isFetchingMore} />}
     </Group>
-)
+);
 
-const Post = ({ item, channel }: PostProps) => {
+/**
+ * Displays an individual post with its metadata and content.
+ */
+const Post = ({ item, channel }: PostProps): JSX.Element => {
     const { handleVisibility } = useAnalytics();
 
     return (
@@ -50,7 +78,7 @@ const Post = ({ item, channel }: PostProps) => {
             <InView
                 className="py-2.5 px-4"
                 as="article"
-                threshold={.3}
+                threshold={0.3}
                 onChange={(inView, entry) => handleVisibility(entry, inView)}
             >
                 <div data-id={item.id} data-view={item.view}>
@@ -63,13 +91,18 @@ const Post = ({ item, channel }: PostProps) => {
             </InView>
         </Group>
     );
-}
+};
 
-export const Posts = ({ channel, posts, onRefresh, isFetching, isFetchingMore, noMorePosts }: PostsProps) => (
+/**
+ * Main Posts component that renders a list of posts with pull-to-refresh and load-more functionality.
+ */
+export const Posts = ({ channel, posts, onRefresh, isFetching, isFetchingMore, noMorePosts }: PostsProps): JSX.Element => (
     <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>
         <PullToRefresh onRefresh={onRefresh} isFetching={isFetching}>
             <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto">
-                {posts.map((item, index) => <Post key={index} item={item} channel={channel} />)}
+                {posts.map((item, index) => (
+                    <Post key={index} item={item} channel={channel} />
+                ))}
                 <LoadingMore isFetchingMore={isFetchingMore} noMorePosts={noMorePosts} />
             </div>
         </PullToRefresh>
