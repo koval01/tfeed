@@ -28,7 +28,7 @@ export const VKMediaGrid: React.FC<VKMediaGridProps> = ({ images }) => {
     const secondRowRatio = getSecondRowAspectRatio(imageCount);
 
     return (
-        <div className="MediaGridContainerWeb--post">
+        <div className="select-none MediaGridContainerWeb--post">
             <div
                 className="MediaGrid MediaGrid--twoRow"
                 style={{ '--mg-second-row-count': perRow[1] || 0 } as React.CSSProperties}
