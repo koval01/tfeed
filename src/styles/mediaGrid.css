@@ -80,6 +80,10 @@
     --mg-margin: var(--mg-spacer, 2px) 0 0 0;
 }
 
+.MediaGrid__thumb--fullWidth {
+    width: 100%;
+}
+
 .MediaGrid__imageElement {
     position: absolute;
     top: 0;

@@ -32,7 +32,10 @@ export const getItemClass = (index: number, totalCount: number, perRow: number[]
         if (index === 0) {
             classes.push(cn(
                 "MediaGrid__thumb--topLeft",
-                totalCount === 1 ? 'MediaGrid__thumb--allSide' : totalCount === 2 ? 'MediaGrid__thumb--bottomLeft' : ''
+                totalCount === 1 ? 
+                    'MediaGrid__thumb--allSide MediaGrid__thumb--fullWidth' 
+                : totalCount === 2 ? 
+                    'MediaGrid__thumb--bottomLeft' : ''
             ));
         }
         if (index === 1) {

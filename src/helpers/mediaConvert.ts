@@ -19,9 +19,9 @@ type MediaOutput = {
  */
 export const convertMediaArray = (mediaArray: MediaInput[]): MediaOutput[] => {
     return mediaArray
-        .filter(media => media.type === 'photo' || media.type === 'video')
+        .filter(media => media.type === 'image' || media.type === 'video')
         .map(media => ({
-            url: media.type === 'photo' ? media.url : media.thumb || '',
+            url: media.type === 'image' ? media.url : media.thumb || '',
         }))
         .filter(media => media.url);
 };
