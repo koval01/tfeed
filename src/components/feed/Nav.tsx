@@ -50,7 +50,7 @@ export const SubscribeButton = ({ channel }: { channel: Channel }) => {
     const { t } = useTranslation();
 
     return (
-        <div className="block mr-0 md:pr-0 pr-2 w-full">
+        <div className="block pr-1 w-full">
             <Button
                 appearance="accent-invariable"
                 size="s"
@@ -63,7 +63,7 @@ export const SubscribeButton = ({ channel }: { channel: Channel }) => {
 }
 
 const Nav = ({ channel }: { channel: Channel }) => (
-    <div className="flex items-center relative justify-between space-x-2 md:pl-0 pl-2 overflow-hidden py-1.5">
+    <div className="flex items-center relative justify-between space-x-2 overflow-hidden py-1.5">
         <div className="block select-none items-center">
             <NavAvatar channel={channel} />
             <ChannelTitle channel={channel} />
