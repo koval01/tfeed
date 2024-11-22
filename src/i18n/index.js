@@ -1,3 +1,4 @@
+import { about } from "@/i18n/about";
 import { date } from "@/i18n/date";
 import { error } from "@/i18n/error";
 import { profile } from "@/i18n/profile";
@@ -5,6 +6,7 @@ import { profile } from "@/i18n/profile";
 export const i18nStrings = {
     "en": {
         "translation": {
+            ...about["en"],
             ...date["en"],
             ...error["en"],
             ...profile["en"],
@@ -15,6 +17,7 @@ export const i18nStrings = {
     },
     "de": {
         "translation": {
+            ...about["de"],
             ...date["de"],
             ...error["de"],
             ...profile["de"],
@@ -31,6 +34,7 @@ export const i18nStrings = {
     },
     "ru": {
         "translation": {
+            ...about["ru"],
             ...date["ru"],
             ...error["ru"],
             ...profile["ru"],
@@ -47,6 +51,7 @@ export const i18nStrings = {
     },
     "uk": {
         "translation": {
+            ...about["uk"],
             ...date["uk"],
             ...error["uk"],
             ...profile["uk"],
