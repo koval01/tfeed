@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Avatar, AvatarProps } from "@vkontakte/vkui";
+import { Avatar, type AvatarProps } from "@vkontakte/vkui";
 import { nextImage } from '@/helpers/nextImage';
 
 export const NextAvatar: React.FC<AvatarProps> = ({ src, size, ...props }) => {
