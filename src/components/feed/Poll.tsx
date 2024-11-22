@@ -1,12 +1,12 @@
 import type { Poll as PollProp, PollOptions } from "@/types";
 
 import { Icon20CheckSquareOutline } from "@vkontakte/icons";
-import { 
+import {
     Caption,
-    FormItem, 
-    Headline, 
-    Progress, 
-    Subhead 
+    FormItem,
+    Headline,
+    Progress,
+    Subhead
 } from "@vkontakte/vkui";
 
 import { useTranslation } from "react-i18next";
@@ -14,31 +14,28 @@ import { useTranslation } from "react-i18next";
 const PollHeader = ({ poll }: { poll: PollProp }) => {
     const { t } = useTranslation();
 
-    return(
-    <>
-        <Headline weight="1" level="2" className="text-[--vkui--color_text_contrast]">
-            {poll.question}
-        </Headline>
-        <div className="flex space-x-1.5 text-[--vkui--color_text_muted]">
-            <div>
-                <Subhead className="font-normal text-xs">
-                    {t(poll.type)}
-                </Subhead>
+    return (
+        <>
+            <Headline weight="1" level="2" className="text-[--vkui--color_text_contrast]">
+                {poll.question}
+            </Headline>
+            <div className="flex space-x-1.5 text-[--vkui--color_text_muted]">
+                <div>
+                    <Subhead className="font-normal text-xs">
+                        {t(poll.type)}
+                    </Subhead>
+                </div>
+                <div>
+                    <span className="align-top leading-3 text-[--vkui--color_text_secondary]">|</span>
+                </div>
+                <div>
+                    <Caption>
+                        {poll.votes} {t("votes")}
+                    </Caption>
+                </div>
             </div>
-            <div className="inline-block">
-                <span className="align-top leading-3 text-[--vkui--color_text_secondary]">|</span>
-            </div>
-            <div className="flex align-baseline whitespace-nowrap overflow-hidden space-x-[3px]">
-                <span className="inline-block align-middle">
-                    <Icon20CheckSquareOutline width={15} height={15} />
-                </span>
-                <Caption className="relative leading-[15px] text-sm/7 font-medium">
-                    {poll.votes}
-                </Caption>
-            </div>
-        </div>
-    </>
-);
+        </>
+    );
 }
 
 const PollOption = ({ option }: { option: PollOptions }) => (

@@ -30,6 +30,7 @@ export const i18nStrings = {
             "UnhandledError": "Ein unbehandelter Fehler ist aufgetreten!",
             "forwarded message": "weitergeleitete Nachricht",
             "Anonymous Poll": "Anonyme Umfrage",
+            "votes": "Stimmen",
         }
     },
     "ru": {
@@ -47,6 +48,7 @@ export const i18nStrings = {
             "UnhandledError": "Произошла непредвиденная ошибка!",
             "forwarded message": "пересланное сообщение",
             "Anonymous Poll": "Анонимный опрос",
+            "votes": "голосов",
         }
     },
     "uk": {
@@ -64,6 +66,7 @@ export const i18nStrings = {
             "UnhandledError": "Виникла непередбачувана помилка!",
             "forwarded message": "переслане повідомлення",
             "Anonymous Poll": "Анонімне опитування",
+            "votes": "голосів",
         }
     }
 }
