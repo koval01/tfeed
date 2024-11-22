@@ -16,7 +16,7 @@ const NavAvatar = ({ channel }: { channel: Channel }) => (
 )
 
 const Title = ({ children, verified }: TitleProps) => (
-    <div className="inline-flex items-super text-sm font-medium mt-0.5">
+    <div className="inline-flex items-super text-sm font-medium relative -top-1">
         <div className="whitespace-nowrap text-ellipsis overflow-hidden">
             {children}
         </div>
@@ -32,7 +32,7 @@ const SubscribersCounter = ({ channel }: { channel: Channel }) => {
     const { t } = useTranslation();
 
     return (
-        <div className="whitespace-nowrap text-ellipsis overflow-hidden text-[12px] leading-[14px] mb-0.5 mt-px vkuiPlaceholder__text">
+        <div className="whitespace-nowrap text-ellipsis overflow-hidden text-[12px] leading-[14px] pb-1 relative -top-1 vkuiPlaceholder__text">
             {channel.counters.subscribers} {t("subscribers")}
         </div>
     )
@@ -63,7 +63,7 @@ export const SubscribeButton = ({ channel }: { channel: Channel }) => {
 }
 
 const Nav = ({ channel }: { channel: Channel }) => (
-    <div className="flex items-center relative justify-between space-x-2 overflow-hidden py-1.5">
+    <div className="flex items-center relative justify-between space-x-2 overflow-hidden py-1.5 md:pt-3">
         <div className="block select-none items-center">
             <NavAvatar channel={channel} />
             <ChannelTitle channel={channel} />
