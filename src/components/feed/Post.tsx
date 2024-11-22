@@ -1,4 +1,7 @@
-import { PostBodyProps, PostsProps, PostProps, LoadingMoreProps } from "@/types/feed/post";
+import type { PostBodyProps, PostsProps, PostProps, LoadingMoreProps } from "@/types/feed/post";
+
+import { InView } from "react-intersection-observer";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 import { Forward } from "@/components/feed/Forward";
 import { PostContent, PostFooter, PostHeader } from "@/components/feed/Body";
@@ -39,17 +42,28 @@ const LoadingMore = ({ isFetchingMore, noMorePosts }: LoadingMoreProps) => (
     </Group>
 )
 
-const Post = ({ item, channel }: PostProps) => (
-    <Group>
-        <div className="py-2.5 px-4">
-            <PostHeader channel={channel} post={item} />
-            <Spacing />
-            <PostBody channel={channel} post={item} />
-            <Spacing />
-            <PostFooter post={item} />
-        </div>
-    </Group>
-)
+const Post = ({ item, channel }: PostProps) => {
+    const { handleVisibility } = useAnalytics();
+
+    return (
+        <Group>
+            <InView
+                className="py-2.5 px-4"
+                as="article"
+                threshold={.3}
+                onChange={(inView, entry) => handleVisibility(entry, inView)}
+            >
+                <div data-id={item.id} data-view={item.view}>
+                    <PostHeader channel={channel} post={item} />
+                    <Spacing />
+                    <PostBody channel={channel} post={item} />
+                    <Spacing />
+                    <PostFooter post={item} />
+                </div>
+            </InView>
+        </Group>
+    );
+}
 
 export const Posts = ({ channel, posts, onRefresh, isFetching, isFetchingMore, noMorePosts }: PostsProps) => (
     <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>

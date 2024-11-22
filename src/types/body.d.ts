@@ -36,6 +36,7 @@ export interface Post {
     content: ContentPost;
     footer: Footer;
     forwarded: Forwarded;
+    view: string;
 }
 
 export interface Forwarded {
