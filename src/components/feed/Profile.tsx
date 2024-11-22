@@ -23,12 +23,12 @@ import { useTranslation } from "react-i18next";
 
 const Verified = ({ verified }: { verified: boolean }) => (
     verified && <VerifiedTT
-        className="align-middle inline-block text-[--vkui--color_icon_accent]"
+        className="align-baseline inline-block text-[--vkui--color_icon_accent]"
         Icon={Icon20Verified} />
 )
 
 const Title = ({ children, verified }: TitleProps) => (
-    <div className="inline-flex leading-7">
+    <div className="inline-flex leading-7 items-center">
         <DisplayTitle level="1">{children}</DisplayTitle>
         <div className="inline ml-1">
             <Verified verified={verified} />

@@ -10,18 +10,18 @@ import { Button, EllipsisText, Headline } from "@vkontakte/vkui";
 import { useTranslation } from "react-i18next";
 
 const NavAvatar = ({ channel }: { channel: Channel }) => (
-    <div className="inline-block overflow-hidden float-left mr-2 relative">
+    <div className="inline-block items-baseline overflow-hidden float-left mr-2 relative">
         <Avatar src={channel.avatar} size={36} name={channel.title.string} />
     </div>
 )
 
 const Title = ({ children, verified }: TitleProps) => (
-    <div className="flex text-sm font-medium mt-0.5">
+    <div className="inline-flex items-super text-sm font-medium mt-0.5">
         <div className="whitespace-nowrap text-ellipsis overflow-hidden">
             {children}
         </div>
         {verified && (
-            <div className="inline-block overflow-hidden size-4 ml-1 leading-4 align-baseline">
+            <div className="inline-block overflow-hidden size-4 ml-1 leading-none">
                 <Verified className="inline-flex text-[--vkui--color_icon_accent]" Icon={Icon16Verified} />
             </div>
         )}
