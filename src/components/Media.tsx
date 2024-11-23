@@ -7,7 +7,7 @@ import {
     getSecondRowAspectRatio
 } from '@/helpers/mediaGridUtils';
 
-import Image from 'next/image';
+import { NextImage as Image } from '@/components/NextImage';
 
 type Image = {
     url: string;
@@ -40,16 +40,11 @@ export const VKMediaGrid: React.FC<VKMediaGridProps> = ({ images }) => {
                         style={{ '--mg-ratio': index < 2 ? 1 : secondRowRatio } as React.CSSProperties}
                     >
                         <Image
-                            fill
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                             className="MediaGrid__imageElement"
+                            widthSize={"100%"}
+                            heightSize={"100%"}
                             src={image.url}
-                            loading="lazy"
                             alt={image.alt || ''}
-                            onError={({ currentTarget }) => {
-                                currentTarget.onerror = null;
-                                currentTarget.src = "/images/errorImageLoad.webp";
-                            }}
                         />
                     </div>
                 ))}
