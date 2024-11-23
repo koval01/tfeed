@@ -100,8 +100,8 @@ export const Posts = ({ channel, posts, onRefresh, isFetching, isFetchingMore, n
     <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>
         <PullToRefresh onRefresh={onRefresh} isFetching={isFetching}>
             <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto">
-                {posts.map((item, _) => (
-                    <Post key={item.id} item={item} channel={channel} />
+                {posts.map((item, index) => (
+                    <Post key={index} item={item} channel={channel} />
                 ))}
                 <LoadingMore isFetchingMore={isFetchingMore} noMorePosts={noMorePosts} />
             </div>

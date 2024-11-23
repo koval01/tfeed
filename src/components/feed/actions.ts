@@ -142,7 +142,7 @@ class PostFetcher {
 
         if (posts && posts.length > 0) {
             this.updatePostsAndOffset(posts, "before");
-        } else if (posts !== null) {
+        } else if (posts === null) {
             setNoMorePosts(true);
             this.showErrorSnackbar?.(
                 "No more posts available.",

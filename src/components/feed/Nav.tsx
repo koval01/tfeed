@@ -81,7 +81,7 @@ export const SubscribeButton: React.FC<{ channel: Channel }> = ({ channel }) => 
  */
 const Nav: React.FC<{ channel: Channel }> = ({ channel }) => (
     <div className="flex items-center relative justify-between space-x-2 overflow-hidden py-1.5 md:pt-3">
-        <div className="block select-none items-center">
+        <div className="block select-none items-center min-w-40">
             <NavAvatar channel={channel} />
             <ChannelTitle channel={channel} />
             <SubscribersCounter channel={channel} />

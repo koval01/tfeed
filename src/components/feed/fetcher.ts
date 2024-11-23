@@ -8,18 +8,7 @@ interface FetcherError extends Error {
 type Direction = "before" | "after";
 
 // Fetcher
-const fetcher = async (url: string): Promise<any> => {
-    try {
-        const response = await axios.get(url);
-        return response.data;
-    } catch (error: any) {
-        const err = error as FetcherError;
-        console.error(`Fetcher error: ${err.message}`, err.response?.data || err);
-        throw new Error(
-            err.response?.status ? `Error ${err.response.status}: ${err.message}` : err.message
-        );
-    }
-};
+const fetcher = (url: string): Promise<any> => axios.get(url).then(res => res.data);
 
 // SWR Wrapper
 const useInternalSWR = <Data = any, Error = any>(

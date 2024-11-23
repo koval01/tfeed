@@ -14,7 +14,7 @@
 .MediaGrid {
     --mg-border-radius-wrapper: 8px;
     --mg-grid-width: 100%;
-    --mg-spacer: 2px;
+    --mg-spacer: 3px;
     display: flex;
     flex-flow: row wrap;
     width: var(--mg-grid-width);
@@ -41,14 +41,14 @@
 
 .MediaGrid__thumb--firstRowItem {
     --grid-width-divided-by-row-count: var(--mg-grid-width, 100%) / var(--mg-first-row-count, 2);
-    --spacer-divided-by-row-count: var(--mg-spacer, 2px) / var(--mg-first-row-count, 2);
+    --spacer-divided-by-row-count: var(--mg-spacer, 3px) / var(--mg-first-row-count, 2);
     --mg-width: calc(var(--grid-width-divided-by-row-count) - var(--spacer-divided-by-row-count));
 }
 
 .MediaGrid__thumb--secondRowItem {
-    --mg-margin: var(--mg-spacer, 2px) 0 0 var(--mg-spacer, 2px);
+    --mg-margin: var(--mg-spacer, 3px) 0 0 var(--mg-spacer, 3px);
     --mg-height: calc((var(--mg-grid-width, 100%)/var(--mg-second-row-count, 3))/var(--mg-ratio, 1));
-    --spacer-divided-by-row-count: var(--mg-spacer, 2px) / var(--mg-second-row-count, 3);
+    --spacer-divided-by-row-count: var(--mg-spacer, 3px) / var(--mg-second-row-count, 3);
     --mg-width: calc(var(--mg-grid-width, 100%)/var(--mg-second-row-count, 3) - (var(--mg-second-row-count, 3) - 1)*var(--spacer-divided-by-row-count));
 }
 
@@ -73,11 +73,11 @@
 }
 
 .MediaGrid__thumb--firstRowItem+.MediaGrid__thumb--firstRowItem {
-    --mg-margin: 0 0 0 var(--mg-spacer, 2px);
+    --mg-margin: 0 0 0 var(--mg-spacer, 3px);
 }
 
 .MediaGrid__thumb--secondRowItemFirstColumn {
-    --mg-margin: var(--mg-spacer, 2px) 0 0 0;
+    --mg-margin: var(--mg-spacer, 3px) 0 0 0;
 }
 
 .MediaGrid__thumb--fullWidth {
@@ -93,4 +93,108 @@
     border-radius: inherit;
     object-fit: cover;
     object-position: center;
+}
+
+/* Smooth background blur and dimming effect */
+.MediaGrid__backgroundBlur {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, .5); /* Initial darkening */
+    backdrop-filter: blur(20px); /* Background blur effect */
+    opacity: 0; /* Default to transparent */
+    pointer-events: none; /* Prevent clicks on the blur */
+    transition: opacity .5s ease-in-out; /* Smooth fade-in-out */
+    z-index: -10;
+}
+
+.MediaGrid__backgroundBlur.visible {
+    opacity: 1; /* Fade in smoothly */
+}
+
+.MediaGrid__backgroundBlur._invisible {
+    opacity: 0; /* Fade out smoothly */
+}
+
+/* Overlay container animations */
+.MediaGrid__overlayContainer {
+    transition: all .5s ease-in-out;
+}
+
+.MediaGrid__overlayContainer.animating .MediaGrid__imageTransition {
+    animation: fly-to-center .7s ease-in-out forwards, blur-to-clear .6s ease-in-out forwards;
+}
+
+.MediaGrid__overlayContainer:not(.animating) .MediaGrid__imageTransition {
+    animation: fly-back .45s ease-in-out forwards, clear-to-blur .5s ease-in-out forwards;
+}
+
+.MediaGrid__imageTransition {
+    position: absolute;
+    border-radius: 12px;
+
+    top: var(--start-top);
+    left: var(--start-left);
+
+    width: var(--start-width);
+    height: var(--start-height);
+
+    filter: blur(20px);
+    opacity: 0;
+
+    object-fit: cover;
+    transition: height .5s ease-in-out, width .5s ease-in-out;
+}
+
+@keyframes fly-to-center {
+    from {
+        top: var(--start-top);
+        left: var(--start-left);
+        width: var(--start-width);
+        height: var(--start-height);
+    }
+    to {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: var(--end-width);
+        height: var(--end-height);
+    }
+}
+
+@keyframes fly-back {
+    from {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: var(--end-width);
+        height: var(--end-height);
+    }
+    to {
+        top: var(--start-top);
+        left: var(--start-left);
+        width: var(--start-width);
+        height: var(--start-height);
+    }
+}
+
+@keyframes blur-to-clear {
+    0% {
+        filter: blur(20px);
+        opacity: 0;
+    }
+    100% {
+        filter: blur(0);
+        opacity: 1;
+    }
+}
+
+@keyframes clear-to-blur {
+    0% {
+        filter: blur(0);
+        opacity: 1;
+    }
+    100% {
+        filter: blur(20px);
+        opacity: 0;
+    }
 }

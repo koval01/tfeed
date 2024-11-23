@@ -80,9 +80,8 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
         }
     }, [data, initializePosts]);
 
-    // Periodic refresh every 100 seconds
     useEffect(() => {
-        const refreshInterval = setInterval(refreshPosts, 100000);
+        const refreshInterval = setInterval(() => refreshPosts(false), 1e4);
         return () => clearInterval(refreshInterval);
     }, [refreshPosts]);
 

@@ -11,12 +11,8 @@ export const NextImage: React.FC<ImageProps> = ({ children, src, ...props }) => 
     return (
         <Image 
             src={modifiedSrc} 
+            alt={props.alt}
             {...props}
-            onError={({ currentTarget }) => {
-                currentTarget.onerror = null;
-                if (currentTarget instanceof HTMLImageElement)
-                currentTarget.src = "/images/errorImageLoad.webp";
-            }}
         >
             {children}
         </Image>

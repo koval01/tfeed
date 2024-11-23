@@ -34,7 +34,7 @@ export const usePosts = (
         setOffset(offsetObject);
     }, []);
 
-    const refreshPosts = useCallback(async (showError = false) => {
+    const refreshPosts = useCallback(async (showError = true) => {
         await onRefresh(
             channelUsername,
             offset,
