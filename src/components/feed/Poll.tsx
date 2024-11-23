@@ -20,7 +20,7 @@ const PollHeader = ({ poll }: { poll: PollProp }): JSX.Element => {
 
     return (
         <>
-            <Headline weight="1" level="2" className="text-[--vkui--color_text_contrast]">
+            <Headline weight="1" level="2">
                 {poll.question}
             </Headline>
             <div className="flex space-x-1.5 text-[--vkui--color_text_secondary]">
