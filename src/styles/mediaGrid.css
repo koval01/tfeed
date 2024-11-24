@@ -99,11 +99,11 @@
 .MediaGrid__backgroundBlur {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, .5); /* Initial darkening */
+    background: rgba(0, 0, 0, .4); /* Initial darkening */
     backdrop-filter: blur(20px); /* Background blur effect */
     opacity: 0; /* Default to transparent */
     pointer-events: none; /* Prevent clicks on the blur */
-    transition: opacity .5s ease-in-out; /* Smooth fade-in-out */
+    transition: opacity .25s ease-in-out; /* Smooth fade-in-out */
     z-index: -10;
 }
 
@@ -117,15 +117,15 @@
 
 /* Overlay container animations */
 .MediaGrid__overlayContainer {
-    transition: all .5s ease-in-out;
+    transition: all .25s ease-in-out;
 }
 
 .MediaGrid__overlayContainer.animating .MediaGrid__imageTransition {
-    animation: fly-to-center .7s ease-in-out forwards, blur-to-clear .6s ease-in-out forwards;
+    animation: fly-to-center .25s ease-in-out forwards, blur-to-clear .3s ease-in-out forwards;
 }
 
 .MediaGrid__overlayContainer:not(.animating) .MediaGrid__imageTransition {
-    animation: fly-back .45s ease-in-out forwards, clear-to-blur .5s ease-in-out forwards;
+    animation: fly-back .25s ease-in-out forwards, clear-to-blur .3s ease-in-out forwards;
 }
 
 .MediaGrid__imageTransition {
