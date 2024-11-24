@@ -21,7 +21,8 @@ const ChannelPage: React.FC<ChannelPageProps> = ({ params }) => {
     return (
         <SplitLayout
             header={!error ? <PanelHeader delimiter="none" /> : null}
-            className={isLoading ? "overflow-hidden" : ""}
+            className={isLoading ? "fixed" : ""}
+            // In data loading mode, the page is just a dicorporation
         >
             <SplitCol>
                 {!error ? (
