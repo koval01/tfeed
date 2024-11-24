@@ -57,7 +57,7 @@ const Counters = ({ counters }: { counters: CountersProps }) => {
 
 const Footer = () => {
     const footerLinks = [
-        { "name": "About", "href": "//telegram.org/faq" },
+        { "name": "About", "href": "/page/about" },
         { "name": "Blog", "href": "//telegram.org/blog" },
         { "name": "Apps", "href": "//telegram.org/apps" },
         { "name": "Platform", "href": "//core.telegram.org" }
