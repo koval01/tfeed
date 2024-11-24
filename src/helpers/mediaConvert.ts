@@ -1,11 +1,9 @@
+import type { Media } from "@/types/media";
+
 type MediaInput = {
     url: string;
     thumb?: string;
     type: string;
-};
-
-type MediaOutput = {
-    url: string;
 };
 
 /**
@@ -17,11 +15,13 @@ type MediaOutput = {
  * @param mediaArray - The input array of media objects.
  * @returns An array of objects with a single `url` property.
  */
-export const convertMediaArray = (mediaArray: MediaInput[]): MediaOutput[] => {
+export const convertMediaArray = (mediaArray: MediaInput[]): Media[] => {
     return mediaArray
         .filter(media => media.type === 'image' || media.type === 'video')
         .map(media => ({
+            type: media.type as "image" | "video",
             url: media.type === 'image' ? media.url : media.thumb || '',
+            video_url: media.type === 'video' ? media.url : void 0,
         }))
         .filter(media => media.url);
 };

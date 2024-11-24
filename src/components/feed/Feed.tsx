@@ -1,3 +1,5 @@
+"use client";
+
 import { type FC, useCallback, useEffect, useState } from "react";
 import type { Body } from "@/types";
 

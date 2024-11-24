@@ -1,19 +1,25 @@
+"use client";
+
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import '@/styles/mediaGrid.css';
-import { getLayoutConfig, getItemClass, getSecondRowAspectRatio } from '@/helpers/mediaGridUtils';
+import type { Media } from '@/types/media';
+
+import {
+    getLayoutConfig,
+    getItemClass,
+    getSecondRowAspectRatio
+} from '@/helpers/mediaGridUtils';
+
 import { NextImage as Image } from '@/components/NextImage';
 import { Icons } from '@/components/icons';
+
 import { cn } from '@/lib/utils';
 import _ from 'lodash';
 
-// Types
-type Image = {
-    url: string;
-    alt?: string;
-};
+import '@/styles/mediaGrid.css';
+import { Icon28Play } from '@vkontakte/icons';
 
 type VKMediaGridProps = {
-    images: Image[];
+    mediaCollection: Media[];
 };
 
 // Reusable FallbackIcon Component
@@ -23,13 +29,13 @@ const FallbackIcon: React.FC = () => (
 
 // Overlay Component
 const ImageOverlay: React.FC<{
-    image: Image;
+    mediaItem: Media;
     transitionStyle: Record<string, string>;
     isAnimating: boolean;
     isClosing: boolean;
     isOverlayVisible: boolean;
     onClose: () => void;
-}> = ({ image, transitionStyle, isAnimating, isClosing, isOverlayVisible, onClose }) => (
+}> = ({ mediaItem, transitionStyle, isAnimating, isClosing, isOverlayVisible, onClose }) => (
     <div
         className={cn(
             "fixed inset-0 z-50 flex items-center justify-center MediaGrid__overlayContainer",
@@ -50,34 +56,49 @@ const ImageOverlay: React.FC<{
         <Image
             widthSize={""}
             heightSize={""}
-            src={image.url}
-            alt={image.alt || ''}
+            src={mediaItem.url}
+            alt={mediaItem.type || ''}
             fallbackIcon={<FallbackIcon />}
             className="absolute MediaGrid__imageTransition"
         />
+        {mediaItem.type === "video" && (
+            <video
+                preload="auto"
+                controls
+                autoPlay
+                width="auto"
+                height="auto"
+                playsInline
+                crossOrigin="anonymous"
+                poster={mediaItem.url}
+                className="absolute MediaGrid__imageTransition"
+                onError={(error) => { console.error(error) }}
+            >
+                <source src={mediaItem.video_url} type="video/mp4" />
+            </video>
+        )}
     </div>
 );
 
-export const VKMediaGrid: React.FC<VKMediaGridProps> = ({ images }) => {
-    const [selectedImage, setSelectedImage] = useState<Image | null>(null);
+export const VKMediaGrid: React.FC<VKMediaGridProps> = ({ mediaCollection }) => {
+    const [selectedMedia, setSelectedMedia] = useState<Media | null>(null);
     const [transitionStyle, setTransitionStyle] = useState<Record<string, string>>({});
     const [isAnimating, setIsAnimating] = useState(false);
     const [isOverlayVisible, setIsOverlayVisible] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
-    const overlayRef = useRef<HTMLDivElement | null>(null);
 
-    const imageCount = images.length;
-    const { rows, perRow } = getLayoutConfig(imageCount);
-    const secondRowRatio = getSecondRowAspectRatio(imageCount);
+    const mediaCount = mediaCollection.length;
+    const { perRow } = getLayoutConfig(mediaCount);
+    const secondRowRatio = getSecondRowAspectRatio(mediaCount);
 
-    // Handle image click
-    const handleImageClick = (image: Image, event: React.MouseEvent) => {
+    // Handle media click
+    const handleMediaClick = (mediaItem: Media, event: React.MouseEvent) => {
         const thumbnailContainer = (event.currentTarget as HTMLElement).getBoundingClientRect();
         const { top, left, width, height } = thumbnailContainer;
 
-        // Preload image to get dimensions
+        // Preload media to get dimensions
         const tempImage = new window.Image();
-        tempImage.src = image.url;
+        tempImage.src = mediaItem.url;
 
         tempImage.onload = () => {
             const { naturalWidth, naturalHeight } = tempImage;
@@ -96,7 +117,7 @@ export const VKMediaGrid: React.FC<VKMediaGridProps> = ({ images }) => {
                 '--aspect-ratio': `${imageAspectRatio}`,
             });
 
-            setSelectedImage(image);
+            setSelectedMedia(mediaItem);
             setIsAnimating(true);
 
             setTimeout(() => setIsOverlayVisible(true), 10);
@@ -111,11 +132,11 @@ export const VKMediaGrid: React.FC<VKMediaGridProps> = ({ images }) => {
         setTimeout(() => {
             setIsAnimating(false);
             setIsClosing(false);
-            setSelectedImage(null);
+            setSelectedMedia(null);
         }, 500);
     }, []);
 
-    // Calculate final image dimensions
+    // Calculate final media dimensions
     const calculateEndDimensions = useCallback((aspectRatio: number) => {
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
@@ -137,10 +158,10 @@ export const VKMediaGrid: React.FC<VKMediaGridProps> = ({ images }) => {
     // Handle resizing
     useEffect(() => {
         const recalculateDimensions = () => {
-            if (!selectedImage) return;
+            if (!selectedMedia) return;
 
             const tempImage = new window.Image();
-            tempImage.src = selectedImage.url;
+            tempImage.src = selectedMedia.url;
 
             const updateDimensions = () => {
                 const { naturalWidth, naturalHeight } = tempImage;
@@ -171,7 +192,7 @@ export const VKMediaGrid: React.FC<VKMediaGridProps> = ({ images }) => {
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    }, [selectedImage, calculateEndDimensions]);
+    }, [selectedMedia, calculateEndDimensions]);
 
     // Close overlay with Escape key
     useEffect(() => {
@@ -191,29 +212,48 @@ export const VKMediaGrid: React.FC<VKMediaGridProps> = ({ images }) => {
                     className="MediaGrid MediaGrid--twoRow"
                     style={{ '--mg-second-row-count': perRow[1] || 0 } as React.CSSProperties}
                 >
-                    {images.map((image, index) => (
+                    {mediaCollection.map((media, index) => (
                         <div
-                            key={image.url}
-                            className={getItemClass(index, imageCount, perRow)}
+                            key={media.url}
+                            className={getItemClass(index, mediaCount, perRow)}
                             style={{ '--mg-ratio': index < 2 ? 1 : secondRowRatio } as React.CSSProperties}
-                            onClick={(e) => handleImageClick(image, e)}
+                            onClick={(e) => handleMediaClick(media, e)}
                         >
                             <Image
                                 className="MediaGrid__imageElement cursor-pointer"
                                 widthSize={'100%'}
                                 heightSize={'100%'}
-                                src={image.url}
-                                alt={image.alt || ''}
+                                src={media.url}
+                                alt={media.type || ''}
                                 fallbackIcon={<FallbackIcon />}
-                            />
+                            >
+                                {media.type === "video" && (
+                                    <div
+                                        className="flex items-center justify-center rounded-full bg-black/50 backdrop-blur-lg"
+                                        style={{
+                                            width: "clamp(40px, 10%, 80px)",
+                                            height: "clamp(40px, 10%, 80px)",
+                                        }}
+                                    >
+                                        <Icon28Play
+                                            className="text-[--vkui--color_text_contrast]"
+                                            style={{
+                                                width: "70%",
+                                                height: "70%",
+                                            }}
+                                        />
+                                    </div>
+
+                                )}
+                            </Image>
                         </div>
                     ))}
                 </div>
             </div>
 
-            {selectedImage && (
+            {selectedMedia && (
                 <ImageOverlay
-                    image={selectedImage}
+                    mediaItem={selectedMedia}
                     transitionStyle={transitionStyle}
                     isAnimating={isAnimating}
                     isClosing={isClosing}

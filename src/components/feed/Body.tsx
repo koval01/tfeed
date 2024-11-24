@@ -1,3 +1,5 @@
+"use client";
+
 import type { FooterComponentProps, PostBodyProps } from "@/types/feed/post";
 import type { Channel, Post, TitleProps } from "@/types";
 
@@ -177,8 +179,8 @@ export const PostFooter = ({ post }: { post: Post }) => (
  */
 const PostMedia = ({ post }: { post: Post }) => {
     if (!post.content.media) return null;
-    const images = convertMediaArray(post.content.media);
-    return <VKMediaGrid images={images} />;
+    const mediaCollection = convertMediaArray(post.content.media);
+    return <VKMediaGrid mediaCollection={mediaCollection} />;
 };
 
 /**
