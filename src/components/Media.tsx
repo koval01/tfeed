@@ -229,19 +229,12 @@ export const VKMediaGrid: React.FC<VKMediaGridProps> = ({ mediaCollection }) => 
                             >
                                 {media.type === "video" && (
                                     <div
-                                        className="flex items-center justify-center rounded-full bg-black/50 backdrop-blur-lg"
+                                        className="flex items-center justify-center rounded-full bg-black/50 backdrop-blur-lg w-auto aspect-square"
                                         style={{
-                                            width: "clamp(40px, 10%, 80px)",
-                                            height: "clamp(40px, 10%, 80px)",
+                                            height: "clamp(40px, 15%, 120px)"
                                         }}
                                     >
-                                        <Icon28Play
-                                            className="text-[--vkui--color_text_contrast]"
-                                            style={{
-                                                width: "70%",
-                                                height: "70%",
-                                            }}
-                                        />
+                                        <Icon28Play className="object-contain size-[70%] text-[--vkui--color_text_contrast]" />
                                     </div>
 
                                 )}
