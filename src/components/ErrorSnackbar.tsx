@@ -1,6 +1,7 @@
 'use client'
 
-import { FC } from "react";
+import type { FC } from "react";
+
 import { Icon28ErrorCircleOutline } from "@vkontakte/icons";
 import { Snackbar } from "@vkontakte/vkui";
 

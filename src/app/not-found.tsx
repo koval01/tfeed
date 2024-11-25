@@ -1,8 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Error } from "@/components/Error";
 import { useTranslation } from "react-i18next";
+
+import { Error } from "@/components/Error";
 
 const NotFound = () => {
     const router = useRouter();

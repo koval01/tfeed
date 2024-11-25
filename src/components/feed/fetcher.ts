@@ -1,10 +1,6 @@
 import axios from "axios";
 import useSWR, { SWRResponse } from "swr";
 
-interface FetcherError extends Error {
-    response?: { status: number; data: any };
-}
-
 type Direction = "before" | "after";
 
 // Fetcher

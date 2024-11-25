@@ -7,7 +7,7 @@ import type { Channel, Post, TitleProps } from "@/types";
 
 import { cn } from "@/lib/utils";
 import { useFormattedDate } from "@/hooks/useFormattedDate";
-import { useTranslation, Trans } from "react-i18next";
+import { Trans } from "react-i18next";
 
 import {
     Icon16Verified,
@@ -15,6 +15,7 @@ import {
     Icon20SignatureOutline,
     Icon24ShareOutline,
 } from "@vkontakte/icons";
+
 import {
     Caption,
     EllipsisText,

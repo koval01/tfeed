@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import { useTranslation, Trans } from "react-i18next";
+
 import { FixedCenter } from "@/components/fixed-center";
 
 import {
@@ -10,8 +12,6 @@ import {
   SplitCol,
   SplitLayout
 } from "@vkontakte/vkui";
-
-import { useTranslation, Trans } from "react-i18next";
 
 const Home: React.FC = () => {
   const { t } = useTranslation();

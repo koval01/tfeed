@@ -1,7 +1,12 @@
 import React from "react";
-import { Metadata } from "next";
-import { Preview } from "@/types";
-import { AppLinksAndroid, AppLinksApple } from "next/dist/lib/metadata/types/extra-types";
+import type { Metadata } from "next";
+import type { Preview } from "@/types";
+
+import type { 
+    AppLinksAndroid, 
+    AppLinksApple 
+} from "next/dist/lib/metadata/types/extra-types";
+
 import { removeEmojies } from "@/helpers/string";
 
 export const runtime = "edge";

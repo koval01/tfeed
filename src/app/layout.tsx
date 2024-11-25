@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from 'react';
-import { Metadata, Viewport } from 'next';
+import type { Metadata, Viewport } from 'next';
 
 import { siteConfig } from '@/config/site';
 

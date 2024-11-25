@@ -15,15 +15,16 @@ import { initReactI18next } from "react-i18next";
 
 import { i18nStrings } from "@/i18n";
 
-import '@/styles/app.css';
-import '@/styles/vkui.css';
-import '@/styles/tfeed.css';
-import '@/styles/tailwind.css';
-
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { ErrorPage } from '@/components/ErrorPage';
 
 import { useDidMount } from '@/hooks/useDidMount';
+
+// global application styles
+import '@/styles/app.css';
+import '@/styles/vkui.css';
+import '@/styles/tfeed.css';
+import '@/styles/tailwind.css';
 
 const i18nHook = i18n.use(initReactI18next);
 

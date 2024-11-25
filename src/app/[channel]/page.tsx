@@ -1,8 +1,10 @@
 "use client";
 
 import React from "react";
-import { ChannelPageProps } from "@/types/channel";
+import type { ChannelPageProps } from "@/types/channel";
+
 import { useBody } from "@/components/feed/fetcher";
+
 import { Feed } from "@/components/feed";
 import { Error } from "@/components/Error";
 

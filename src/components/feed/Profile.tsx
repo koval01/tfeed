@@ -1,3 +1,5 @@
+import type { TitleProps, Channel, Counters as CountersProps } from "@/types";
+
 import {
     Group,
     SplitCol,
@@ -10,13 +12,13 @@ import {
     DisplayTitle,
     Gradient
 } from "@vkontakte/vkui";
+
 import { Icon20Verified } from "@vkontakte/icons";
 
 import { Avatar } from "@/components/Avatar";
 import { Verified as VerifiedTT } from "@/components/feed/Verified";
 import { TextComponent } from "@/components/feed/TextComponent";
 
-import { TitleProps, Channel, Counters as CountersProps } from "@/types";
 import Link from "next/link";
 
 import { Trans } from "react-i18next";

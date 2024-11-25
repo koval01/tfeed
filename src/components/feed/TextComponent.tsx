@@ -1,7 +1,13 @@
 import { EllipsisText, Link } from '@vkontakte/vkui';
 import { Spoiler } from 'spoiled';
 
-import parse, { DOMNode, HTMLReactParserOptions, Element, Text } from 'html-react-parser';
+import parse, { 
+    DOMNode, 
+    HTMLReactParserOptions, 
+    Element, 
+    Text 
+} from 'html-react-parser';
+
 import '@/styles/emoji.css';
 
 /**
