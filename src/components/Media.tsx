@@ -1,7 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
 import type { Media } from '@/types/media';
+import type { AppDispatch } from '@/lib/store';
+
+import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+
+import { blockScroll, unblockScroll } from '@/store/scrollSlice';
 
 import {
     getLayoutConfig,
@@ -81,6 +86,8 @@ const ImageOverlay: React.FC<{
 );
 
 export const VKMediaGrid: React.FC<VKMediaGridProps> = ({ mediaCollection }) => {
+    const dispatch = useDispatch<AppDispatch>();
+    
     const [selectedMedia, setSelectedMedia] = useState<Media | null>(null);
     const [transitionStyle, setTransitionStyle] = useState<Record<string, string>>({});
     const [isAnimating, setIsAnimating] = useState(false);
@@ -118,6 +125,7 @@ export const VKMediaGrid: React.FC<VKMediaGridProps> = ({ mediaCollection }) => 
             });
 
             setSelectedMedia(mediaItem);
+            dispatch(blockScroll());
             setIsAnimating(true);
 
             setTimeout(() => setIsOverlayVisible(true), 10);
@@ -127,6 +135,7 @@ export const VKMediaGrid: React.FC<VKMediaGridProps> = ({ mediaCollection }) => 
     // Close overlay
     const closeOverlay = useCallback(() => {
         setIsClosing(true);
+        dispatch(unblockScroll());
         setIsOverlayVisible(false);
 
         setTimeout(() => {

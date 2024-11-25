@@ -1,9 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
+
+import scrollReducer from '@/store/scrollSlice';
 import postsReducer from '@/store/postsSlice';
 
 export const makeStore = () => {
     return configureStore({
         reducer: {
+            scroll: scrollReducer,
             posts: postsReducer,
         },
     });

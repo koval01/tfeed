@@ -1,6 +1,8 @@
 'use client'
 
+import type { RootState } from '@/lib/store';
 import { useEffect, type PropsWithChildren } from 'react';
+import { useSelector } from 'react-redux';
 
 import {
   AdaptivityProvider,
@@ -38,6 +40,20 @@ i18nHook.init({
 });
 
 const App = (props: PropsWithChildren) => {
+  const isBlocked = useSelector((state: RootState) => state.scroll.isBlocked);
+
+  useEffect(() => {
+    if (isBlocked) {
+      document.body.style.overflowY = 'hidden';
+    } else {
+      document.body.style.overflowY = 'scroll';
+    }
+
+    return () => {
+      document.body.style.overflowY = 'scroll';
+    };
+  }, [isBlocked]);
+  
   useEffect(() => {
     i18nHook.changeLanguage(navigator.language.split("-")[0]);
   }, []);
