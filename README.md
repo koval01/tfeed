@@ -1,64 +1,71 @@
-# TFeed
+# TFeed - Web Telegram Channel Viewer
 
-It is a web application for watching public telegram channels, it is built on such technologies:
+TFeed is a web application that allows users to browse and read public Telegram channels directly in their browser. No downloads, installations, or authentication required - just open and start reading.
 
-- [React](https://react.dev/)
-- [Next.js](https://nextjs.org/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [tailwindcss](https://tailwindcss.com/)
-- [VK UI](https://vkcom.github.io/VKUI)
-- [Axios](https://axios-http.com/docs/intro)
-- [Cloudflare Pages](https://pages.cloudflare.com/)
+## Features
 
-> The template was created using [pnpm](https://pnpm.io/). Therefore, it is required to use
-> it for this project as well. Using other package managers, you will receive a corresponding error.
+- Browse public Telegram channels seamlessly
+- Clean and intuitive user interface powered by VK UI
+- Responsive design that works across devices
+- No registration or Telegram account required
+- Real-time channel updates
+- Multi-language support via i18next
 
-## Install Dependencies
+## Tech Stack
 
-If you have just cloned this template, you should install the project dependencies using the
-command:
+### Core
+- [React](https://react.dev/) - UI library
+- [Next.js](https://nextjs.org/) - React framework
+- [TypeScript](https://www.typescriptlang.org/) - Type safety
+- [Redux Toolkit](https://redux-toolkit.js.org/) - State management
 
-```Bash
+### UI/Styling
+- [VK UI](https://vkcom.github.io/VKUI) - UI component library
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS
+- [Lucide React](https://lucide.dev/) - Icon library
+
+### Data Fetching/State
+- [Axios](https://axios-http.com/) - HTTP client
+- [SWR](https://swr.vercel.app/) - Data fetching
+- [React Redux](https://react-redux.js.org/) - Redux bindings
+
+### Utilities
+- [dayjs](https://day.js.org/) - Date handling
+- [i18next](https://www.i18next.com/) - Internationalization
+- [lodash](https://lodash.com/) - Utility functions
+
+### Infrastructure
+- [Cloudflare Pages](https://pages.cloudflare.com/) - Hosting and deployment
+
+## Getting Started
+
+1. Clone the repository
+2. Install dependencies:
+```bash
 pnpm install
 ```
 
-## Scripts
-
-This project contains the following scripts:
-
-- `dev`. Runs the application in development mode.
-- `dev:https`. Runs the application in development mode using self-signed SSL certificate.
-- `build`. Builds the application for production.
-- `start`. Starts the Next.js server in production mode.
-- `lint`. Runs [eslint](https://eslint.org/) to ensure the code quality meets the required
-  standards.
-- `deploy`. Starting the build of the project, and in the case of a successful build, 
-  all commits will be pushed to the origin repository
-
-To run a script, use the `pnpm run` command:
-
-```Bash
-pnpm run {script}
-# Example: pnpm run build
-```
-
-## Run
-
-To run the application in the development mode, use the `dev` script:
-
+3. Start the development server:
 ```bash
 pnpm run dev
 ```
 
-After this, you will see a similar message in your terminal:
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-```bash
-▲ Next.js 14.2.3
-- Local:        http://localhost:3000
+## Available Scripts
 
-✓ Starting...
-✓ Ready in 2.9s
-```
+- `dev` - Run development server
+- `dev:https` - Run development server with HTTPS
+- `build` - Build for production
+- `start` - Start production server
+- `lint` - Run ESLint
+- `pages:build` - For test build in Cloudflare's env
+- `deploy` - Build and deploy to production
 
-To view the application, you need to open the `Local`
-link (`http://localhost:3000` in this example) in your browser.
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+[TFeed License](LICENSE.md)
