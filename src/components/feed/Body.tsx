@@ -216,7 +216,7 @@ const PostNotSupported = () => (
         <Caption level="1" className="vkuiPlaceholder__text">
             <Trans
                 i18nKey="openPostInTelegramHint"
-                components={{ div: <Icon24ShareOutline className="inline-block text-[--vkui--color_text_accent]" width={14} height={14} /> }}
+                components={{ div: <Icon24ShareOutline className="inline-block text-[#24a1de]" width={13} height={13} /> }}
             />
         </Caption>
     </div>
