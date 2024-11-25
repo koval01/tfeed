@@ -100,6 +100,7 @@
     position: absolute;
     inset: 0;
     background: rgba(0, 0, 0, .4); /* Initial darkening */
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px); /* Background blur effect */
     opacity: 0; /* Default to transparent */
     pointer-events: none; /* Prevent clicks on the blur */
@@ -138,6 +139,7 @@
     width: var(--start-width);
     height: var(--start-height);
 
+    -webkit-filter: blur(20px);
     filter: blur(20px);
     opacity: 0;
 
@@ -179,10 +181,12 @@
 
 @keyframes blur-to-clear {
     0% {
+        -webkit-filter: blur(20px);
         filter: blur(20px);
         opacity: 0;
     }
     100% {
+        -webkit-filter: blur(0);
         filter: blur(0);
         opacity: 1;
     }
@@ -190,10 +194,12 @@
 
 @keyframes clear-to-blur {
     0% {
+        -webkit-filter: blur(0);
         filter: blur(0);
         opacity: 1;
     }
     100% {
+        -webkit-filter: blur(20px);
         filter: blur(20px);
         opacity: 0;
     }
