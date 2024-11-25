@@ -1,5 +1,9 @@
 import { useState, useCallback } from 'react';
-import { Post, Offset, Body } from '@/types';
+import { useDispatch } from 'react-redux';
+
+import type { Post, Offset, Body } from '@/types';
+
+import { setNoLoadMore as reduxSetNoLoadMore } from '@/store/postsSlice';
 import { onRefresh, onMore } from '@/components/feed/actions';
 
 interface UsePostsReturn {
@@ -7,7 +11,7 @@ interface UsePostsReturn {
     offset: Offset;
     isFetching: boolean;
     isFetchingMore: boolean;
-    noMorePosts: boolean;
+    setNoLoadMore: (state: boolean) => void;
     refreshPosts: (showError?: boolean) => Promise<void>;
     loadMorePosts: () => Promise<void>;
     initializePosts: (data: Body) => void;
@@ -17,11 +21,13 @@ export const usePosts = (
     channelUsername: string | undefined,
     showErrorSnackbar: (message: string) => void
 ): UsePostsReturn => {
+    const dispatch = useDispatch();
+    const setNoLoadMore = (state: boolean) => dispatch(reduxSetNoLoadMore(state));
+
     const [posts, setPosts] = useState<Post[]>([]);
     const [offset, setOffset] = useState<Offset>({});
     const [isFetching, setIsFetching] = useState(false);
     const [isFetchingMore, setIsFetchingMore] = useState(false);
-    const [noMorePosts, setNoMorePosts] = useState(false);
 
     const initializePosts = useCallback((data: Body) => {
         const newPosts = data?.content?.posts?.slice().reverse() || [];
@@ -54,7 +60,7 @@ export const usePosts = (
             setIsFetchingMore,
             setPosts,
             setOffset,
-            setNoMorePosts,
+            setNoLoadMore,
             showErrorSnackbar
         );
     }, [channelUsername, offset, isFetching, isFetchingMore, showErrorSnackbar]);
@@ -64,7 +70,7 @@ export const usePosts = (
         offset,
         isFetching,
         isFetchingMore,
-        noMorePosts,
+        setNoLoadMore,
         refreshPosts,
         loadMorePosts,
         initializePosts

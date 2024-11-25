@@ -1,10 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
+import postsReducer from '@/store/postsSlice';
 
 export const makeStore = () => {
     return configureStore({
-        reducer: {}
+        reducer: {
+            posts: postsReducer,
+        },
     });
 }
+
+export const selectNoLoadMore = (state: RootState): boolean => state.posts.noLoadMore;
 
 // Infer the type of makeStore
 export type AppStore = ReturnType<typeof makeStore>;

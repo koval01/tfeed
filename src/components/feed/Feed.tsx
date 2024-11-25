@@ -1,6 +1,10 @@
 "use client";
 
 import { type FC, useCallback, useEffect, useState } from "react";
+
+import { usePosts } from "@/hooks/usePosts";
+import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+
 import type { Body } from "@/types";
 
 import { Panel, SplitLayout } from "@vkontakte/vkui";
@@ -14,9 +18,6 @@ import { Posts } from "@/components/feed/Post";
 import { Profile } from "@/components/feed/Profile";
 import ErrorSnackbar from "@/components/ErrorSnackbar";
 import { FeedHeader } from "@/components/feed/FeedHeader";
-
-import { usePosts } from "@/hooks/usePosts";
-import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 interface FeedProps {
     /**
@@ -61,7 +62,6 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
         posts,
         isFetching,
         isFetchingMore,
-        noMorePosts,
         refreshPosts,
         loadMorePosts,
         initializePosts,
@@ -71,7 +71,6 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
     useInfiniteScroll({
         onLoadMore: loadMorePosts,
         isLoading: isFetchingMore,
-        noMoreItems: noMorePosts,
     });
 
     // Initialize posts and set the channel username on data change
@@ -109,7 +108,6 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
                             onRefresh={refreshPosts}
                             isFetching={isFetching}
                             isFetchingMore={isFetchingMore}
-                            noMorePosts={noMorePosts}
                         />
                         <Profile channel={data.channel} />
                     </>

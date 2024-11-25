@@ -3,7 +3,6 @@ import { Spoiler } from 'spoiled';
 
 import parse, { DOMNode, HTMLReactParserOptions, Element, Text } from 'html-react-parser';
 import styles from '@/styles/emoji.module.css';
-import { nextImage } from '@/helpers/nextImage';
 
 /**
  * Extracts the text content from an HTML element and its children.
@@ -74,10 +73,7 @@ const renderEmoji = (element: Element): JSX.Element | string => {
 
         if (!emojiUrl) return extractTextContent(element);
 
-        const resolvedUrl = nextImage(
-            emojiUrl.startsWith('//') ? `https:${emojiUrl}` : emojiUrl,
-            40
-        );
+        const resolvedUrl = emojiUrl.startsWith('//') ? `https:${emojiUrl}` : emojiUrl;
 
         return (
             <span className={styles.emoji} style={{ backgroundImage: `url(${resolvedUrl})` }}>

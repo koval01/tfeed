@@ -131,19 +131,18 @@ class PostFetcher {
      *
      * @param offset - The current offset object.
      * @param setIsFetchingMore - Function to toggle the loading state for fetching more posts.
-     * @param setNoMorePosts - Function to set the "no more posts" state.
      */
     async loadMore(
         offset: Offset,
         setIsFetchingMore: (value: SetStateAction<boolean>) => void,
-        setNoMorePosts: (value: SetStateAction<boolean>) => void
+        setNoLoadMore: (state: boolean) => void
     ): Promise<void> {
         const posts = await this.fetchPosts(offset.before, "before", setIsFetchingMore);
 
         if (posts && posts.length > 0) {
             this.updatePostsAndOffset(posts, "before");
         } else if (posts === null) {
-            setNoMorePosts(true);
+            setNoLoadMore(true);
             this.showErrorSnackbar?.(
                 "No more posts available.",
                 Icon28SearchStarsOutline,
@@ -177,9 +176,9 @@ export const onMore = async (
     setIsFetchingMore: (value: SetStateAction<boolean>) => void,
     setPosts: (value: SetStateAction<Post[]>) => void,
     setOffset: (value: SetStateAction<Offset>) => void,
-    setNoMorePosts: (value: SetStateAction<boolean>) => void,
+    setNoLoadMore: (state: boolean) => void,
     showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string) => void
 ): Promise<void> => {
     const postFetcher = new PostFetcher(channelUsername, setPosts, setOffset, showErrorSnackbar);
-    await postFetcher.loadMore(offset, setIsFetchingMore, setNoMorePosts);
+    await postFetcher.loadMore(offset, setIsFetchingMore, setNoLoadMore);
 };

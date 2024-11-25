@@ -1,25 +1,29 @@
 "use client";
 
 import React from "react";
-import type { 
-    PostBodyProps, 
-    PostsProps, 
-    PostProps, 
-    LoadingMoreProps 
+import { useSelector } from "react-redux";
+
+import { selectNoLoadMore } from '@/lib/store';
+
+import type {
+    PostBodyProps,
+    PostsProps,
+    PostProps,
+    LoadingMoreProps
 } from "@/types/feed/post";
 
-import { 
-    Group, 
-    SplitCol, 
-    Spacing, 
-    PullToRefresh, 
-    Subhead 
+import {
+    Group,
+    SplitCol,
+    Spacing,
+    PullToRefresh,
+    Subhead
 } from "@vkontakte/vkui";
 
-import { 
-    PostContent, 
-    PostFooter, 
-    PostHeader 
+import {
+    PostContent,
+    PostFooter,
+    PostHeader
 } from "@/components/feed/Body";
 
 import { InView } from "react-intersection-observer";
@@ -63,11 +67,15 @@ const LoadingMoreButton = ({ isFetchingMore }: { isFetchingMore: boolean }): JSX
 /**
  * Displays the loading state or button to load more posts.
  */
-const LoadingMore = ({ isFetchingMore, noMorePosts }: LoadingMoreProps): JSX.Element => (
-    <Group mode="plain" className="my-1 md:my-3 lg:my-5">
-        {!noMorePosts && <LoadingMoreButton isFetchingMore={isFetchingMore} />}
-    </Group>
-);
+const LoadingMore = ({ isFetchingMore }: LoadingMoreProps): JSX.Element => {
+    const noMorePosts = useSelector(selectNoLoadMore);
+
+    return (
+        <Group mode="plain" className="my-1 md:my-3 lg:my-5">
+            {!noMorePosts && <LoadingMoreButton isFetchingMore={isFetchingMore} />}
+        </Group>
+    )
+};
 
 /**
  * Displays an individual post with its metadata and content.
@@ -98,14 +106,14 @@ const Post = ({ item, channel }: PostProps): JSX.Element => {
 /**
  * Main Posts component that renders a list of posts with pull-to-refresh and load-more functionality.
  */
-export const Posts = ({ channel, posts, onRefresh, isFetching, isFetchingMore, noMorePosts }: PostsProps): JSX.Element => (
+export const Posts = ({ channel, posts, onRefresh, isFetching, isFetchingMore }: PostsProps): JSX.Element => (
     <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>
         <PullToRefresh onRefresh={onRefresh} isFetching={isFetching}>
             <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto">
                 {posts.map((item) => (
                     <Post key={item.id} item={item} channel={channel} />
                 ))}
-                <LoadingMore isFetchingMore={isFetchingMore} noMorePosts={noMorePosts} />
+                <LoadingMore isFetchingMore={isFetchingMore} />
             </div>
         </PullToRefresh>
     </SplitCol>

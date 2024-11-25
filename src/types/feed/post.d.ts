@@ -8,7 +8,6 @@ export interface PostsProps {
     onRefresh: () => void;
     isFetching: boolean;
     isFetchingMore: boolean;
-    noMorePosts: boolean;
 }
 
 export interface PostProps {
@@ -18,7 +17,6 @@ export interface PostProps {
 
 export interface LoadingMoreProps {
     isFetchingMore: boolean;
-    noMorePosts: boolean;
 }
 
 export interface FooterComponentProps {
