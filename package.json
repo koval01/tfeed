@@ -34,7 +34,7 @@
     "react-redux": "^9.1.2",
     "spoiled": "^0.3.2",
     "swr": "^2.2.5",
-    "tailwind-merge": "^2.5.4"
+    "tailwind-merge": "^2.5.5"
   },
   "devDependencies": {
     "@cloudflare/next-on-pages": "^1.13.5",
