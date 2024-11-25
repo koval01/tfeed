@@ -13,6 +13,8 @@ export const i18nStrings = {
             "NotFoundSubText": "Could not find requested resource",
             "MainSubText": "Unfortunately the main page is empty for now, it is still under development.",
             "UnhandledError": "An unhandled error occurred!",
+            "thisPostNotSupported": "Go to Telegram to view this post",
+            "openPostInTelegramHint": "To open this post on Telegram, use the <div /> symbol in the upper right corner of the post.",
         }
     },
     "de": {
@@ -31,6 +33,8 @@ export const i18nStrings = {
             "forwarded message": "weitergeleitete Nachricht",
             "Anonymous Poll": "Anonyme Umfrage",
             "votes": "Stimmen",
+            "thisPostNotSupported": "Um diesen Beitrag zu sehen, gehen Sie zu Telegram",
+            "openPostInTelegramHint": "Um diesen Beitrag in Telegram zu öffnen, verwenden Sie das <div />-Symbol in der oberen rechten Ecke des Beitrags.",
         }
     },
     "ru": {
@@ -49,6 +53,8 @@ export const i18nStrings = {
             "forwarded message": "пересланное сообщение",
             "Anonymous Poll": "Анонимный опрос",
             "votes": "голосов",
+            "thisPostNotSupported": "Для просмотра этого поста перейдите в Telegram",
+            "openPostInTelegramHint": "Чтобы открыть этот пост в Telegram, используйте символ <div /> в верхнем правом углу поста.",
         }
     },
     "uk": {
@@ -67,6 +73,8 @@ export const i18nStrings = {
             "forwarded message": "переслане повідомлення",
             "Anonymous Poll": "Анонімне опитування",
             "votes": "голосів",
+            "thisPostNotSupported": "Для перегляду цього поста перейдіть у Telegram",
+            "openPostInTelegramHint": "Щоб відкрити цей пост у Telegram, використовуйте символ <div /> у верхньому правому куті поста.",
         }
     }
 }

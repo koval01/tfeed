@@ -19,7 +19,7 @@ import { TextComponent } from "@/components/feed/TextComponent";
 import { TitleProps, Channel, Counters as CountersProps } from "@/types";
 import Link from "next/link";
 
-import { useTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
 
 const Verified = ({ verified }: { verified: boolean }) => (
     verified && <VerifiedTT
@@ -36,24 +36,20 @@ const Title = ({ children, verified }: TitleProps) => (
     </div>
 )
 
-const Counters = ({ counters }: { counters: CountersProps }) => {
-    const { t } = useTranslation();
-
-    return (
-        <div className="flex whitespace-nowrap overflow-hidden max-w-72">
-            {Object.entries(counters).map(([key, value], index) => (
-                <div key={index} className="inline-block whitespace-normal align-top basis-1/4 pr-5 box-border">
-                    <TitleVK level="3" className="inline-block w-full text-left">
-                        {value}
-                    </TitleVK>
-                    <Footnote className="vkuiPlaceholder__text inline-block capitalize align-top mt-1">
-                        {t(key)}
-                    </Footnote>
-                </div>
-            ))}
-        </div>
-    )
-}
+const Counters = ({ counters }: { counters: CountersProps }) => (
+    <div className="flex whitespace-nowrap overflow-hidden max-w-72">
+        {Object.entries(counters).map(([key, value], index) => (
+            <div key={index} className="inline-block whitespace-normal align-top basis-1/4 pr-5 box-border">
+                <TitleVK level="3" className="inline-block w-full text-left">
+                    {value}
+                </TitleVK>
+                <Footnote className="vkuiPlaceholder__text inline-block capitalize align-top mt-1">
+                    <Trans i18nKey={key} />
+                </Footnote>
+            </div>
+        ))}
+    </div>
+);
 
 const Footer = () => {
     const footerLinks = [
@@ -62,7 +58,6 @@ const Footer = () => {
         { "name": "Apps", "href": "//telegram.org/apps" },
         { "name": "Platform", "href": "//core.telegram.org" }
     ];
-    const { t } = useTranslation();
 
     return (
         <div className="text-center pt-0 pb-2">
@@ -70,7 +65,7 @@ const Footer = () => {
                 <div key={index} className="inline-block align-top px-2">
                     <Footnote className="vkuiPlaceholder__text">
                         <Link href={item.href}>
-                            {t(item.name)}
+                            <Trans i18nKey={item.name} />
                         </Link>
                     </Footnote>
                 </div>
@@ -85,23 +80,19 @@ const Description = ({ channel }: { channel: Channel }) => (
     </Paragraph>
 )
 
-const ActionBlock = ({ channel }: { channel: Channel }) => {
-    const { t } = useTranslation();
-
-    return (
-        <div>
-            <Counters counters={channel.counters} />
-            <Spacing size={12} />
-            {/* */}
-            <Description channel={channel} />
-            <Spacing size={16} />
-            {/* */}
-            <Button size="l" mode="primary" onClick={() => { window.open(`https://t.me/${channel.username}`, "_blank") }}>
-                {t("Subscribe")}
-            </Button>
-        </div>
-    )
-}
+const ActionBlock = ({ channel }: { channel: Channel }) => (
+    <div>
+        <Counters counters={channel.counters} />
+        <Spacing size={12} />
+        {/* */}
+        <Description channel={channel} />
+        <Spacing size={16} />
+        {/* */}
+        <Button size="l" mode="primary" onClick={() => { window.open(`https://t.me/${channel.username}`, "_blank") }}>
+            <Trans i18nKey="Subscribe" />
+        </Button>
+    </div>
+);
 
 const ChannelTitle = ({ channel }: { channel: Channel }) => (
     <Title verified={channel.labels.includes("verified")}>

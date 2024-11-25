@@ -17,6 +17,7 @@ import { i18nStrings } from "@/i18n";
 
 import '@/styles/app.css';
 import '@/styles/vkui.css';
+import '@/styles/tfeed.css';
 import '@/styles/tailwind.css';
 
 import { ErrorBoundary } from '@/components/ErrorBoundary';

@@ -2,7 +2,7 @@ import { EllipsisText, Link } from '@vkontakte/vkui';
 import { Spoiler } from 'spoiled';
 
 import parse, { DOMNode, HTMLReactParserOptions, Element, Text } from 'html-react-parser';
-import styles from '@/styles/emoji.module.css';
+import '@/styles/emoji.css';
 
 /**
  * Extracts the text content from an HTML element and its children.
@@ -76,7 +76,7 @@ const renderEmoji = (element: Element): JSX.Element | string => {
         const resolvedUrl = emojiUrl.startsWith('//') ? `https:${emojiUrl}` : emojiUrl;
 
         return (
-            <span className={styles.emoji} style={{ backgroundImage: `url(${resolvedUrl})` }}>
+            <span className="emoji" style={{ backgroundImage: `url(${resolvedUrl})` }}>
                 <b>{extractTextContent(element)}</b>
             </span>
         );

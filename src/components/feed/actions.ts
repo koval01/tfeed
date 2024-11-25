@@ -1,10 +1,10 @@
 import { type FC, SetStateAction } from "react";
 import type { Offset, Post } from "@/types";
-import { AxiosError } from "axios"; // not type object
+import { AxiosError } from "axios";
 
-import { 
-    Icon28CheckCircleFill, 
-    Icon28SearchStarsOutline 
+import {
+    Icon28CheckCircleFill,
+    Icon28SearchStarsOutline,
 } from "@vkontakte/icons";
 
 import { getMore } from "@/components/feed/fetcher";
@@ -18,14 +18,6 @@ class PostFetcher {
     private setOffset: (value: SetStateAction<Offset>) => void;
     private showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string) => void;
 
-    /**
-     * Constructor for PostFetcher.
-     *
-     * @param channelUsername - The username of the channel to fetch posts from.
-     * @param setPosts - Function to update the list of posts in the UI.
-     * @param setOffset - Function to update the pagination offsets.
-     * @param showErrorSnackbar - Optional function to display error messages to the user.
-     */
     constructor(
         channelUsername: string | undefined,
         setPosts: (value: SetStateAction<Post[]>) => void,
@@ -44,7 +36,6 @@ class PostFetcher {
      * @param offsetKey - The offset value to start fetching from.
      * @param direction - The direction of pagination ("after" or "before").
      * @param setIsFetching - Function to toggle the loading state.
-     * @returns A promise that resolves to the fetched posts or null if an error occurs.
      */
     private async fetchPosts(
         offsetKey: number | undefined,
@@ -59,7 +50,10 @@ class PostFetcher {
             const response = await getMore(this.channelUsername, offsetKey, direction);
             return response?.posts?.slice().reverse() || [];
         } catch (error) {
-            this.handleError(error, direction === "after" ? "refreshing data" : "fetching older posts");
+            this.handleError(
+                error,
+                direction === "after" ? "refreshing data" : "fetching older posts"
+            );
             return null;
         } finally {
             setIsFetching(false);
@@ -84,7 +78,8 @@ class PostFetcher {
             ? context === "refreshing data"
                 ? "The feed is up to date, but there are no new entries."
                 : "No more older posts are available."
-            : `An error occurred while ${context}${isAxiosError ? `. Status: ${error.response?.statusText || error.message}` : "."}`;
+            : `An error occurred while ${context}${isAxiosError ? `. Status: ${error.response?.statusText || error.message}` : "."
+            }`;
 
         this.showErrorSnackbar?.(
             message,
@@ -102,13 +97,15 @@ class PostFetcher {
     private updatePostsAndOffset(posts: Post[], direction: "after" | "before"): void {
         if (posts.length === 0) return;
 
-        this.setPosts(prevPosts =>
+        this.setPosts((prevPosts) =>
             direction === "after" ? [...posts, ...prevPosts] : [...prevPosts, ...posts]
         );
 
-        this.setOffset(prevOffset => ({
+        this.setOffset((prevOffset) => ({
             ...prevOffset,
-            [direction]: direction === "after" ? posts[0]?.id : posts[posts.length - 1]?.id,
+            [direction]: direction === "after"
+                ? posts[0]?.id
+                : posts[posts.length - 1]?.id,
         }));
     }
 
@@ -118,7 +115,10 @@ class PostFetcher {
      * @param offset - The current offset object.
      * @param setIsFetching - Function to toggle the loading state.
      */
-    async refresh(offset: Offset, setIsFetching: (value: SetStateAction<boolean>) => void): Promise<void> {
+    async refresh(
+        offset: Offset,
+        setIsFetching: (value: SetStateAction<boolean>) => void
+    ): Promise<void> {
         const posts = await this.fetchPosts(offset.after, "after", setIsFetching);
         if (posts) {
             this.updatePostsAndOffset(posts, "after");
@@ -130,7 +130,8 @@ class PostFetcher {
      * Loads older posts and updates the state.
      *
      * @param offset - The current offset object.
-     * @param setIsFetchingMore - Function to toggle the loading state for fetching more posts.
+     * @param setIsFetchingMore - Function to toggle the loading state.
+     * @param setNoLoadMore - Function to mark no more posts available.
      */
     async loadMore(
         offset: Offset,

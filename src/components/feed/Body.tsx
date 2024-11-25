@@ -1,10 +1,13 @@
 "use client";
 
+import type { PropsWithChildren } from "react";
+
 import type { FooterComponentProps, PostBodyProps } from "@/types/feed/post";
 import type { Channel, Post, TitleProps } from "@/types";
 
 import { cn } from "@/lib/utils";
 import { useFormattedDate } from "@/hooks/useFormattedDate";
+import { useTranslation, Trans } from "react-i18next";
 
 import {
     Icon16Verified,
@@ -20,6 +23,7 @@ import {
     Headline,
     Subhead,
     Tappable,
+    Text,
 } from "@vkontakte/vkui";
 
 import { Avatar } from "@/components/Avatar";
@@ -201,12 +205,43 @@ const PostPoll = ({ post }: { post: Post }) =>
     post.content.poll ? <Poll poll={post.content.poll} /> : null;
 
 /**
+ * This is a component that is a decorative cap for a post that is not supported
+ */
+const PostNotSupported = () => (
+    <div>
+        <Text className="text-lg font-bold TFeed__GradientText">
+            <Trans i18nKey="thisPostNotSupported" />
+        </Text>
+        <Caption level="1" className="vkuiPlaceholder__text">
+            <Trans
+                i18nKey="openPostInTelegramHint"
+                components={{ div: <Icon24ShareOutline className="inline-block text-[--vkui--color_text_accent]" width={14} height={14} /> }}
+            />
+        </Caption>
+    </div>
+);
+
+/**
+ * This component is a wrapper that decides whether to display a message about unsupported content
+ */
+const PostSupport = ({ children, post }: PropsWithChildren<{ post: Post }>) => {
+    const content = post.content;
+    const isSupported = !!(
+        content.text?.string ||
+        content.poll ||
+        content.media?.some(media => media.type === 'video' || media.type === 'image')
+    );
+
+    return isSupported ? children : <PostNotSupported />
+}
+
+/**
  * Renders the main content of the post, including text, media, and poll.
  */
-export const PostContent = ({ channel, post }: PostBodyProps) => (
-    <>
+export const PostContent = ({ post }: PostBodyProps) => (
+    <PostSupport post={post}>
         <PostText post={post} />
         <PostMedia post={post} />
         <PostPoll post={post} />
-    </>
+    </PostSupport>
 );

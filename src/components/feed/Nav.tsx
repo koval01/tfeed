@@ -8,7 +8,7 @@ import { Avatar } from "@/components/Avatar";
 import { Icon16Verified } from "@vkontakte/icons";
 import { Button, EllipsisText, Headline } from "@vkontakte/vkui";
 
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 
 /**
  * Renders a channel avatar.
@@ -60,21 +60,19 @@ const ChannelTitle: React.FC<{ channel: Channel }> = ({ channel }) => (
 /**
  * Renders a subscription button that redirects to the channel's Telegram page.
  */
-export const SubscribeButton: React.FC<{ channel: Channel }> = ({ channel }) => {
-    const { t } = useTranslation();
-
-    return (
-        <div className="block pr-1 w-full">
-            <Button
-                appearance="accent-invariable"
-                size="s"
-                onClick={() => window.open(`https://t.me/${channel.username}`, "_blank")}
-            >
-                <Headline level="2">{t("Subscribe")}</Headline>
-            </Button>
-        </div>
-    );
-};
+export const SubscribeButton: React.FC<{ channel: Channel }> = ({ channel }) => (
+    <div className="block pr-1 w-full">
+        <Button
+            appearance="accent-invariable"
+            size="s"
+            onClick={() => window.open(`https://t.me/${channel.username}`, "_blank")}
+        >
+            <Headline level="2">
+                <Trans i18nKey="Subscribe" />
+            </Headline>
+        </Button>
+    </div>
+);
 
 /**
  * Renders the navigation block for a channel, including avatar, title, and subscriber count.

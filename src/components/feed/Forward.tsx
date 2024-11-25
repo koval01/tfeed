@@ -6,7 +6,7 @@ import type { Post, Forwarded } from "@/types";
 import { Icon28ReplyOutline } from "@vkontakte/icons";
 import { Avatar, EllipsisText, Headline, Link, Spacing, Subhead } from "@vkontakte/vkui";
 
-import { useTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
 import { TextComponent } from "@/components/feed/TextComponent";
 
 /**
@@ -57,27 +57,23 @@ const ForwardName: React.FC<{ forwarded: Forwarded }> = ({ forwarded }) => (
 /**
  * The `Forward` component renders forwarded message details along with its children.
  */
-export const Forward: React.FC<PropsWithChildren<{ post: Post }>> = ({ children, post }) => {
-    const { t } = useTranslation();
-
-    return (
-        <div className="mt-3 pl-3 border-solid border-l-2 border-[#001433]/[.12] dark:border-white/[.24]">
-            <div className="min-h-10">
-                <div className="block float-left">
-                    <LinkPost forwarded={post.forwarded}>
-                        <AvatarObject />
-                    </LinkPost>
-                </div>
-                <div className="ml-[52px] mt-[3px]">
-                    <ForwardName forwarded={post.forwarded} />
-                    <Subhead className="vkuiPlaceholder__text select-none">
-                        {t("forwarded message")}
-                    </Subhead>
-                </div>
+export const Forward: React.FC<PropsWithChildren<{ post: Post }>> = ({ children, post }) => (
+    <div className="mt-3 pl-3 border-solid border-l-2 border-[#001433]/[.12] dark:border-white/[.24]">
+        <div className="min-h-10">
+            <div className="block float-left">
+                <LinkPost forwarded={post.forwarded}>
+                    <AvatarObject />
+                </LinkPost>
             </div>
-            <Spacing />
-            {children}
-            <Spacing size={6} />
+            <div className="ml-[52px] mt-[3px]">
+                <ForwardName forwarded={post.forwarded} />
+                <Subhead className="vkuiPlaceholder__text select-none">
+                    <Trans i18nKey="forwarded message" />
+                </Subhead>
+            </div>
         </div>
-    );
-};
+        <Spacing />
+        {children}
+        <Spacing size={6} />
+    </div>
+);

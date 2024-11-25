@@ -11,7 +11,7 @@ import {
   SplitLayout
 } from "@vkontakte/vkui";
 
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 
 const Home: React.FC = () => {
   const { t } = useTranslation();
@@ -23,11 +23,11 @@ const Home: React.FC = () => {
           <Placeholder>
             {/* Accessible title */}
             <DisplayTitle className="select-none" aria-label={t("Nothing")}>
-              {t("Nothing")}
+              <Trans i18nKey="Nothing" />
             </DisplayTitle>
           </Placeholder>
           <Headline className="text-center">
-            {t("MainSubText")}
+            <Trans i18nKey="MainSubText" />
           </Headline>
         </FixedCenter>
       </SplitCol>

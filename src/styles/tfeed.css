@@ -1,0 +1,12 @@
+.TFeed__GradientText {
+    background: #24a1de;
+    background: linear-gradient(25deg, rgba(103,192,237,1) 0%, rgba(36,161,222,1) 50%, rgba(17,149,213,1) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+.TFeed__AIGradient {
+    background: rgb(156 105 232);
+    background: linear-gradient(25deg, rgb(112 155 255) 0%, rgb(197 82 241) 36%, rgb(156 105 232) 64%, rgb(239 36 25) 100%);
+}
