@@ -109,7 +109,7 @@ const Post = ({ item, channel }: PostProps): JSX.Element => {
 export const Posts = ({ channel, posts, onRefresh, isFetching, isFetchingMore }: PostsProps): JSX.Element => (
     <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>
         <PullToRefresh onRefresh={onRefresh} isFetching={isFetching}>
-            <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto">
+            <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto w-full">
                 {posts.map((item) => (
                     <Post key={item.id} item={item} channel={channel} />
                 ))}
