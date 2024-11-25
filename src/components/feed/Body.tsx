@@ -3,7 +3,7 @@
 import type { PropsWithChildren } from "react";
 
 import type { FooterComponentProps, PostBodyProps } from "@/types/feed/post";
-import type { Channel, Post, TitleProps } from "@/types";
+import type { Channel, Footer, Post, TitleProps } from "@/types";
 
 import { cn } from "@/lib/utils";
 import { useFormattedDate } from "@/hooks/useFormattedDate";
@@ -133,7 +133,7 @@ const FooterComponent = ({
 }: FooterComponentProps) => (
     <div
         className={cn(
-            "flex items-center whitespace-nowrap overflow-hidden leading-[15px] h-3.5 vkuiPlaceholder__text",
+            "flex items-center whitespace-nowrap overflow-hidden leading-5 h-6 vkuiPlaceholder__text",
             className
         )}
     >
@@ -155,12 +155,12 @@ const PostViews = ({ views }: { views?: string }) =>
 /**
  * Displays the author in the post footer.
  */
-const PostAuthor = ({ author }: { author?: string }) =>
-    author ? (
+const PostAuthor = ({ footer }: { footer?: Footer }) =>
+    footer?.author ? (
         <FooterComponent
             Icon={Icon20SignatureOutline}
-            context={author}
-            iconSize={16}
+            context={<TextComponent htmlString={footer.author?.html} />}
+            iconSize={19}
             className="space-x-1"
         />
     ) : (
@@ -173,7 +173,7 @@ const PostAuthor = ({ author }: { author?: string }) =>
 export const PostFooter = ({ post }: { post: Post }) => (
     <div className="py-0 select-none">
         <div className="flex items-center relative justify-between max-md:pt-1 pt-3 pb-0">
-            <PostAuthor author={post.footer.author} />
+            <PostAuthor footer={post.footer} />
             <PostViews views={post.footer.views} />
         </div>
     </div>

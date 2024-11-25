@@ -30,8 +30,8 @@ const Verified = ({ verified }: { verified: boolean }) => (
 )
 
 const Title = ({ children, verified }: TitleProps) => (
-    <div className="inline-flex leading-7 items-center">
-        <DisplayTitle level="1">{children}</DisplayTitle>
+    <div className="inline-flex items-center">
+        <DisplayTitle level="1" className="leading-8">{children}</DisplayTitle>
         <div className="inline ml-1">
             <Verified verified={verified} />
         </div>
