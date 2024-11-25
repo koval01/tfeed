@@ -22,7 +22,11 @@ export const usePosts = (
     showErrorSnackbar: (message: string) => void
 ): UsePostsReturn => {
     const dispatch = useDispatch();
-    const setNoLoadMore = (state: boolean) => dispatch(reduxSetNoLoadMore(state));
+
+    // Wrap setNoLoadMore in useCallback
+    const setNoLoadMore = useCallback((state: boolean) => {
+        dispatch(reduxSetNoLoadMore(state));
+    }, [dispatch]);
 
     const [posts, setPosts] = useState<Post[]>([]);
     const [offset, setOffset] = useState<Offset>({});
@@ -63,7 +67,14 @@ export const usePosts = (
             setNoLoadMore,
             showErrorSnackbar
         );
-    }, [channelUsername, offset, isFetching, isFetchingMore, showErrorSnackbar]);
+    }, [
+        channelUsername,
+        offset,
+        isFetching,
+        isFetchingMore,
+        showErrorSnackbar,
+        setNoLoadMore
+    ]);
 
     return {
         posts,

@@ -143,7 +143,7 @@ export const VKMediaGrid: React.FC<VKMediaGridProps> = ({ mediaCollection }) => 
             setIsClosing(false);
             setSelectedMedia(null);
         }, 500);
-    }, []);
+    }, [dispatch]);
 
     // Calculate final media dimensions
     const calculateEndDimensions = useCallback((aspectRatio: number) => {
