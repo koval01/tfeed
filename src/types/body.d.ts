@@ -46,7 +46,7 @@ export interface Forwarded {
 
 export interface Footer {
     views?: string;
-    author?: string;
+    author?: ParsedAndRaw;
     date: FooterDate;
 }
 

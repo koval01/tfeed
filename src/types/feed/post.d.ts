@@ -21,7 +21,7 @@ export interface LoadingMoreProps {
 
 export interface FooterComponentProps {
     Icon: FC;
-    context: string;
+    context: string | JSX.Element;
     iconSize?: number;
     className?: ClassValue;
 }
