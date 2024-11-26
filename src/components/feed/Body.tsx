@@ -9,25 +9,24 @@ import { cn } from "@/lib/utils";
 import { useFormattedDate } from "@/hooks/useFormattedDate";
 import { Trans } from "react-i18next";
 
+import { RoundVideo } from "@/components/feed/RoundVideo";
+
 import {
     Icon16Verified,
     Icon16View,
     Icon20SignatureOutline,
     Icon24MessageReplyOutline,
-    Icon24ShareOutline,
+    Icon24ShareOutline
 } from "@vkontakte/icons";
 
 import {
     Banner,
     Caption,
-    Div,
     EllipsisText,
     Flex,
     Footnote,
     Headline,
     Image,
-    Separator,
-    Spacing,
     Subhead,
     Tappable,
     Text,
@@ -210,6 +209,9 @@ const PostPoll = ({ post }: { post: Post }) =>
     post.content.poll ? <Poll poll={post.content.poll} /> : null;
 
 
+/**
+ * The component that is responsible for replies to other posts
+ */
 const PostReply = ({ channel, post }: { channel: Channel, post: Post }) => {
     const reply = post.content.reply;
 
@@ -274,7 +276,7 @@ const PostSupport = ({ children, post }: PropsWithChildren<{ post: Post }>) => {
     const isSupported = !!(
         content.text?.string ||
         content.poll ||
-        content.media?.some(media => media.type === 'video' || media.type === 'image')
+        content.media?.some(media => ["video", "image", "roundvideo"].includes(media.type))
     );
 
     return isSupported ? children : <PostNotSupported />
@@ -289,5 +291,6 @@ export const PostContent = ({ channel, post }: PostBodyProps) => (
         <PostText post={post} />
         <PostMedia post={post} />
         <PostPoll post={post} />
+        <RoundVideo post={post} />
     </PostSupport>
 );
