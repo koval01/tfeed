@@ -13,15 +13,21 @@ import {
     Icon16Verified,
     Icon16View,
     Icon20SignatureOutline,
+    Icon24MessageReplyOutline,
     Icon24ShareOutline,
 } from "@vkontakte/icons";
 
 import {
+    Banner,
     Caption,
+    Div,
     EllipsisText,
     Flex,
     Footnote,
     Headline,
+    Image,
+    Separator,
+    Spacing,
     Subhead,
     Tappable,
     Text,
@@ -34,6 +40,9 @@ import { Verified } from "@/components/feed/Verified";
 import { TextComponent } from "@/components/feed/TextComponent";
 
 import { convertMediaArray } from "@/helpers/mediaConvert";
+
+const handleRedirect = (channel: Channel, post: Post) =>
+    window.open(`https://t.me/${channel.username}/${post.id}`, "_blank");
 
 /**
  * Renders the title of a channel or post with optional verification status.
@@ -92,22 +101,17 @@ const HeadProfile = ({ channel, post }: PostBodyProps) => {
 /**
  * Renders a "more" button to redirect to a post on Telegram.
  */
-const MoreButton = ({ channel, post }: PostBodyProps) => {
-    const handleRedirect = () =>
-        window.open(`https://t.me/${channel.username}/${post.id}`, "_blank");
-
-    return (
-        <div className="relative flex" style={{ flex: "0 0 auto" }}>
-            <div className="flex items-center">
-                <div className="relative">
-                    <Tappable onClick={handleRedirect} className="rounded-lg">
-                        <Icon24ShareOutline className="vkuiPlaceholder__text" />
-                    </Tappable>
-                </div>
+const MoreButton = ({ channel, post }: PostBodyProps) => (
+    <div className="relative flex" style={{ flex: "0 0 auto" }}>
+        <div className="flex items-center">
+            <div className="relative">
+                <Tappable onClick={() => handleRedirect(channel, post)} className="rounded-lg">
+                    <Icon24ShareOutline className="vkuiPlaceholder__text" />
+                </Tappable>
             </div>
         </div>
-    );
-};
+    </div>
+);
 
 /**
  * Renders the post header with an avatar, profile information, and more button.
@@ -205,6 +209,46 @@ const PostText = ({ post }: { post: Post }) => (
 const PostPoll = ({ post }: { post: Post }) =>
     post.content.poll ? <Poll poll={post.content.poll} /> : null;
 
+
+const PostReply = ({ channel, post }: { channel: Channel, post: Post }) => {
+    const reply = post.content.reply;
+
+    return reply &&
+        (
+            <Banner
+                className="select-none my-1.5 md:my-2"
+                asideMode="expand"
+                onClick={() => handleRedirect(channel, post)}
+                before={
+                    <div className="inline-flex items-center space-x-2">
+                        <Icon24MessageReplyOutline
+                            width={26}
+                            height={26}
+                            className="text-[--vkui--color_text_accent]"
+                        />
+                        {post.content.reply.cover && <Image
+                            size={40}
+                            src={reply.cover}
+                            alt={`Reply to ${reply.name}'s message`}
+                        />}
+                    </div>
+                }
+                header={
+                    <Subhead weight="2" className="text-sm text-[--vkui--color_text_accent]">
+                        <TextComponent htmlString={reply.name?.html} />
+                    </Subhead>
+                }
+                subheader={
+                    <span className="text-[13px]">
+                        <EllipsisText>
+                            <TextComponent htmlString={reply.text?.html} />
+                        </EllipsisText>
+                    </span>
+                }
+            />
+        )
+}
+
 /**
  * This is a component that is a decorative cap for a post that is not supported
  */
@@ -239,8 +283,9 @@ const PostSupport = ({ children, post }: PropsWithChildren<{ post: Post }>) => {
 /**
  * Renders the main content of the post, including text, media, and poll.
  */
-export const PostContent = ({ post }: PostBodyProps) => (
+export const PostContent = ({ channel, post }: PostBodyProps) => (
     <PostSupport post={post}>
+        <PostReply channel={channel} post={post} />
         <PostText post={post} />
         <PostMedia post={post} />
         <PostPoll post={post} />

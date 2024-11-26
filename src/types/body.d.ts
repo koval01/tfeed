@@ -55,11 +55,19 @@ interface FooterDate {
     unix: number;
 }
 
+interface Reply {
+    cover?: string;
+    name: ParsedAndRaw;
+    text?: ParsedAndRaw;
+    to_message: number;
+}
+
 interface ContentPost {
     text: Text;
     media: Media[];
     poll: Poll;
     inline: Inline;
+    reply: Reply;
 }
 
 interface Inline {

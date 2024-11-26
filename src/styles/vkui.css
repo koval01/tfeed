@@ -9,3 +9,7 @@
 .vkuiPlaceholder__action {
     max-width: 100%;
 }
+
+.vkuiBanner__before {
+    display: flex;
+}

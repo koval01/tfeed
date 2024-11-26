@@ -42,7 +42,7 @@ const PollOption = ({ option }: { option: PollOptions }): JSX.Element => (
                 <Progress aria-labelledby="progresslabel" value={option.percent} />
             </FormItem>
         </div>
-        <div className="flex w-8 items-center whitespace-nowrap overflow-hidden vkuiPlaceholder__text">
+        <div className="flex w-[34px] items-center whitespace-nowrap overflow-hidden vkuiPlaceholder__text">
             {option.percent}%
         </div>
     </div>
