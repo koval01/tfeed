@@ -15,9 +15,11 @@ export const FeedHeader: FC<FeedHeaderProps> = ({ channel, isLoading }) => (
     <PanelHeader
         before={isLoading ? <ChannelNavSkeleton /> : <ChannelNav channel={channel} />}
         after={
-            <div className="inline-block items-center overflow-hidden lg:hidden">
-                <SubscribeButton channel={channel} />
-            </div>
+            !isLoading && (
+                <div className="inline-block items-center overflow-hidden lg:hidden">
+                    <SubscribeButton channel={channel} />
+                </div>
+            )
         }
     />
 );
