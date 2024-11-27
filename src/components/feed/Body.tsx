@@ -1,6 +1,6 @@
 "use client";
 
-import type { PropsWithChildren } from "react";
+import React, { type PropsWithChildren } from "react";
 
 import type { FooterComponentProps, PostBodyProps } from "@/types/feed/post";
 import type { Channel, Footer, Post, TitleProps } from "@/types";
@@ -286,7 +286,7 @@ const PostSupport = ({ children, post }: PropsWithChildren<{ post: Post }>) => {
 /**
  * Renders the main content of the post, including text, media, and poll.
  */
-export const PostContent = ({ channel, post }: PostBodyProps) => (
+export const PostContent = React.memo(({ channel, post }: PostBodyProps) => (
     <PostSupport post={post}>
         <PostReply channel={channel} post={post} />
         <PostText post={post} />
@@ -295,4 +295,4 @@ export const PostContent = ({ channel, post }: PostBodyProps) => (
         <RoundVideo post={post} />
         <Sticker post={post} />
     </PostSupport>
-);
+));
