@@ -121,7 +121,7 @@ export const onRefresh = async (
 
     const posts = await fetchPosts(config, offset.after, "after", setIsFetching);
 
-    if (posts) {
+    if (posts?.length) {
         updatePostsAndOffset(posts, "after", setPosts, setOffset);
         showErrorSnackbar?.("Feed successfully updated.", Icon28CheckCircleFill);
     }
