@@ -9,8 +9,6 @@ import { cn } from "@/lib/utils";
 import { useFormattedDate } from "@/hooks/useFormattedDate";
 import { Trans } from "react-i18next";
 
-import { RoundVideo } from "@/components/feed/RoundVideo";
-
 import {
     Icon16Verified,
     Icon16View,
@@ -33,9 +31,12 @@ import {
 } from "@vkontakte/vkui";
 
 import { Avatar } from "@/components/Avatar";
-import { Poll } from "@/components/feed/Poll";
 import { VKMediaGrid } from "@/components/Media";
+
+import { Poll } from "@/components/feed/Poll";
+import { Sticker } from "@/components/feed/Sticker";
 import { Verified } from "@/components/feed/Verified";
+import { RoundVideo } from "@/components/feed/RoundVideo";
 import { TextComponent } from "@/components/feed/TextComponent";
 
 import { convertMediaArray } from "@/helpers/mediaConvert";
@@ -276,7 +277,7 @@ const PostSupport = ({ children, post }: PropsWithChildren<{ post: Post }>) => {
     const isSupported = !!(
         content.text?.string ||
         content.poll ||
-        content.media?.some(media => ["video", "image", "roundvideo"].includes(media.type))
+        content.media?.some(media => ["video", "image", "roundvideo", "sticker"].includes(media.type))
     );
 
     return isSupported ? children : <PostNotSupported />
@@ -292,5 +293,6 @@ export const PostContent = ({ channel, post }: PostBodyProps) => (
         <PostMedia post={post} />
         <PostPoll post={post} />
         <RoundVideo post={post} />
+        <Sticker post={post} />
     </PostSupport>
 );
