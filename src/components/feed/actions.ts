@@ -1,7 +1,6 @@
 import { type FC, SetStateAction } from "react";
 import type { Offset, Post } from "@/types";
 import { AxiosError } from "axios";
-
 import {
     Icon28CheckCircleFill,
     Icon28SearchStarsOutline,
@@ -9,152 +8,101 @@ import {
 
 import { getMore } from "@/components/feed/fetcher";
 
-/**
- * Manages fetching, updating, and error handling for a feed of posts.
- */
-class PostFetcher {
-    private channelUsername?: string;
-    private setPosts: (value: SetStateAction<Post[]>) => void;
-    private setOffset: (value: SetStateAction<Offset>) => void;
-    private showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string) => void;
+type Direction = "before" | "after";
 
-    constructor(
-        channelUsername: string | undefined,
-        setPosts: (value: SetStateAction<Post[]>) => void,
-        setOffset: (value: SetStateAction<Offset>) => void,
-        showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string) => void
-    ) {
-        this.channelUsername = channelUsername;
-        this.setPosts = setPosts;
-        this.setOffset = setOffset;
-        this.showErrorSnackbar = showErrorSnackbar;
-    }
+interface ErrorHandlerOptions {
+    context: string;
+    showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string) => void;
+}
 
-    /**
-     * Fetches posts from the server.
-     *
-     * @param offsetKey - The offset value to start fetching from.
-     * @param direction - The direction of pagination ("after" or "before").
-     * @param setIsFetching - Function to toggle the loading state.
-     */
-    private async fetchPosts(
-        offsetKey: number | undefined,
-        direction: "after" | "before",
-        setIsFetching: (value: SetStateAction<boolean>) => void
-    ): Promise<Post[] | null> {
-        if (!this.channelUsername || offsetKey === undefined) return null;
-
-        setIsFetching(true);
-
-        try {
-            const response = await getMore(this.channelUsername, offsetKey, direction);
-            return response?.posts?.slice().reverse() || [];
-        } catch (error) {
-            this.handleError(
-                error,
-                direction === "after" ? "refreshing data" : "fetching older posts"
-            );
-            return null;
-        } finally {
-            setIsFetching(false);
-        }
-    }
-
-    /**
-     * Handles errors during post fetching.
-     *
-     * @param error - The error object thrown.
-     * @param context - The context of the error (e.g., "refreshing data").
-     */
-    private handleError(error: unknown, context: string): void {
-        const isAxiosError = error instanceof AxiosError;
-        const is404 = isAxiosError && error.response?.status === 404;
-
-        if (!is404) {
-            console.error(`Error during ${context}`, error);
-        }
-
-        const message = is404
-            ? context === "refreshing data"
-                ? "The feed is up to date, but there are no new entries."
-                : "No more older posts are available."
-            : `An error occurred while ${context}${isAxiosError ? `. Status: ${error.response?.statusText || error.message}` : "."
-            }`;
-
-        this.showErrorSnackbar?.(
-            message,
-            is404 ? Icon28SearchStarsOutline : undefined,
-            is404 ? "--vkui--color_icon_accent" : undefined
-        );
-    }
-
-    /**
-     * Updates the state with new posts and adjusts the pagination offset.
-     *
-     * @param posts - The new posts to add.
-     * @param direction - The direction of pagination ("after" or "before").
-     */
-    private updatePostsAndOffset(posts: Post[], direction: "after" | "before"): void {
-        if (posts.length === 0) return;
-
-        this.setPosts((prevPosts) =>
-            direction === "after" ? [...posts, ...prevPosts] : [...prevPosts, ...posts]
-        );
-
-        this.setOffset((prevOffset) => ({
-            ...prevOffset,
-            [direction]: direction === "after"
-                ? posts[0]?.id
-                : posts[posts.length - 1]?.id,
-        }));
-    }
-
-    /**
-     * Refreshes the feed with new posts.
-     *
-     * @param offset - The current offset object.
-     * @param setIsFetching - Function to toggle the loading state.
-     */
-    async refresh(
-        offset: Offset,
-        setIsFetching: (value: SetStateAction<boolean>) => void
-    ): Promise<void> {
-        const posts = await this.fetchPosts(offset.after, "after", setIsFetching);
-        if (posts) {
-            this.updatePostsAndOffset(posts, "after");
-            this.showErrorSnackbar?.("Feed successfully updated.", Icon28CheckCircleFill);
-        }
-    }
-
-    /**
-     * Loads older posts and updates the state.
-     *
-     * @param offset - The current offset object.
-     * @param setIsFetchingMore - Function to toggle the loading state.
-     * @param setNoLoadMore - Function to mark no more posts available.
-     */
-    async loadMore(
-        offset: Offset,
-        setIsFetchingMore: (value: SetStateAction<boolean>) => void,
-        setNoLoadMore: (state: boolean) => void
-    ): Promise<void> {
-        const posts = await this.fetchPosts(offset.before, "before", setIsFetchingMore);
-
-        if (posts && posts.length > 0) {
-            this.updatePostsAndOffset(posts, "before");
-        } else if (posts === null) {
-            setNoLoadMore(true);
-            this.showErrorSnackbar?.(
-                "No more posts available.",
-                Icon28SearchStarsOutline,
-                "--vkui--color_icon_accent"
-            );
-        }
-    }
+interface FetcherConfig {
+    channelUsername?: string;
+    setPosts: (value: SetStateAction<Post[]>) => void;
+    setOffset: (value: SetStateAction<Offset>) => void;
+    showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string) => void;
 }
 
 /**
- * Handles refreshing the feed.
+ * Handles error scenarios during post fetching operations
+ */
+const handleFetchError = (error: unknown, { context, showErrorSnackbar }: ErrorHandlerOptions): boolean => {
+    const isAxiosError = error instanceof AxiosError;
+    const is404 = isAxiosError && error.response?.status === 404;
+
+    if (!is404) {
+        console.error(`Error during ${context}`, error);
+    }
+
+    const message = is404
+        ? context === "refreshing data"
+            ? "The feed is up to date, but there are no new entries."
+            : "No more older posts are available."
+        : `An error occurred while ${context}${isAxiosError ? `. Status: ${error.response?.statusText || error.message}` : "."
+        }`;
+
+    showErrorSnackbar?.(
+        message,
+        is404 ? Icon28SearchStarsOutline : undefined,
+        is404 ? "--vkui--color_icon_accent" : undefined
+    );
+
+    return is404;
+};
+
+/**
+ * Updates posts and offset state based on fetch results
+ */
+const updatePostsAndOffset = (
+    posts: Post[],
+    direction: Direction,
+    setPosts: (value: SetStateAction<Post[]>) => void,
+    setOffset: (value: SetStateAction<Offset>) => void
+): void => {
+    if (posts.length === 0) return;
+
+    setPosts((prevPosts) =>
+        direction === "after" ? [...posts, ...prevPosts] : [...prevPosts, ...posts]
+    );
+
+    setOffset((prevOffset) => ({
+        ...prevOffset,
+        [direction]: direction === "after"
+            ? posts[0]?.id
+            : posts[posts.length - 1]?.id,
+    }));
+};
+
+/**
+ * Fetches posts from the server with error handling
+ */
+const fetchPosts = async (
+    config: FetcherConfig,
+    offsetKey: number | undefined,
+    direction: Direction,
+    setIsFetching: (value: SetStateAction<boolean>) => void
+): Promise<Post[] | null> => {
+    const { channelUsername, showErrorSnackbar } = config;
+
+    if (!channelUsername || offsetKey === undefined) return null;
+
+    setIsFetching(true);
+
+    try {
+        const response = await getMore(channelUsername, offsetKey, direction);
+        return response?.posts?.slice().reverse() || [];
+    } catch (error) {
+        const is404 = handleFetchError(error, {
+            context: direction === "after" ? "refreshing data" : "fetching older posts",
+            showErrorSnackbar
+        });
+        return is404 ? [] : null;
+    } finally {
+        setIsFetching(false);
+    }
+};
+
+/**
+ * Refreshes the feed with new posts
  */
 export const onRefresh = async (
     channelUsername: string | undefined,
@@ -164,12 +112,23 @@ export const onRefresh = async (
     setOffset: (value: SetStateAction<Offset>) => void,
     showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string) => void
 ): Promise<void> => {
-    const postFetcher = new PostFetcher(channelUsername, setPosts, setOffset, showErrorSnackbar);
-    await postFetcher.refresh(offset, setIsFetching);
+    const config: FetcherConfig = {
+        channelUsername,
+        setPosts,
+        setOffset,
+        showErrorSnackbar
+    };
+
+    const posts = await fetchPosts(config, offset.after, "after", setIsFetching);
+
+    if (posts) {
+        updatePostsAndOffset(posts, "after", setPosts, setOffset);
+        showErrorSnackbar?.("Feed successfully updated.", Icon28CheckCircleFill);
+    }
 };
 
 /**
- * Handles loading more posts.
+ * Loads more posts and handles pagination
  */
 export const onMore = async (
     channelUsername: string | undefined,
@@ -180,6 +139,23 @@ export const onMore = async (
     setNoLoadMore: (state: boolean) => void,
     showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string) => void
 ): Promise<void> => {
-    const postFetcher = new PostFetcher(channelUsername, setPosts, setOffset, showErrorSnackbar);
-    await postFetcher.loadMore(offset, setIsFetchingMore, setNoLoadMore);
+    const config: FetcherConfig = {
+        channelUsername,
+        setPosts,
+        setOffset,
+        showErrorSnackbar
+    };
+
+    const posts = await fetchPosts(config, offset.before, "before", setIsFetchingMore);
+
+    if (posts && posts.length > 0) {
+        updatePostsAndOffset(posts, "before", setPosts, setOffset);
+    } else if (posts && posts.length === 0) {
+        setNoLoadMore(true);
+        showErrorSnackbar?.(
+            "No more posts available.",
+            Icon28SearchStarsOutline,
+            "--vkui--color_icon_accent"
+        );
+    }
 };
