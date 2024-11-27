@@ -15,7 +15,7 @@ const ImageSticker = ({ url }: { url: string }) => (
         noBorder
         keepAspectRatio
         withTransparentBackground
-        className="!max-w-64 rounded-2xl"
+        className="!max-w-48 rounded-none"
     />
 )
 
@@ -32,7 +32,7 @@ export const Sticker = ({ post }: { post: Post }) => {
     return /\.webm(\?|$)/i.test(url) ?
         (
             <video
-                className="max-h-64 w-auto"
+                className="max-h-48 w-auto !rounded-none"
                 src={url}
                 poster={thumb}
                 controls={false}
