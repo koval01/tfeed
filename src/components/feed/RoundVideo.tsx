@@ -42,16 +42,32 @@ const VideoControl = ({ isPlaying, isVisible, onToggle }: VideoControlProps) => 
  * Main round video component that displays circular video with play/pause controls
  */
 export const RoundVideo = ({ post }: { post: Post }) => {
-    // Only render if media is round video
-    if (!post.content.media?.[0] || post.content.media[0].type !== "roundvideo") {
-        return null;
-    }
-    
+    // State variables for playback and button visibility
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const [isButtonVisible, setIsButtonVisible] = useState<boolean>(true);
     const videoRef = useRef<HTMLVideoElement>(null);
 
+    // Determine whether the device is mobile
     const isMobile = window.innerWidth <= 768;
+
+    // Extract the video media from the post
+    const videoMedia = post.content.media?.[0];
+    const isRoundVideo = videoMedia && videoMedia.type === "roundvideo";
+
+    /**
+     * Effect to hide the play/pause button after 1 second on mobile when the video is playing
+     */
+    useEffect(() => {
+        if (isPlaying && isMobile) {
+            const timeout = setTimeout(() => setIsButtonVisible(false), 1e3);
+            return () => clearTimeout(timeout);
+        }
+    }, [isPlaying, isMobile]);
+
+    // If the post doesn't have a valid round video, render `null`
+    if (!isRoundVideo) {
+        return null;
+    }
 
     /**
      * Handles video playback toggling
@@ -70,16 +86,6 @@ export const RoundVideo = ({ post }: { post: Post }) => {
             setIsButtonVisible(true);
         }
     };
-
-    // Hide controls on mobile after delay when playing
-    useEffect(() => {
-        if (isPlaying && isMobile) {
-            const timeout = setTimeout(() => setIsButtonVisible(false), 1e3);
-            return () => clearTimeout(timeout);
-        }
-    }, [isPlaying]);
-
-    const videoMedia = post.content.media[0];
 
     return (
         <div
