@@ -35,6 +35,7 @@ import { VKMediaGrid } from "@/components/Media";
 
 import { Poll } from "@/components/feed/Poll";
 import { Sticker } from "@/components/feed/Sticker";
+import { GifPost } from "@/components/feed/GifPost";
 import { Verified } from "@/components/feed/Verified";
 import { RoundVideo } from "@/components/feed/RoundVideo";
 import { TextComponent } from "@/components/feed/TextComponent";
@@ -277,7 +278,7 @@ const PostSupport = ({ children, post }: PropsWithChildren<{ post: Post }>) => {
     const isSupported = !!(
         content.text?.string ||
         content.poll ||
-        content.media?.some(media => ["video", "image", "roundvideo", "sticker"].includes(media.type))
+        content.media?.some(media => ["video", "image", "roundvideo", "sticker", "gif"].includes(media.type))
     );
 
     return isSupported ? children : <PostNotSupported />
@@ -294,5 +295,6 @@ export const PostContent = React.memo(({ channel, post }: PostBodyProps) => (
         <PostPoll post={post} />
         <RoundVideo post={post} />
         <Sticker post={post} />
+        <GifPost post={post} />
     </PostSupport>
 ));
