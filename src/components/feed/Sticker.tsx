@@ -1,7 +1,7 @@
 import type { Post } from "@/types";
 
 import { Icon28StickerSmileOutline } from "@vkontakte/icons";
-import { Image } from "@vkontakte/vkui";
+import { ContentBadge, Footnote, Image } from "@vkontakte/vkui";
 
 const ImageSticker = ({ url }: { url: string }) => (
     <Image
@@ -15,9 +15,32 @@ const ImageSticker = ({ url }: { url: string }) => (
         noBorder
         keepAspectRatio
         withTransparentBackground
-        className="!max-w-48 rounded-none"
+        className="!max-w-72 rounded-none"
     />
 )
+
+const StickerComponent = ({ post }: { post: Post }) => {
+    const media = post.content.media[0];
+    const url = media.url;
+    const thumb = media.thumb;
+
+    return (
+        /\.webm(\?|$)/i.test(url) ?
+            (
+                <video
+                    className="max-h-72 w-auto !rounded-none"
+                    src={url}
+                    poster={thumb}
+                    controls={false}
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    disablePictureInPicture
+                />
+            ) : <ImageSticker url={url} />
+    );
+}
 
 export const Sticker = ({ post }: { post: Post }) => {
     // Only render if media is round video
@@ -25,22 +48,17 @@ export const Sticker = ({ post }: { post: Post }) => {
         return null;
     }
 
-    const media = post.content.media[0];
-    const url = media.url;
-    const thumb = media.thumb;
-
-    return /\.webm(\?|$)/i.test(url) ?
-        (
-            <video
-                className="max-h-48 w-auto !rounded-none"
-                src={url}
-                poster={thumb}
-                controls={false}
-                autoPlay
-                muted
-                loop
-                playsInline
-                disablePictureInPicture
-            />
-        ) : <ImageSticker url={url} />;
+    return (
+        <div className="block space-y-2 md:space-y-3">
+            <StickerComponent post={post} />
+            <ContentBadge size="m">
+                <ContentBadge.SlotIcon>
+                    <Icon28StickerSmileOutline />
+                </ContentBadge.SlotIcon>
+                <Footnote weight="1" caps>
+                    post
+                </Footnote>
+            </ContentBadge>
+        </div>
+    );
 }
