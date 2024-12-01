@@ -266,3 +266,5 @@ export const VKMediaGrid = React.memo<VKMediaGridProps>(({ mediaCollection }) =>
         </>
     );
 });
+
+VKMediaGrid.displayName = 'VKMediaGrid';
