@@ -1,4 +1,5 @@
-import { useEffect, useCallback } from "react";
+import { useCallback } from "react";
+import { useInterval } from "@/hooks/useInterval";
 
 type AnalyticsData = {
     id: string;
@@ -88,15 +89,11 @@ export const useAnalytics = () => {
         }
     }, [sendToServer]);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (analyticsState.analyticsQueue.length > 0 && !analyticsState.isSending) {
-                batchSendAnalytics();
-            }
-        }, 1e4);
-
-        return () => clearInterval(interval);
-    }, [batchSendAnalytics]);
+    useInterval(() => {
+        if (analyticsState.analyticsQueue.length > 0 && !analyticsState.isSending) {
+            batchSendAnalytics();
+        }
+    }, 1e4, [batchSendAnalytics]);
 
     return { handleVisibility };
 };

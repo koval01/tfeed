@@ -3,6 +3,7 @@
 import { type FC, useCallback, useEffect, useState } from "react";
 
 import { usePosts } from "@/hooks/usePosts";
+import { useInterval } from "@/hooks/useInterval";
 import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
 
 import type { Body } from "@/types";
@@ -81,10 +82,7 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
         }
     }, [data, initializePosts]);
 
-    useEffect(() => {
-        const refreshInterval = setInterval(() => refreshPosts(false), 6e4); // 60 seconds
-        return () => clearInterval(refreshInterval);
-    }, [refreshPosts]);
+    useInterval(() => refreshPosts(false), 6e4);
 
     return (
         <Panel>
