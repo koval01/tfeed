@@ -117,7 +117,7 @@ export const Posts = ({ channel, posts, onRefresh, isFetching, isFetchingMore }:
         return (
             <Post key={item.id} item={item} channel={channel} />
         );
-    }, []);
+    }, [channel]);
 
     return (
         <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>
