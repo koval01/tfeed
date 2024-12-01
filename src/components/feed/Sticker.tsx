@@ -1,7 +1,9 @@
 import type { Post } from "@/types";
 
 import { Icon28StickerSmileOutline } from "@vkontakte/icons";
-import { ContentBadge, Footnote, Image } from "@vkontakte/vkui";
+import { Image } from "@vkontakte/vkui";
+
+import { Badge } from "@/components/Badge";
 
 const ImageSticker = ({ url }: { url: string }) => (
     <Image
@@ -51,14 +53,7 @@ export const Sticker = ({ post }: { post: Post }) => {
     return (
         <div className="block space-y-2 md:space-y-3">
             <StickerComponent post={post} />
-            <ContentBadge size="m" className="select-none">
-                <ContentBadge.SlotIcon>
-                    <Icon28StickerSmileOutline />
-                </ContentBadge.SlotIcon>
-                <Footnote weight="1" caps>
-                    post
-                </Footnote>
-            </ContentBadge>
+            <Badge Icon={Icon28StickerSmileOutline} text="post" />
         </div>
     );
 }

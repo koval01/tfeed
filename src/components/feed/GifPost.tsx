@@ -1,7 +1,8 @@
 import type { Post } from "@/types";
 
 import { Icon28GifOutline } from "@vkontakte/icons";
-import { ContentBadge, Footnote } from "@vkontakte/vkui";
+
+import { Badge } from "@/components/Badge";
 
 export const GifPost = ({ post }: { post: Post }) => {
     // Only render if media is GIF
@@ -26,14 +27,7 @@ export const GifPost = ({ post }: { post: Post }) => {
                 playsInline
                 disablePictureInPicture
             />
-            <ContentBadge size="m" className="select-none">
-                <ContentBadge.SlotIcon>
-                    <Icon28GifOutline />
-                </ContentBadge.SlotIcon>
-                <Footnote weight="1" caps>
-                    post
-                </Footnote>
-            </ContentBadge>
+            <Badge Icon={Icon28GifOutline} text="post" />
         </div>
     );
 }
