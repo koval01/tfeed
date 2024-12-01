@@ -1,9 +1,5 @@
 import type { Post } from "@/types";
 
-import { Icon28GifOutline } from "@vkontakte/icons";
-
-import { Badge } from "@/components/Badge";
-
 export const GifPost = ({ post }: { post: Post }) => {
     // Only render if media is GIF
     if (!post.content.media?.[0] || post.content.media[0].type !== "gif") {
@@ -15,9 +11,9 @@ export const GifPost = ({ post }: { post: Post }) => {
     const thumb = media.thumb;
 
     return (
-        <div className="block space-y-2 md:space-y-3">
+        <div className="block">
             <video
-                className="max-h-svh h-auto w-full"
+                className="max-h-svh h-auto w-full rounded-lg"
                 src={url}
                 poster={thumb}
                 controls={false}
@@ -27,7 +23,6 @@ export const GifPost = ({ post }: { post: Post }) => {
                 playsInline
                 disablePictureInPicture
             />
-            <Badge Icon={Icon28GifOutline} text="post" />
         </div>
     );
 }
