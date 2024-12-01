@@ -20,7 +20,7 @@ const VideoControl = ({ isPlaying, isVisible, onToggle }: VideoControlProps) => 
     <button
         className={cn(
             "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
-            "flex items-center justify-center rounded-full",
+            "flex items-center justify-center rounded-full aspect-square",
             "bg-black/50 backdrop-blur-md hover:bg-black/60 transition-opacity duration-300",
             isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
@@ -91,7 +91,7 @@ export const RoundVideo = ({ post }: { post: Post }) => {
         <div
             className={cn(
                 "relative size-full max-lg:max-w-96 rounded-full overflow-hidden",
-                "shadow-lg border-2 border-[--vkui--color_image_border_alpha]"
+                "shadow-lg border-2 border-[--vkui--color_image_border_alpha] aspect-square"
             )}
             onMouseEnter={() => !isMobile && setIsButtonVisible(true)}
             onMouseLeave={() => isPlaying && setIsButtonVisible(false)}
@@ -102,7 +102,7 @@ export const RoundVideo = ({ post }: { post: Post }) => {
                 ref={videoRef}
                 src={videoMedia.url}
                 poster={videoMedia.thumb}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover aspect-square"
                 controls={false}
                 loop
                 onClick={togglePlay}
