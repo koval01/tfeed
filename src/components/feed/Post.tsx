@@ -123,8 +123,11 @@ export const Posts = ({ channel, posts, onRefresh, isFetching, isFetchingMore }:
         <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>
             <PullToRefresh onRefresh={onRefresh} isFetching={isFetching}>
                 <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto w-full">
-                    <VirtualizedListWrapper items={posts} renderItem={renderItem} />
-                    <LoadingMore isFetchingMore={isFetchingMore} />
+                    <VirtualizedListWrapper 
+                        items={posts} 
+                        renderItem={renderItem} 
+                        loadMoreButton={<LoadingMore isFetchingMore={isFetchingMore} />} 
+                    />
                 </div>
             </PullToRefresh>
         </SplitCol>
