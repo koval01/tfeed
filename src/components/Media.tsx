@@ -85,7 +85,7 @@ const ImageOverlay: React.FC<{
     </div>
 );
 
-export const VKMediaGrid: React.FC<VKMediaGridProps> = ({ mediaCollection }) => {
+export const VKMediaGrid = React.memo<VKMediaGridProps>(({ mediaCollection }) => {
     const dispatch = useDispatch<AppDispatch>();
     
     const [selectedMedia, setSelectedMedia] = useState<Media | null>(null);
@@ -265,4 +265,4 @@ export const VKMediaGrid: React.FC<VKMediaGridProps> = ({ mediaCollection }) => 
             )}
         </>
     );
-};
+});
