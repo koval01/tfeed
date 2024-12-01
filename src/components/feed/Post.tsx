@@ -86,11 +86,11 @@ const LoadingMore = ({ isFetchingMore }: LoadingMoreProps): JSX.Element => {
 /**
  * Displays an individual post with its metadata and content.
  */
-const Post = ({ item, channel }: PostProps): JSX.Element => {
+const Post = ({ item, channel, ...props }: PostProps & Record<string, any>): JSX.Element => {
     const { handleVisibility } = useAnalytics();
 
     return (
-        <Group>
+        <Group {...props}>
             <InView
                 className="py-2.5 px-4"
                 as="article"
