@@ -51,7 +51,7 @@ export const Sticker = ({ post }: { post: Post }) => {
     return (
         <div className="block space-y-2 md:space-y-3">
             <StickerComponent post={post} />
-            <ContentBadge size="m">
+            <ContentBadge size="m" className="select-none">
                 <ContentBadge.SlotIcon>
                     <Icon28StickerSmileOutline />
                 </ContentBadge.SlotIcon>

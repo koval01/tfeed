@@ -26,7 +26,7 @@ export const GifPost = ({ post }: { post: Post }) => {
                 playsInline
                 disablePictureInPicture
             />
-            <ContentBadge size="m">
+            <ContentBadge size="m" className="select-none">
                 <ContentBadge.SlotIcon>
                     <Icon28GifOutline />
                 </ContentBadge.SlotIcon>
