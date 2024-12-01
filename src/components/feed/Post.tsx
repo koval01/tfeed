@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useCallback } from "react";
 import { useSelector } from "react-redux";
 
 import { selectNoLoadMore } from '@/lib/store';
@@ -11,6 +11,12 @@ import type {
     PostProps,
     LoadingMoreProps
 } from "@/types/feed/post";
+
+import type { 
+    Post as PostInterface 
+} from "@/types";
+
+import VirtualizedListWrapper from "@/components/VirtualizedListWrapper";
 
 import {
     Group,
@@ -106,15 +112,21 @@ const Post = ({ item, channel }: PostProps): JSX.Element => {
 /**
  * Main Posts component that renders a list of posts with pull-to-refresh and load-more functionality.
  */
-export const Posts = ({ channel, posts, onRefresh, isFetching, isFetchingMore }: PostsProps): JSX.Element => (
-    <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>
-        <PullToRefresh onRefresh={onRefresh} isFetching={isFetching}>
-            <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto w-full">
-                {posts.map((item) => (
-                    <Post key={item.id} item={item} channel={channel} />
-                ))}
-                <LoadingMore isFetchingMore={isFetchingMore} />
-            </div>
-        </PullToRefresh>
-    </SplitCol>
-);
+export const Posts = ({ channel, posts, onRefresh, isFetching, isFetchingMore }: PostsProps): JSX.Element => {
+    const renderItem = useCallback((item: PostInterface) => {
+        return (
+            <Post key={item.id} item={item} channel={channel} />
+        );
+    }, []);
+
+    return (
+        <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>
+            <PullToRefresh onRefresh={onRefresh} isFetching={isFetching}>
+                <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto w-full">
+                    <VirtualizedListWrapper items={posts} renderItem={renderItem} />
+                    <LoadingMore isFetchingMore={isFetchingMore} />
+                </div>
+            </PullToRefresh>
+        </SplitCol>
+    );
+}
