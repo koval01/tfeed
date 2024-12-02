@@ -55,3 +55,5 @@ export const Sticker = React.memo(({ post }: { post: Post }) => {
         </div>
     );
 });
+
+Sticker.displayName = "Sticker";

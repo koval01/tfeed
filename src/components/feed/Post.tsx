@@ -109,6 +109,8 @@ const Post = React.memo(({ item, channel, ...props }: PostProps & Record<string,
     );
 });
 
+Post.displayName = "Post";
+
 /**
  * Main Posts component that renders a list of posts with pull-to-refresh and load-more functionality.
  */

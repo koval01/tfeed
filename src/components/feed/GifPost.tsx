@@ -27,3 +27,5 @@ export const GifPost = React.memo(({ post }: { post: Post }) => {
         </div>
     );
 });
+
+GifPost.displayName = "GifPost";

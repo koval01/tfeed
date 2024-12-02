@@ -130,3 +130,5 @@ export const TextComponent: React.NamedExoticComponent<{ htmlString?: string }> 
     const parserOptions = getParserOptions();
     return parse(htmlString, parserOptions);
 });
+
+TextComponent.displayName = "TextComponent";

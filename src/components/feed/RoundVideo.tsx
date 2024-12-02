@@ -127,3 +127,5 @@ export const RoundVideo = React.memo(({ post }: { post: Post }) => {
         </div>
     );
 });
+
+RoundVideo.displayName = "RoundVideo";

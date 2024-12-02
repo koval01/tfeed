@@ -16,5 +16,6 @@ export const useInterval = (
         const tick = () => savedCallback.current();
         const id = setInterval(tick, delay);
         return () => clearInterval(id);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [delay, ...deps]);
 };
