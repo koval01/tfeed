@@ -21,7 +21,7 @@ export const Profile: React.FC = () => (
     <SplitCol
         width={280}
         maxWidth={280}
-        className="max-lg:hidden ScrollStickyWrapper"
+        className="max-lg:hidden ScrollStickyWrapper pt-3"
     >
         <div className="fixed w-[345px]">
             <Group className="select-none p-0">
@@ -104,8 +104,9 @@ export const Posts: React.FC = () => (
         maxWidth="560px"
         stretchedOnMobile
         autoSpaced
+        className="pt-3"
     >
-        <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto">
+        <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto md:px-4">
             {Array.from({ length: 10 }).map((_, index) => (
                 <Group key={index}>
                     <div className="py-2.5 px-4">
