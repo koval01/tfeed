@@ -1,6 +1,10 @@
 import { type DependencyList, useEffect, useRef } from "react";
 
-export const useInterval = (callback: () => void, delay: number, deps?: DependencyList) => {
+export const useInterval = (
+    callback: () => void,
+    delay: number,
+    deps: DependencyList = []
+) => {
     const savedCallback = useRef(callback);
 
     useEffect(() => {
@@ -8,8 +12,9 @@ export const useInterval = (callback: () => void, delay: number, deps?: Dependen
     }, [callback]);
 
     useEffect(() => {
+        if (delay === null || delay === undefined) return;
         const tick = () => savedCallback.current();
         const id = setInterval(tick, delay);
         return () => clearInterval(id);
-    }, [delay, deps]);
+    }, [delay, ...deps]);
 };
