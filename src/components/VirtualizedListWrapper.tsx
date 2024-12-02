@@ -33,29 +33,25 @@ const VirtualizedListWrapper = <T,>({
 
     ItemComponent.displayName = "VirtuosoItem";
 
-    const components: Components<T | "load-more"> = {
+    const components: Components<T> = {
         Item: ItemComponent,
+        Footer: () => loadMoreButton
     };
 
-    const renderWithLoadMore = (item: T | "load-more", index: number) => {
-        if (item === "load-more") {
-            return loadMoreButton;
-        }
-        return renderItem(item as T, index);
+    const render = (item: T, index: number) => {
+        return renderItem(item, index);
     };
-
-    const enhancedItems = [...items, "load-more"] as const;
 
     return (
         <Div className="max-md:px-0">
-            <Virtuoso<T | "load-more">
+            <Virtuoso<T>
                 ref={virtuosoRef}
                 style={{ width: "100%" }}
-                data={enhancedItems}
+                data={items}
                 overscan={200}
                 useWindowScroll
                 components={components}
-                itemContent={(index, item) => renderWithLoadMore(item, index)}
+                itemContent={(index, item) => render(item, index)}
             />
         </Div>
     );

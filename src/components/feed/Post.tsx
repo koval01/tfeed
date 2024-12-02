@@ -77,7 +77,7 @@ const LoadingMore = ({ isFetchingMore }: LoadingMoreProps): JSX.Element => {
     const noMorePosts = useSelector(selectNoLoadMore);
 
     return (
-        <Group mode="plain" className="my-1 md:my-3 lg:my-5">
+        <Group mode="plain" className="my-0.5 md:my-1 lg:my-1.5 pb-12 md:pb-24">
             {!noMorePosts && <LoadingMoreButton isFetchingMore={isFetchingMore} />}
         </Group>
     )
