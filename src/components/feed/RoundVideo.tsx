@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import type { Post } from "@/types";
 
 import { Icon28Play, Icon28Pause } from "@vkontakte/icons";
@@ -41,7 +41,7 @@ const VideoControl = ({ isPlaying, isVisible, onToggle }: VideoControlProps) => 
 /**
  * Main round video component that displays circular video with play/pause controls
  */
-export const RoundVideo = ({ post }: { post: Post }) => {
+export const RoundVideo = React.memo(({ post }: { post: Post }) => {
     // State variables for playback and button visibility
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const [isButtonVisible, setIsButtonVisible] = useState<boolean>(true);
@@ -126,4 +126,4 @@ export const RoundVideo = ({ post }: { post: Post }) => {
             />
         </div>
     );
-};
+});

@@ -1,6 +1,7 @@
+import React from "react";
 import type { Post } from "@/types";
 
-export const GifPost = ({ post }: { post: Post }) => {
+export const GifPost = React.memo(({ post }: { post: Post }) => {
     // Only render if media is GIF
     if (!post.content.media?.[0] || post.content.media[0].type !== "gif") {
         return null;
@@ -25,4 +26,4 @@ export const GifPost = ({ post }: { post: Post }) => {
             />
         </div>
     );
-}
+});

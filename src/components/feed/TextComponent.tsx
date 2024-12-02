@@ -1,3 +1,5 @@
+import React from "react";
+
 import { EllipsisText, Link } from '@vkontakte/vkui';
 import { Spoiler } from 'spoiled';
 
@@ -122,9 +124,9 @@ const getParserOptions = (): HTMLReactParserOptions => ({
  * @param props.htmlString - The HTML string to parse and render.
  * @returns Parsed JSX elements or null if no HTML string is provided.
  */
-export const TextComponent: React.FC<{ htmlString?: string }> = ({ htmlString }) => {
+export const TextComponent: React.NamedExoticComponent<{ htmlString?: string }> = React.memo(({ htmlString }) => {
     if (!htmlString) return null; // No HTML string, return null.
 
     const parserOptions = getParserOptions();
     return parse(htmlString, parserOptions);
-};
+});
