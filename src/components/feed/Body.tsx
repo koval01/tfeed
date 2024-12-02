@@ -73,7 +73,7 @@ const ChannelTitle = ({ channel }: { channel: Channel }) => (
         verified={channel.labels.includes("verified")}
         channelName={channel.title.string}
     >
-        <EllipsisText className="max-sm:max-w-40 max-md:max-w-72 lg:max-w-[380px] md:max-w-[60vw]">
+        <EllipsisText className="max-sm:max-w-40 max-md:max-w-72 lg:max-w-[380px] md:max-w-[45vw]">
             <TextComponent htmlString={channel.title.html} />
         </EllipsisText>
     </Title>
