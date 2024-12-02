@@ -10,7 +10,9 @@ import {
     Footnote,
     Title as TitleVK,
     DisplayTitle,
-    Gradient
+    Gradient,
+    Card,
+    EllipsisText
 } from "@vkontakte/vkui";
 
 import { Icon20Verified } from "@vkontakte/icons";
@@ -31,8 +33,10 @@ const Verified = ({ verified }: { verified: boolean }) => (
 )
 
 const Title = ({ children, verified }: TitleProps) => (
-    <div className="inline-flex items-center">
-        <DisplayTitle level="1" className="!leading-8">{children}</DisplayTitle>
+    <div className="inline-flex items-center max-w-60">
+        <DisplayTitle level="1" className="!leading-8 w-full whitespace-nowrap">
+            <EllipsisText>{children}</EllipsisText>
+        </DisplayTitle>
         <div className="inline ml-1">
             <Verified verified={verified} />
         </div>
@@ -40,18 +44,20 @@ const Title = ({ children, verified }: TitleProps) => (
 )
 
 const Counters = ({ counters }: { counters: CountersProps }) => (
-    <div className="flex whitespace-nowrap overflow-hidden max-w-72">
-        {Object.entries(counters).map(([key, value], index) => (
-            <div key={index} className="inline-block whitespace-normal align-top basis-1/4 pr-5 box-border">
-                <TitleVK level="3" className="inline-block w-full text-left">
-                    {value}
-                </TitleVK>
-                <Footnote className="vkuiPlaceholder__text inline-block capitalize align-top mt-1">
-                    <Trans i18nKey={key} />
-                </Footnote>
-            </div>
-        ))}
-    </div>
+    <Card>
+        <div className="grid grid-cols-3 gap-3 p-2 justify-items-center">
+            {Object.entries(counters).map(([key, value], index) => (
+                <div key={index} className="text-center w-full">
+                    <TitleVK level="3" className="block w-full text-center">
+                        {value}
+                    </TitleVK>
+                    <Footnote className="vkuiPlaceholder__text inline-block capitalize align-top mt-1">
+                        <Trans i18nKey={key} />
+                    </Footnote>
+                </div>
+            ))}
+        </div>
+    </Card>
 );
 
 const Footer = () => {
@@ -103,9 +109,11 @@ const ActionBlock = ({ channel }: { channel: Channel }) => (
 );
 
 const ChannelTitle = ({ channel }: { channel: Channel }) => (
-    <Title verified={channel.labels.includes("verified")}>
-        <TextComponent htmlString={channel.title.html} />
-    </Title>
+    <div className="block w-full">
+        <Title verified={channel.labels.includes("verified")}>
+            <TextComponent htmlString={channel.title.html} />
+        </Title>
+    </div>
 )
 
 const Body = ({ channel }: { channel: Channel }) => (
@@ -123,7 +131,7 @@ const Body = ({ channel }: { channel: Channel }) => (
 )
 
 export const Profile = ({ channel }: { channel: Channel }) => (
-    <SplitCol className="max-lg:hidden ScrollStickyWrapper" width={280} maxWidth={280}>
+    <SplitCol className="max-lg:hidden pt-3 ScrollStickyWrapper" width={280} maxWidth={280}>
         <div className="fixed w-[345px]">
             <Group className="select-none p-0">
                 <Body channel={channel} />
