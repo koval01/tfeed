@@ -86,7 +86,7 @@ const LoadingMore = ({ isFetchingMore }: LoadingMoreProps): JSX.Element => {
 /**
  * Displays an individual post with its metadata and content.
  */
-const Post = ({ item, channel, ...props }: PostProps & Record<string, any>): JSX.Element => {
+const Post = React.memo(({ item, channel, ...props }: PostProps & Record<string, any>): JSX.Element => {
     const { handleVisibility } = useAnalytics();
 
     return (
@@ -107,7 +107,7 @@ const Post = ({ item, channel, ...props }: PostProps & Record<string, any>): JSX
             </InView>
         </Group>
     );
-};
+});
 
 /**
  * Main Posts component that renders a list of posts with pull-to-refresh and load-more functionality.
