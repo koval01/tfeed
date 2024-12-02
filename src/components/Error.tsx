@@ -7,33 +7,30 @@ import { FixedCenter } from "@/components/fixed-center";
 import { Icons } from "@/components/icons";
 
 import { useRouter } from "next/navigation";
-import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 
 
-const ErrorBody = ({ header, description, actions }: ErrorProps) => {
-    return (
-        <div className="max-md:w-screen">
-            <Placeholder
-                icon={<Icons.logo className="size-16 md:size-24 lg:size-32 xl:size-40" />}
-                header={header}
-                action={!!actions ? (
-                    <Button type="primary" size="l" onClick={actions.click}>
-                        {actions.name}
-                    </Button>
-                ) : null}
-                className="select-none max-md:px-0"
-            >
-                <Paragraph>
-                    {description}
-                </Paragraph>
-            </Placeholder>
-        </div>
-    );
-}
+const ErrorBody = ({ header, description, actions }: ErrorProps) => (
+    <div className="max-md:w-screen">
+        <Placeholder
+            icon={<Icons.logo className="size-16 md:size-24 lg:size-32 xl:size-40" />}
+            header={header}
+            action={!!actions ? (
+                <Button type="primary" size="l" onClick={actions.click} aria-label={t("Error action button")}>
+                    {actions.name}
+                </Button>
+            ) : null}
+            className="select-none max-md:px-0"
+        >
+            <Paragraph>
+                {description}
+            </Paragraph>
+        </Placeholder>
+    </div>
+);
 
 export const Error = ({ header, description, actions, error }: ErrorProps) => {
     const router = useRouter();
-    const { t } = useTranslation();
 
     if (error instanceof AxiosError) {
         const errorData: ServerError = error.response?.data || {};

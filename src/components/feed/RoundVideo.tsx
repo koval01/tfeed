@@ -3,6 +3,7 @@ import type { Post } from "@/types";
 
 import { Icon28Play, Icon28Pause } from "@vkontakte/icons";
 import { cn } from "@/lib/utils";
+import { t } from "i18next";
 
 /**
  * Types for video control props
@@ -29,6 +30,7 @@ const VideoControl = ({ isPlaying, isVisible, onToggle }: VideoControlProps) => 
             height: "clamp(40px, 15%, 60px)"
         }}
         onClick={onToggle}
+        aria-label={t("Play media button")}
     >
         {isPlaying ? (
             <Icon28Pause className="w-1/2 h-1/2 text-[--vkui--color_text_contrast]" />

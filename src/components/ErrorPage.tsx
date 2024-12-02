@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 
 import { Error } from '@/components/Error';
-import { useTranslation } from 'react-i18next';
+import { t } from 'i18next';
 
 export const ErrorPage = ({
   error,
@@ -16,8 +16,6 @@ export const ErrorPage = ({
     // Log the error to an error reporting service
     console.error(error);
   }, [error]);
-
-  const { t } = useTranslation();
 
   return (
     <Error header={t("UnhandledError")} description={error.message} actions={

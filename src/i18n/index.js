@@ -35,6 +35,9 @@ export const i18nStrings = {
             "votes": "Stimmen",
             "thisPostNotSupported": "Um diesen Beitrag zu sehen, gehen Sie zu Telegram",
             "openPostInTelegramHint": "Um diesen Beitrag in Telegram zu öffnen, verwenden Sie das <div />-Symbol in der oberen rechten Ecke des Beitrags.",
+            "Subscribe button": "Schaltfläche Abonnieren",
+            "Play media button": "Schaltfläche Medien abspielen",
+            "Load more button": "Schaltfläche Mehr laden",
         }
     },
     "ru": {
@@ -55,6 +58,9 @@ export const i18nStrings = {
             "votes": "голосов",
             "thisPostNotSupported": "Для просмотра этого поста перейдите в Telegram",
             "openPostInTelegramHint": "Чтобы открыть этот пост в Telegram, используйте символ <div /> в верхнем правом углу поста.",
+            "Subscribe button": "Кнопка подписки",
+            "Play media button": "Кнопка воспроизведения медиа",
+            "Load more button": "Кнопка \"Загрузить еще\"",
         }
     },
     "uk": {
@@ -75,6 +81,9 @@ export const i18nStrings = {
             "votes": "голосів",
             "thisPostNotSupported": "Для перегляду цього поста перейдіть у Telegram",
             "openPostInTelegramHint": "Щоб відкрити цей пост у Telegram, використовуйте символ <div /> у верхньому правому куті поста.",
+            "Subscribe button": "Кнопка підписки",
+            "Play media button": "Кнопка відтворення медіа",
+            "Load more button": "Кнопка \"Завантажити більше\"",
         }
     }
 }

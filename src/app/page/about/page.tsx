@@ -16,11 +16,10 @@ import {
     SplitLayout
 } from "@vkontakte/vkui";
 
-import { Trans, useTranslation } from "react-i18next";
+import { Trans } from "react-i18next";
+import { t } from "i18next";
 
 const About = () => {
-    const { t } = useTranslation();
-
     const features = t("about.features", { returnObjects: true }) as string[];
 
     return (

@@ -1,13 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useTranslation } from "react-i18next";
 
 import { Error } from "@/components/Error";
+import { t } from "i18next";
 
 const NotFound = () => {
     const router = useRouter();
-    const { t } = useTranslation();
 
     return (
         <Error header={t("Not Found")} description={t("NotFoundSubText")} actions={{

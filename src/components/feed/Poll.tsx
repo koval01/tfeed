@@ -9,28 +9,24 @@ import {
     Progress 
 } from "@vkontakte/vkui";
 
-import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 
 /**
  * Header component for the Poll.
  * Displays the poll question, type, and total votes.
  */
-const PollHeader = ({ poll }: { poll: PollProp }): JSX.Element => {
-    const { t } = useTranslation();
-
-    return (
-        <>
-            <Headline weight="1" level="2">
-                {poll.question}
-            </Headline>
-            <div className="flex space-x-1.5 text-[--vkui--color_text_secondary]">
-                <Subhead className="font-normal text-xs">{t(poll.type)}</Subhead>
-                <span className="align-top leading-3">|</span>
-                <Caption>{poll.votes} {t("votes")}</Caption>
-            </div>
-        </>
-    );
-};
+const PollHeader = ({ poll }: { poll: PollProp }): JSX.Element => (
+    <>
+        <Headline weight="1" level="2">
+            {poll.question}
+        </Headline>
+        <div className="flex space-x-1.5 text-[--vkui--color_text_secondary]">
+            <Subhead className="font-normal text-xs">{t(poll.type)}</Subhead>
+            <span className="align-top leading-3">|</span>
+            <Caption>{poll.votes} {t("votes")}</Caption>
+        </div>
+    </>
+);
 
 /**
  * Single poll option with a progress bar and percentage display.

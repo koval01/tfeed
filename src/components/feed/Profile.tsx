@@ -22,6 +22,7 @@ import { TextComponent } from "@/components/feed/TextComponent";
 import Link from "next/link";
 
 import { Trans } from "react-i18next";
+import { t } from "i18next";
 
 const Verified = ({ verified }: { verified: boolean }) => (
     verified && <VerifiedTT
@@ -90,7 +91,12 @@ const ActionBlock = ({ channel }: { channel: Channel }) => (
         <Description channel={channel} />
         <Spacing size={16} />
         {/* */}
-        <Button size="l" mode="primary" onClick={() => { window.open(`https://t.me/${channel.username}`, "_blank") }}>
+        <Button
+            size="l"
+            mode="primary"
+            aria-label={t("Subscribe button")}
+            onClick={() => { window.open(`https://t.me/${channel.username}`, "_blank") }}
+        >
             <Trans i18nKey="Subscribe" />
         </Button>
     </div>

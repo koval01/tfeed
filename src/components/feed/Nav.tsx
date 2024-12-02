@@ -8,7 +8,8 @@ import { Avatar } from "@/components/Avatar";
 import { Icon16Verified } from "@vkontakte/icons";
 import { Button, EllipsisText, Headline } from "@vkontakte/vkui";
 
-import { useTranslation, Trans } from "react-i18next";
+import { Trans } from "react-i18next";
+import { t } from "i18next";
 
 /**
  * Renders a channel avatar.
@@ -36,15 +37,11 @@ const Title: React.FC<TitleProps> = ({ children, verified }) => (
 /**
  * Displays the subscriber count for a channel.
  */
-const SubscribersCounter: React.FC<{ channel: Channel }> = ({ channel }) => {
-    const { t } = useTranslation();
-
-    return (
-        <div className="whitespace-nowrap text-ellipsis overflow-hidden text-[12px] leading-[14px] pb-1 relative -top-1 vkuiPlaceholder__text">
-            {channel.counters.subscribers} {t("subscribers")}
-        </div>
-    );
-};
+const SubscribersCounter: React.FC<{ channel: Channel }> = ({ channel }) => (
+    <div className="whitespace-nowrap text-ellipsis overflow-hidden text-[12px] leading-[14px] pb-1 relative -top-1 vkuiPlaceholder__text">
+        {channel.counters.subscribers} {t("subscribers")}
+    </div>
+);
 
 /**
  * Renders the channel's title with optional HTML content.
@@ -66,6 +63,7 @@ export const SubscribeButton: React.FC<{ channel: Channel }> = ({ channel }) => 
             appearance="accent-invariable"
             size="s"
             onClick={() => window.open(`https://t.me/${channel.username}`, "_blank")}
+            aria-label={t("Subscribe button")}
         >
             <Headline level="2">
                 <Trans i18nKey="Subscribe" />

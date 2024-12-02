@@ -4,6 +4,7 @@ import React, { useCallback } from "react";
 import { useSelector } from "react-redux";
 
 import { selectNoLoadMore } from '@/lib/store';
+import { t } from "i18next";
 
 import type {
     PostBodyProps,
@@ -64,6 +65,7 @@ const LoadingMoreButton = ({ isFetchingMore }: { isFetchingMore: boolean }): JSX
             loader={<ThreeDot variant="pulsate" color="#818c99" style={{ fontSize: "4px" }} />}
             disabled={isFetchingMore}
             className="w-24 h-[30px]"
+            aria-label={t("Load more button")}
         >
             <Subhead weight="1" className="text-xs vkuiPlaceholder__text">Load more</Subhead>
         </Button>
