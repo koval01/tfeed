@@ -106,7 +106,7 @@ export const Posts: React.FC = () => (
         autoSpaced
         className="pt-3"
     >
-        <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto md:px-4">
+        <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto px-0">
             {Array.from({ length: 10 }).map((_, index) => (
                 <Group key={index}>
                     <div className="py-2.5 px-4">

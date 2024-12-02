@@ -43,7 +43,7 @@ const VirtualizedListWrapper = <T,>({
     };
 
     return (
-        <Div className="max-md:px-0">
+        <Div className="px-0">
             <Virtuoso<T>
                 ref={virtuosoRef}
                 style={{ width: "100%" }}
