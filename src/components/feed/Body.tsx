@@ -231,7 +231,7 @@ const PostReply = ({ channel, post }: { channel: Channel, post: Post }) => {
                             className="text-[--vkui--color_text_accent]"
                         />
                         {post.content.reply.cover && <Image
-                            size={40}
+                            size={44}
                             src={reply.cover}
                             alt={`Reply to ${reply.name}'s message`}
                         />}
@@ -239,7 +239,9 @@ const PostReply = ({ channel, post }: { channel: Channel, post: Post }) => {
                 }
                 header={
                     <Subhead weight="2" className="text-sm text-[--vkui--color_text_accent]">
-                        <TextComponent htmlString={reply.name?.html} />
+                        <EllipsisText>
+                            <TextComponent htmlString={reply.name?.html} />
+                        </EllipsisText>
                     </Subhead>
                 }
                 subheader={
