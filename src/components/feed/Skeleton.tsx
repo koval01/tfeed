@@ -11,6 +11,8 @@ import {
     Footnote,
 } from "@vkontakte/vkui";
 
+import { random } from "lodash";
+
 /**
  * **Profile Component**
  * A skeleton placeholder for the user profile sidebar.
@@ -82,15 +84,32 @@ const PostHeader: React.FC = () => (
  *
  * @returns The PostBody skeleton component.
  */
-const PostBody: React.FC = () => (
+const PostBody: React.FC<{ length?: number }> = ({ length = 5 }) => (
     <Footnote weight="2" className="whitespace-pre-line">
-        <Skeleton width="95%" />
-        <Skeleton width="100%" />
-        <Skeleton width="90%" />
-        <Skeleton width="80%" />
-        <Skeleton width="85%" />
+        {Array.from({ length }).map((_, index) => (
+            <Skeleton key={index} width={`${random(80, 100)}%`} />
+        ))}
     </Footnote>
 );
+
+/**
+ * **Post Component**
+ * Combines PostHeader and PostBody to create a complete post skeleton.
+ * Wrapped in React.memo for performance optimization.
+ *
+ * @returns The complete Post skeleton component
+ */
+export const Post: React.FC<{ rows?: number }> = React.memo(({ rows = 5 }) => (
+    <Group>
+        <div className="py-2.5 px-4">
+            <PostHeader />
+            <Spacing />
+            <PostBody length={rows} />
+        </div>
+    </Group>
+));
+
+Post.displayName = "Post";
 
 /**
  * **Posts Component**
@@ -108,13 +127,7 @@ export const Posts: React.FC = () => (
     >
         <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto px-0">
             {Array.from({ length: 10 }).map((_, index) => (
-                <Group key={index}>
-                    <div className="py-2.5 px-4">
-                        <PostHeader />
-                        <Spacing />
-                        <PostBody />
-                    </div>
-                </Group>
+                <Post key={index} />
             ))}
         </div>
     </SplitCol>

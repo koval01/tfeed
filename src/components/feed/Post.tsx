@@ -17,7 +17,7 @@ import type {
     Post as PostInterface 
 } from "@/types";
 
-import VirtualizedListWrapper from "@/components/VirtualizedListWrapper";
+import VirtualizedListWrapper from "@/components/feed/VirtualizedListWrapper";
 
 import {
     Group,
