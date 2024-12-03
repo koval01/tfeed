@@ -45,6 +45,8 @@ export const usePosts = (
     }, []);
 
     const refreshPosts = useCallback(async (showError = true) => {
+        if (document.documentElement.scrollTop !== 0) return;
+        
         await onRefresh(
             channelUsername,
             offset,

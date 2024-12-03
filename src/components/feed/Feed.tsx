@@ -82,7 +82,7 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
         }
     }, [data, initializePosts]);
 
-    useInterval(() => refreshPosts(false), 6e4);
+    useInterval(() => refreshPosts(false), 3e3);
 
     return (
         <Panel>
