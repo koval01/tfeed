@@ -1,6 +1,7 @@
 import { about } from "@/i18n/about";
 import { date } from "@/i18n/date";
 import { error } from "@/i18n/error";
+import { snack } from "@/i18n/snack";
 import { profile } from "@/i18n/profile";
 
 export const i18nStrings = {
@@ -9,6 +10,7 @@ export const i18nStrings = {
             ...about["en"],
             ...date["en"],
             ...error["en"],
+            ...snack["en"],
             ...profile["en"],
             "NotFoundSubText": "Could not find requested resource",
             "MainSubText": "Unfortunately the main page is empty for now, it is still under development.",
@@ -22,6 +24,7 @@ export const i18nStrings = {
             ...about["de"],
             ...date["de"],
             ...error["de"],
+            ...snack["de"],
             ...profile["de"],
             "Go to home": "Zur Hauptseite gehen",
             "Not Found": "Nicht gefunden",
@@ -45,6 +48,7 @@ export const i18nStrings = {
             ...about["ru"],
             ...date["ru"],
             ...error["ru"],
+            ...snack["ru"],
             ...profile["ru"],
             "Go to home": "Перейти на домашнюю страницу",
             "Not Found": "Не найдено",
@@ -68,6 +72,7 @@ export const i18nStrings = {
             ...about["uk"],
             ...date["uk"],
             ...error["uk"],
+            ...snack["uk"],
             ...profile["uk"],
             "Go to home": "Перейти на головну сторінку",
             "Not Found": "Не знайдено",

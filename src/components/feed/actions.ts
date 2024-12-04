@@ -7,6 +7,7 @@ import {
 } from "@vkontakte/icons";
 
 import { getMore } from "@/components/feed/fetcher";
+import { t } from "i18next";
 
 type Direction = "before" | "after";
 
@@ -35,10 +36,14 @@ const handleFetchError = (error: unknown, { context, showErrorSnackbar }: ErrorH
 
     const message = is404
         ? context === "refreshing data"
-            ? "The feed is up to date, but there are no new entries."
-            : "No more older posts are available."
-        : `An error occurred while ${context}${isAxiosError ? `. Status: ${error.response?.statusText || error.message}` : "."
-        }`;
+            ? t("noFreshPosts")
+            : t("noMorePosts")
+        :
+        t('errorUpdate', {
+            context, ...{
+                statusText: isAxiosError ? `. Status: ${error.response?.statusText || error.message}` : "."
+            }
+        });
 
     showErrorSnackbar?.(
         message,
@@ -123,7 +128,7 @@ export const onRefresh = async (
 
     if (posts?.length) {
         updatePostsAndOffset(posts, "after", setPosts, setOffset);
-        showErrorSnackbar?.("Feed successfully updated.", Icon28CheckCircleFill);
+        showErrorSnackbar?.(t("feedUpdated"), Icon28CheckCircleFill);
     }
 };
 
@@ -153,7 +158,7 @@ export const onMore = async (
     } else if (posts && posts.length === 0) {
         setNoLoadMore(true);
         showErrorSnackbar?.(
-            "No more posts available.",
+            t("noMorePosts"),
             Icon28SearchStarsOutline,
             "--vkui--color_icon_accent"
         );
