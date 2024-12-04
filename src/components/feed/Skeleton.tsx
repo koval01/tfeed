@@ -84,10 +84,12 @@ const PostHeader: React.FC = () => (
  *
  * @returns The PostBody skeleton component.
  */
-const PostBody: React.FC<{ length?: number }> = ({ length = 5 }) => (
+const PostBody: React.FC<{ length?: number, noAnimation?: boolean }> = (
+    { length = 5, noAnimation = false }
+) => (
     <Footnote weight="2" className="whitespace-pre-line">
         {Array.from({ length }).map((_, index) => (
-            <Skeleton key={index} width={`${random(60, 100)}%`} />
+            <Skeleton key={index} width={`${random(40, 100)}%`} noAnimation={noAnimation} />
         ))}
     </Footnote>
 );
@@ -99,12 +101,14 @@ const PostBody: React.FC<{ length?: number }> = ({ length = 5 }) => (
  *
  * @returns The complete Post skeleton component
  */
-export const Post: React.FC<{ rows?: number }> = React.memo(({ rows = 5 }) => (
+export const Post: React.FC<{ rows?: number, noAnimation?: boolean }> = React.memo((
+    { rows = 5, noAnimation = false }
+) => (
     <Group>
         <div className="py-2.5 px-4">
             <PostHeader />
             <Spacing />
-            <PostBody length={rows} />
+            <PostBody length={rows} noAnimation={noAnimation} />
         </div>
     </Group>
 ));

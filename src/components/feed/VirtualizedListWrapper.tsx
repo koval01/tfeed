@@ -30,7 +30,7 @@ type ItemProps = {
  * @param height - Height of the placeholder
  */
 const ScrollSeekPlaceholder = ({ height }: { height: number }) => (
-    <SkeletonPost rows={Math.floor((height + 70) / 13)} />
+    <SkeletonPost rows={Math.floor((height + 70) / 13)} noAnimation={true} />
 )
 
 /**

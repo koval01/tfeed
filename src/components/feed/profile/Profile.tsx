@@ -1,4 +1,10 @@
-import type { Channel, Counters as CountersProps, TitleProps } from "@/types";
+import React from "react";
+
+import type { 
+    Channel,
+    TitleProps,
+    Counters as CountersProps 
+} from "@/types";
 
 import {
     Button,
@@ -130,7 +136,7 @@ const Body = ({ channel }: { channel: Channel }) => (
     </Gradient>
 )
 
-export const Profile = ({ channel }: { channel: Channel }) => (
+export const Profile = React.memo(({ channel }: { channel: Channel }) => (
     <SplitCol className="max-lg:hidden pt-3 ScrollStickyWrapper" width={280} maxWidth={280}>
         <div className="fixed w-[345px]">
             <Group className="select-none p-0">
@@ -138,4 +144,6 @@ export const Profile = ({ channel }: { channel: Channel }) => (
             </Group>
         </div>
     </SplitCol>
-)
+));
+
+Profile.displayName = "Profile";
