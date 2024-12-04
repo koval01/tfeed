@@ -1,4 +1,5 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
+
 import { Div } from "@vkontakte/vkui";
 import { Post as SkeletonPost } from "@/components/feed/Skeleton";
 import { Virtuoso, VirtuosoHandle, Components } from "react-virtuoso";
@@ -29,7 +30,7 @@ type ItemProps = {
  * @param height - Height of the placeholder
  */
 const ScrollSeekPlaceholder = ({ height }: { height: number }) => (
-    <SkeletonPost rows={height % 30} />
+    <SkeletonPost rows={Math.floor((height + 70) / 13)} />
 )
 
 /**
@@ -43,7 +44,6 @@ const VirtualizedListWrapper = <T,>({
     loadMoreButton,
 }: VirtualizedListWrapperProps<T>) => {
     const virtuosoRef = useRef<VirtuosoHandle>(null);
-    const [visibleRange, setVisibleRange] = useState([0, 0]);
 
     // Custom ItemComponent that properly forwards refs to child elements
     // This is needed for virtuoso's measurement and positioning system
@@ -74,26 +74,17 @@ const VirtualizedListWrapper = <T,>({
         <Div className="px-0">
             <Virtuoso<T>
                 ref={virtuosoRef}
-                style={{ width: "100%" }}
+                className="w-full"
                 data={items}
                 overscan={200} // Number of items to render outside visible area
                 useWindowScroll
                 components={components}
                 itemContent={(index, item) => render(item, index)}
-                // Configuration for scroll seek behavior
                 scrollSeekConfiguration={{
-                    // Enter scroll seek mode when scrolling faster than 1000px/s
-                    enter: (velocity) => Math.abs(velocity) > 1e3,
-                    // Exit scroll seek mode when scrolling slower than 20px/s
-                    exit: (velocity) => {
-                        const shouldExit = Math.abs(velocity) < 20;
-                        if (shouldExit) {
-                            setVisibleRange([0, 0]);
-                        }
-                        return shouldExit;
-                    },
-                    // Update visible range during scroll seeking
-                    change: (_velocity, { startIndex, endIndex }) => setVisibleRange([startIndex, endIndex])
+                    // Enter scroll seek mode when scrolling faster than 600px/s
+                    enter: (velocity) => Math.abs(velocity) > 6e2,
+                    // Exit scroll seek mode when scrolling slower than 10px/s
+                    exit: (velocity) => Math.abs(velocity) < 10,
                 }}
             />
         </Div>

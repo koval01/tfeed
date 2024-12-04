@@ -87,7 +87,7 @@ const PostHeader: React.FC = () => (
 const PostBody: React.FC<{ length?: number }> = ({ length = 5 }) => (
     <Footnote weight="2" className="whitespace-pre-line">
         {Array.from({ length }).map((_, index) => (
-            <Skeleton key={index} width={`${random(80, 100)}%`} />
+            <Skeleton key={index} width={`${random(60, 100)}%`} />
         ))}
     </Footnote>
 );
