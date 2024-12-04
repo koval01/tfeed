@@ -2,11 +2,11 @@
 
 import React, { type PropsWithChildren } from "react";
 
-import type { FooterComponentProps, PostBodyProps } from "@/types/feed/post";
 import type { Channel, Footer, Post, TitleProps } from "@/types";
+import type { FooterComponentProps, PostBodyProps } from "@/types/feed/post";
 
+import { useFormattedDate } from "@/hooks/utils/useFormattedDate";
 import { cn } from "@/lib/utils";
-import { useFormattedDate } from "@/hooks/useFormattedDate";
 import { Trans } from "react-i18next";
 
 import {
@@ -30,14 +30,14 @@ import {
     Text,
 } from "@vkontakte/vkui";
 
-import { Avatar } from "@/components/Avatar";
-import { VKMediaGrid } from "@/components/Media";
+import { Avatar } from "@/components/avatar/Avatar";
+import { VKMediaGrid } from "@/components/media/Media";
 
-import { Poll } from "@/components/feed/Poll";
-import { Sticker } from "@/components/feed/Sticker";
-import { GifPost } from "@/components/feed/GifPost";
-import { Verified } from "@/components/feed/Verified";
-import { RoundVideo } from "@/components/feed/RoundVideo";
+import { GifPost } from "@/components/feed/post/GifPost";
+import { Poll } from "@/components/feed/post/Poll";
+import { RoundVideo } from "@/components/feed/post/RoundVideo";
+import { Sticker } from "@/components/feed/post/Sticker";
+import { Verified } from "@/components/feed/post/Verified";
 import { TextComponent } from "@/components/feed/TextComponent";
 
 import { convertMediaArray } from "@/helpers/mediaConvert";

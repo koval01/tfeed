@@ -2,23 +2,23 @@
 
 import { type FC, useCallback, useEffect, useState } from "react";
 
-import { usePosts } from "@/hooks/usePosts";
-import { useInterval } from "@/hooks/useInterval";
-import { useInfiniteScroll } from "@/hooks/useInfiniteScroll";
+import { useInfiniteScroll } from "@/hooks/services/useInfiniteScroll";
+import { usePosts } from "@/hooks/services/usePosts";
+import { useInterval } from "@/hooks/utils/useInterval";
 
 import type { Body } from "@/types";
 
 import { Panel, SplitLayout } from "@vkontakte/vkui";
 
-import { 
-    Posts as PostsSkeleton, 
-    Profile as ProfileSkeleton 
+import {
+    Posts as PostsSkeleton,
+    Profile as ProfileSkeleton
 } from "@/components/feed/Skeleton";
 
-import { Posts } from "@/components/feed/Post";
-import { Profile } from "@/components/feed/Profile";
-import ErrorSnackbar from "@/components/ErrorSnackbar";
-import { FeedHeader } from "@/components/feed/FeedHeader";
+import ErrorSnackbar from "@/components/error/ErrorSnackbar";
+import { FeedHeader } from "@/components/feed/header/FeedHeader";
+import { Posts } from "@/components/feed/post/Post";
+import { Profile } from "@/components/feed/profile/Profile";
 
 interface FeedProps {
     /**

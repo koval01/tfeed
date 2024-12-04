@@ -1,12 +1,12 @@
 "use client";
 
-import React from "react";
 import type { ChannelPageProps } from "@/types/channel";
+import React from "react";
 
-import { useBody } from "@/components/feed/fetcher";
+import { useBody } from "@/hooks/services/useBody";
 
-import { Feed } from "@/components/feed";
-import { Error } from "@/components/Error";
+import { Error } from "@/components/error/Error";
+import { Feed } from "@/components/feed/Feed";
 
 import { PanelHeader, SplitCol, SplitLayout } from "@vkontakte/vkui";
 

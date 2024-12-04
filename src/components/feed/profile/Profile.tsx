@@ -1,30 +1,30 @@
-import type { TitleProps, Channel, Counters as CountersProps } from "@/types";
+import type { Channel, Counters as CountersProps, TitleProps } from "@/types";
 
 import {
-    Group,
-    SplitCol,
-    Placeholder,
     Button,
-    Paragraph,
-    Spacing,
-    Footnote,
-    Title as TitleVK,
-    DisplayTitle,
-    Gradient,
     Card,
-    EllipsisText
+    DisplayTitle,
+    EllipsisText,
+    Footnote,
+    Gradient,
+    Group,
+    Paragraph,
+    Placeholder,
+    Spacing,
+    SplitCol,
+    Title as TitleVK
 } from "@vkontakte/vkui";
 
 import { Icon20Verified } from "@vkontakte/icons";
 
-import { Avatar } from "@/components/Avatar";
-import { Verified as VerifiedTT } from "@/components/feed/Verified";
+import { Avatar } from "@/components/avatar/Avatar";
+import { Verified as VerifiedTT } from "@/components/feed/post/Verified";
 import { TextComponent } from "@/components/feed/TextComponent";
 
 import Link from "next/link";
 
-import { Trans } from "react-i18next";
 import { t } from "i18next";
+import { Trans } from "react-i18next";
 
 const Verified = ({ verified }: { verified: boolean }) => (
     verified && <VerifiedTT

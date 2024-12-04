@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import { Error } from "@/components/Error";
+import { Error } from "@/components/error/Error";
 import { t } from "i18next";
 
 const NotFound = () => {

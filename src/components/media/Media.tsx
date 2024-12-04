@@ -1,26 +1,26 @@
 "use client";
 
-import type { Media } from '@/types/media';
 import type { AppDispatch } from '@/lib/store';
+import type { Media } from '@/types/media';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { blockScroll, unblockScroll } from '@/store/scrollSlice';
 
 import {
-    getLayoutConfig,
     getItemClass,
+    getLayoutConfig,
     getSecondRowAspectRatio
 } from '@/helpers/mediaGridUtils';
 
-import { NextImage as Image } from '@/components/NextImage';
-import { Icons } from '@/components/icons';
+import { NextImage as Image } from '@/components/media/NextImage';
+import { Icons } from '@/components/ui/Icons';
 
 import { cn } from '@/lib/utils';
 import _ from 'lodash';
 
-import '@/styles/mediaGrid.css';
+import '@/styles/components/mediaGrid.css';
 import { Icon28Play } from '@vkontakte/icons';
 
 type VKMediaGridProps = {

@@ -2,7 +2,7 @@ import React from "react";
 import type { AvatarProps as VKAvatarProps } from "@vkontakte/vkui";
 
 import { getInitials, stringToHash } from "@/helpers/string";
-import { NextAvatar } from "@/components/NextAvatar";
+import { NextAvatar } from "@/components/avatar/NextAvatar";
 
 interface AvatarProps extends VKAvatarProps {
     size?: number;

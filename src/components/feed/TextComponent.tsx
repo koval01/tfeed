@@ -10,7 +10,7 @@ import parse, {
     Text 
 } from 'html-react-parser';
 
-import '@/styles/emoji.css';
+import '@/styles/components/emoji.css';
 
 /**
  * Extracts the text content from an HTML element and its children.

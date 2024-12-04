@@ -6,27 +6,27 @@ import { useSelector } from 'react-redux';
 
 import {
   AdaptivityProvider,
-  ConfigProvider,
-  AppRoot
+  AppRoot,
+  ConfigProvider
 } from '@vkontakte/vkui';
 
-import StoreProvider from '@/components/StoreProvider';
+import StoreProvider from '@/components/services/StoreProvider';
 
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
 import { i18nStrings } from "@/i18n";
 
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { ErrorPage } from '@/components/ErrorPage';
+import { ErrorBoundary } from '@/components/services/ErrorBoundary';
+import { ErrorPage } from '@/components/error/ErrorPage';
 
-import { useDidMount } from '@/hooks/useDidMount';
+import { useDidMount } from '@/hooks/utils/useDidMount';
 
 // global application styles
-import '@/styles/app.css';
-import '@/styles/vkui.css';
-import '@/styles/tfeed.css';
+import '@/styles/global.css';
 import '@/styles/tailwind.css';
+import '@/styles/tfeed.css';
+import '@/styles/vkui.css';
 
 const i18nHook = i18n.use(initReactI18next);
 

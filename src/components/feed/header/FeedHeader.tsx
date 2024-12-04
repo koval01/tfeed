@@ -1,9 +1,9 @@
-import type { FC } from 'react';
 import type { Channel } from '@/types';
+import type { FC } from 'react';
 
 import { PanelHeader } from "@vkontakte/vkui";
 
-import { ChannelNav, SubscribeButton } from "@/components/feed/Nav";
+import { ChannelNav, SubscribeButton } from "@/components/feed/header/Nav";
 import { ChannelNavSkeleton } from "@/components/feed/Skeleton";
 
 interface FeedHeaderProps {

@@ -1,15 +1,15 @@
-import React from "react";
 import type { Channel, TitleProps } from "@/types";
+import React from "react";
 
+import { Avatar } from "@/components/avatar/Avatar";
 import { TextComponent } from "@/components/feed/TextComponent";
-import { Verified } from "@/components/feed/Verified";
-import { Avatar } from "@/components/Avatar";
+import { Verified } from "@/components/feed/post/Verified";
 
 import { Icon16Verified } from "@vkontakte/icons";
 import { Button, EllipsisText, Headline } from "@vkontakte/vkui";
 
-import { Trans } from "react-i18next";
 import { t } from "i18next";
+import { Trans } from "react-i18next";
 
 /**
  * Renders a channel avatar.

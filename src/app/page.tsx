@@ -2,18 +2,18 @@
 
 import React from "react";
 
-import { FixedCenter } from "@/components/fixed-center";
+import { FixedCenter } from "@/components/services/FixedCenter";
 
 import {
-  DisplayTitle,
-  Headline,
-  Placeholder,
-  SplitCol,
-  SplitLayout
+    DisplayTitle,
+    Headline,
+    Placeholder,
+    SplitCol,
+    SplitLayout
 } from "@vkontakte/vkui";
 
-import { Trans } from "react-i18next";
 import { t } from "i18next";
+import { Trans } from "react-i18next";
 
 const Home: React.FC = () => (
   <SplitLayout>

@@ -1,5 +1,5 @@
+import { useInterval } from "@/hooks/utils/useInterval";
 import { useCallback } from "react";
-import { useInterval } from "@/hooks/useInterval";
 
 type AnalyticsData = {
     id: string;

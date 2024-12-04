@@ -1,13 +1,13 @@
-import { Placeholder, SplitCol, SplitLayout, Paragraph, Button } from "@vkontakte/vkui";
+import { Button, Paragraph, Placeholder, SplitCol, SplitLayout } from "@vkontakte/vkui";
 
 import type { Error as ErrorProps, ServerError } from "@/types";
 import { AxiosError } from "axios";
 
-import { FixedCenter } from "@/components/fixed-center";
-import { Icons } from "@/components/icons";
+import { FixedCenter } from "@/components/services/FixedCenter";
+import { Icons } from "@/components/ui/Icons";
 
-import { useRouter } from "next/navigation";
 import { t } from "i18next";
+import { useRouter } from "next/navigation";
 
 
 const ErrorBody = ({ header, description, actions }: ErrorProps) => (

@@ -7,23 +7,23 @@ import { selectNoLoadMore } from '@/lib/store';
 import { t } from "i18next";
 
 import type {
+    LoadingMoreProps,
     PostBodyProps,
-    PostsProps,
     PostProps,
-    LoadingMoreProps
+    PostsProps
 } from "@/types/feed/post";
 
-import type { 
-    Post as PostInterface 
+import type {
+    Post as PostInterface
 } from "@/types";
 
 import VirtualizedListWrapper from "@/components/feed/VirtualizedListWrapper";
 
 import {
     Group,
-    SplitCol,
-    Spacing,
     PullToRefresh,
+    Spacing,
+    SplitCol,
     Subhead
 } from "@vkontakte/vkui";
 
@@ -31,13 +31,13 @@ import {
     PostContent,
     PostFooter,
     PostHeader
-} from "@/components/feed/Body";
+} from "@/components/feed/post/Body";
 
+import { useAnalytics } from "@/hooks/services/useAnalytics";
 import { InView } from "react-intersection-observer";
-import { useAnalytics } from "@/hooks/useAnalytics";
 
-import { Forward } from "@/components/feed/Forward";
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/Button";
+import { Forward } from "@/components/feed/post/Forward";
 import { ThreeDot } from "react-loading-indicators";
 
 /**

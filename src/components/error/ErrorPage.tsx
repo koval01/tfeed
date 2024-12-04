@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 
-import { Error } from '@/components/Error';
+import { Error } from '@/components/error/Error';
 import { t } from 'i18next';
 
 export const ErrorPage = ({

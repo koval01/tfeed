@@ -1,7 +1,7 @@
 'use client';
 
-import { FixedCenter } from "@/components/fixed-center";
-import { Icons } from "@/components/icons";
+import { FixedCenter } from "@/components/services/FixedCenter";
+import { Icons } from "@/components/ui/Icons";
 import {
     DisplayTitle,
     Div,
@@ -16,8 +16,8 @@ import {
     SplitLayout
 } from "@vkontakte/vkui";
 
-import { Trans } from "react-i18next";
 import { t } from "i18next";
+import { Trans } from "react-i18next";
 
 const About = () => {
     const features = t("about.features", { returnObjects: true }) as string[];
