@@ -10,6 +10,7 @@ import {
   ConfigProvider
 } from '@vkontakte/vkui';
 
+import MediaViewer from '@/components/media/Viewer';
 import StoreProvider from '@/components/services/StoreProvider';
 
 import i18n from "i18next";
@@ -73,6 +74,7 @@ const RootInner = ({ children }: PropsWithChildren) => (
   <StoreProvider>
     <App>
       {children}
+      <MediaViewer />
     </App>
   </StoreProvider>
 );

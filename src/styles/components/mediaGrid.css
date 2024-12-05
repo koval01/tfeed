@@ -108,7 +108,7 @@
     z-index: -10;
 }
 
-.MediaGrid__backgroundBlur.visible {
+.MediaGrid__backgroundBlur._visible {
     opacity: 1; /* Fade in smoothly */
 }
 
