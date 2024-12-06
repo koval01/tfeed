@@ -53,7 +53,7 @@ const Counters = ({ counters }: { counters: CountersProps }) => (
     <Card>
         <div className="grid grid-cols-3 gap-3 p-2 justify-items-center">
             {Object.entries(counters).map(([key, value], index) => (
-                <div key={index} className="text-center w-full">
+                <div key={`counter__item_${index}`} className="text-center w-full">
                     <TitleVK level="3" className="block w-full text-center">
                         {value}
                     </TitleVK>
@@ -77,7 +77,7 @@ const Footer = () => {
     return (
         <div className="text-center pt-0 pb-2">
             {footerLinks.map((item, index) => (
-                <div key={index} className="inline-block align-top px-2">
+                <div key={`footer__l_item_${index}`} className="inline-block align-top px-2">
                     <Footnote className="vkuiPlaceholder__text">
                         <Link href={item.href}>
                             <Trans i18nKey={item.name} />

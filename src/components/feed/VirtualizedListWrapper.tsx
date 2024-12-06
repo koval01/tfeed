@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useMemo, useRef } from "react";
 
 import { Div } from "@vkontakte/vkui";
 import { Post as SkeletonPost } from "@/components/feed/Skeleton";
@@ -25,12 +25,16 @@ type ItemProps = {
     style?: React.CSSProperties;
 } & React.HTMLAttributes<HTMLDivElement>;
 
+interface WithId {
+  id: string | number;
+}
+
 /**
  * Placeholder component shown during fast scrolling
  * @param height - Height of the placeholder
  */
 const ScrollSeekPlaceholder = ({ height }: { height: number }) => (
-    <SkeletonPost rows={Math.floor((height + 70) / 13)} noAnimation={true} />
+    <SkeletonPost rows={Math.floor((height - 70) / 13.3)} noAnimation={true} />
 )
 
 /**
@@ -38,7 +42,7 @@ const ScrollSeekPlaceholder = ({ height }: { height: number }) => (
  * Uses react-virtuoso for efficient rendering of only visible items
  * @template T - Generic type for list items
  */
-const VirtualizedListWrapper = <T,>({
+const VirtualizedListWrapper = <T extends WithId>({
     items,
     renderItem,
     loadMoreButton,
@@ -66,9 +70,9 @@ const VirtualizedListWrapper = <T,>({
         ...{ ScrollSeekPlaceholder }
     };
 
-    const render = (item: T, index: number) => {
+    const memoizedRender = useMemo(() => (item: T, index: number) => {
         return renderItem(item, index);
-    };
+    }, [renderItem]);
 
     return (
         <Div className="px-0">
@@ -76,13 +80,14 @@ const VirtualizedListWrapper = <T,>({
                 ref={virtuosoRef}
                 className="w-full"
                 data={items}
-                overscan={200} // Number of items to render outside visible area
+                overscan={1e3} // Number of items to render outside visible area
                 useWindowScroll
                 components={components}
-                itemContent={(index, item) => render(item, index)}
+                itemContent={(index, item) => memoizedRender(item, index)}
+                computeItemKey={(index, item) => item.id || index}
                 scrollSeekConfiguration={{
-                    // Enter scroll seek mode when scrolling faster than 600px/s
-                    enter: (velocity) => Math.abs(velocity) > 6e2,
+                    // Enter scroll seek mode when scrolling faster than 800px/s
+                    enter: (velocity) => Math.abs(velocity) > 8e2,
                     // Exit scroll seek mode when scrolling slower than 10px/s
                     exit: (velocity) => Math.abs(velocity) < 10,
                 }}

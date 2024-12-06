@@ -119,7 +119,7 @@ Post.displayName = "Post";
 export const Posts = ({ channel, posts, onRefresh, isFetching, isFetchingMore }: PostsProps): JSX.Element => {
     const renderItem = useCallback((item: PostInterface) => {
         return (
-            <Post key={item.id} item={item} channel={channel} />
+            <Post key={`post__item_${item.id}`} item={item} channel={channel} />
         );
     }, [channel]);
 

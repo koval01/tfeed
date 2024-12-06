@@ -87,7 +87,11 @@ const PostBody: React.FC<{ length?: number, noAnimation?: boolean }> = (
 ) => (
     <Footnote weight="2" className="whitespace-pre-line">
         {Array.from({ length }).map((_, index) => (
-            <Skeleton key={index} width="100%" noAnimation={noAnimation} />
+            <Skeleton
+                key={`skeleton__row_item_${index}`}
+                width="100%"
+                noAnimation={noAnimation}
+            />
         ))}
     </Footnote>
 );
@@ -129,7 +133,7 @@ export const Posts: React.FC = () => (
     >
         <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto px-0">
             {Array.from({ length: 10 }).map((_, index) => (
-                <Post key={index} />
+                <Post key={`skeleton_post_${index}`} />
             ))}
         </div>
     </SplitCol>

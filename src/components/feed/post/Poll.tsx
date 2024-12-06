@@ -52,7 +52,7 @@ export const Poll = ({ poll }: { poll: PollProp }): JSX.Element => (
         <PollHeader poll={poll} />
         <div className="block min-w-[240px] text-xs mb-2.5">
             {poll.options.map((item, index) => (
-                <PollOption key={index} option={item} />
+                <PollOption key={`poll__option_item_${poll.votes}_${index}`} option={item} />
             ))}
         </div>
     </div>

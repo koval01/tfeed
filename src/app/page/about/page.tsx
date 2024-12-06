@@ -61,7 +61,7 @@ const About = () => {
                         <Headline className="mb-2.5 text-lg font-bold">{t("about.features_title")}</Headline>
                         <ul className="list-disc list-inside space-y-1">
                             {features.map((feature, index) => (
-                                <li key={index}>
+                                <li key={`about__sec_item_${index}`}>
                                     {feature}
                                 </li>
                             ))}

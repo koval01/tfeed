@@ -80,7 +80,7 @@ export const VKMediaGrid = React.memo<VKMediaGridProps>(({ mediaCollection }) =>
             >
                 {mediaCollection.map((media, index) => (
                     <div
-                        key={media.url}
+                        key={`media__item_${media.url}`}
                         className={getItemClass(index, mediaCount, perRow)}
                         style={{ '--mg-ratio': index < 2 ? 1 : secondRowRatio } as React.CSSProperties}
                         onClick={(e) => handleMediaClick(media, e)}
