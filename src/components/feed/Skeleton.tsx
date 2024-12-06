@@ -11,8 +11,6 @@ import {
     Footnote,
 } from "@vkontakte/vkui";
 
-import { random } from "lodash";
-
 /**
  * **Profile Component**
  * A skeleton placeholder for the user profile sidebar.
@@ -89,7 +87,7 @@ const PostBody: React.FC<{ length?: number, noAnimation?: boolean }> = (
 ) => (
     <Footnote weight="2" className="whitespace-pre-line">
         {Array.from({ length }).map((_, index) => (
-            <Skeleton key={index} width={`${random(40, 100)}%`} noAnimation={noAnimation} />
+            <Skeleton key={index} width="100%" noAnimation={noAnimation} />
         ))}
     </Footnote>
 );
