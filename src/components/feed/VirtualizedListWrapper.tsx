@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from "react";
+import React, { useRef } from "react";
 
 import { Div } from "@vkontakte/vkui";
 import { Post as SkeletonPost } from "@/components/feed/Skeleton";
@@ -34,7 +34,7 @@ interface WithId {
  * @param height - Height of the placeholder
  */
 const ScrollSeekPlaceholder = ({ height }: { height: number }) => (
-    <SkeletonPost rows={Math.floor((height - 70) / 13.3)} noAnimation={true} />
+    <SkeletonPost rows={Math.floor((height - 70) / 13.3)} noAnimation />
 )
 
 /**
@@ -70,21 +70,17 @@ const VirtualizedListWrapper = <T extends WithId>({
         ...{ ScrollSeekPlaceholder }
     };
 
-    const memoizedRender = useMemo(() => (item: T, index: number) => {
-        return renderItem(item, index);
-    }, [renderItem]);
-
     return (
         <Div className="px-0">
             <Virtuoso<T>
                 ref={virtuosoRef}
                 className="w-full"
                 data={items}
-                overscan={1e3} // Number of items to render outside visible area
+                overscan={1e2} // Number of items to render outside visible area
                 useWindowScroll
                 components={components}
-                itemContent={(index, item) => memoizedRender(item, index)}
-                computeItemKey={(index, item) => `virt__post_${item.id}-${index}`}
+                itemContent={(index, item) => renderItem(item, index)}
+                computeItemKey={(_, item) => `virt__post_${item.id}`}
                 scrollSeekConfiguration={{
                     // Enter scroll seek mode when scrolling faster than 800px/s
                     enter: (velocity) => Math.abs(velocity) > 8e2,
