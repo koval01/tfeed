@@ -9,5 +9,6 @@ export const useInternalSWR = <Data = any, Error = any>(
     return useSWR<Data, Error>(url, fetcher, {
         revalidateIfStale: false,
         revalidateOnFocus: false,
+        revalidateOnReconnect: false,
     });
 };
