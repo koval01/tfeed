@@ -2,7 +2,8 @@ import React from "react";
 import type { Post } from "@/types";
 
 import { Icon28StickerSmileOutline } from "@vkontakte/icons";
-import { Image } from "@vkontakte/vkui";
+import { Div, Headline, Image } from "@vkontakte/vkui";
+import { t } from "i18next";
 
 const ImageSticker = ({ url }: { url: string }) => (
     <Image
@@ -11,12 +12,19 @@ const ImageSticker = ({ url }: { url: string }) => (
         widthSize={"auto"}
         heightSize={"auto"}
         fallbackIcon={
-            <Icon28StickerSmileOutline width={96} height={96} />
+            <Div>
+                <div className="flex">
+                    <Icon28StickerSmileOutline className="m-auto justify-center" width={96} height={96} />
+                </div>
+                <Headline className="text-center">
+                    {t("error_sticker")}
+                </Headline>
+            </Div>
         }
         noBorder
         keepAspectRatio
         withTransparentBackground
-        className="!max-w-72 rounded-none"
+        className="!max-w-72 !min-h-40 rounded-none"
     />
 )
 
