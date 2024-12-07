@@ -25,6 +25,7 @@ import {
     Footnote,
     Headline,
     Image,
+    Spacing,
     Subhead,
     Tappable,
     Text,
@@ -41,6 +42,7 @@ import { Verified } from "@/components/feed/post/Verified";
 import { TextComponent } from "@/components/feed/TextComponent";
 
 import { convertMediaArray } from "@/helpers/mediaConvert";
+import { t } from "i18next";
 
 const handleRedirect = (channel: Channel, post: Post) =>
     window.open(`https://t.me/${channel.username}/${post.id}`, "_blank");
@@ -219,39 +221,46 @@ const PostReply = ({ channel, post }: { channel: Channel, post: Post }) => {
 
     return reply &&
         (
-            <Banner
-                className="select-none my-1.5 md:my-2"
-                asideMode="expand"
-                onClick={() => handleRedirect(channel, post)}
-                before={
-                    <div className="inline-flex items-center space-x-2">
-                        <Icon24MessageReplyOutline
-                            width={26}
-                            height={26}
-                            className="text-[--vkui--color_text_accent]"
-                        />
-                        {post.content.reply.cover && <Image
-                            size={44}
-                            src={reply.cover}
-                            alt={`Reply to ${reply.name}'s message`}
-                        />}
-                    </div>
-                }
-                header={
-                    <Subhead weight="2" className="text-sm text-[--vkui--color_text_accent]">
-                        <EllipsisText>
-                            <TextComponent htmlString={reply.name?.html} />
-                        </EllipsisText>
-                    </Subhead>
-                }
-                subheader={
-                    <span className="text-[13px]">
-                        <EllipsisText>
-                            <TextComponent htmlString={reply.text?.html} />
-                        </EllipsisText>
-                    </span>
-                }
-            />
+            <>
+                <Banner
+                    className="select-none my-1.5 md:my-2"
+                    asideMode="expand"
+                    onClick={() => handleRedirect(channel, post)}
+                    before={
+                        <div className="inline-flex items-center space-x-2">
+                            <Icon24MessageReplyOutline
+                                width={26}
+                                height={26}
+                                className="text-[--vkui--color_text_accent]"
+                            />
+                            {post.content.reply.cover && <Image
+                                size={44}
+                                src={reply.cover}
+                                alt={`Reply to ${reply.name}'s message`}
+                            />}
+                        </div>
+                    }
+                    header={
+                        <Subhead weight="2" className="text-sm text-[--vkui--color_text_accent]">
+                            <EllipsisText>
+                                <TextComponent htmlString={reply.name?.html} />
+                            </EllipsisText>
+                        </Subhead>
+                    }
+                    subheader={
+                        <span className="text-[13px]">
+                            <EllipsisText>
+                                {reply.text ? 
+                                    <TextComponent htmlString={reply.text?.html} /> 
+                                    : 
+                                    <span>{t("replyWithoutReply")}</span>
+                                }
+                            </EllipsisText>
+                        </span>
+                    }
+                />
+                <Spacing />
+            </>
         )
 }
 
