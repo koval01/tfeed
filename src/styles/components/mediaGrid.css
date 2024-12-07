@@ -15,6 +15,7 @@
     --mg-border-radius-wrapper: 8px;
     --mg-grid-width: 100%;
     --mg-spacer: 3px;
+    --mg-third-row-count: 3;
     display: flex;
     flex-flow: row wrap;
     width: var(--mg-grid-width);
@@ -50,6 +51,17 @@
     --mg-height: calc((var(--mg-grid-width, 100%)/var(--mg-second-row-count, 3))/var(--mg-ratio, 1));
     --spacer-divided-by-row-count: var(--mg-spacer, 3px) / var(--mg-second-row-count, 3);
     --mg-width: calc(var(--mg-grid-width, 100%)/var(--mg-second-row-count, 3) - (var(--mg-second-row-count, 3) - 1)*var(--spacer-divided-by-row-count));
+}
+
+.MediaGrid__thumb--thirdRowItem {
+    --mg-margin: var(--mg-spacer, 3px) 0 0 var(--mg-spacer, 3px);
+    --mg-height: calc((var(--mg-grid-width, 100%)/var(--mg-third-row-count, 3))/var(--mg-ratio, 1));
+    --spacer-divided-by-row-count: var(--mg-spacer, 3px) / var(--mg-third-row-count, 3);
+    --mg-width: calc(var(--mg-grid-width, 100%)/var(--mg-third-row-count, 3) - (var(--mg-third-row-count, 3) - 1)*var(--spacer-divided-by-row-count));
+}
+
+.MediaGrid__thumb--thirdRowItemFirstColumn {
+    --mg-margin: var(--mg-spacer, 3px) 0 0 0;
 }
 
 .MediaGrid__thumb--topLeft {

@@ -33,10 +33,12 @@ const FallbackIcon: React.FC = () => (
 );
 
 export const VKMediaGrid = React.memo<VKMediaGridProps>(({ mediaCollection }) => {
+    const mediaCount = mediaCollection.length;
+    if (!mediaCount) return;
+    
     const dispatch = useDispatch<AppDispatch>();
 
-    const mediaCount = mediaCollection.length;
-    const { perRow } = getLayoutConfig(mediaCount);
+    const { rows, perRow } = getLayoutConfig(mediaCount);
     const secondRowRatio = getSecondRowAspectRatio(mediaCount);
 
     const handleMediaClick = (mediaItem: Media, event: React.MouseEvent) => {
@@ -75,14 +77,17 @@ export const VKMediaGrid = React.memo<VKMediaGridProps>(({ mediaCollection }) =>
     return (
         <div className="select-none MediaGridContainerWeb--post">
             <div
-                className="MediaGrid MediaGrid--twoRow"
-                style={{ '--mg-second-row-count': perRow[1] || 0 } as React.CSSProperties}
+                className={`MediaGrid ${rows === 3 ? 'MediaGrid--threeRow' : 'MediaGrid--twoRow'}`}
+                style={{
+                    '--mg-second-row-count': perRow[1] || 0,
+                    '--mg-third-row-count': rows === 3 ? perRow[2] || 0 : 0
+                } as React.CSSProperties}
             >
                 {mediaCollection.map((media, index) => (
                     <div
                         key={`media__item_${media.url}`}
                         className={getItemClass(index, mediaCount, perRow)}
-                        style={{ '--mg-ratio': index < 2 ? 1 : secondRowRatio } as React.CSSProperties}
+                        style={{ '--mg-ratio': index < 2 ? 1 : index < 2 + perRow[1] ? secondRowRatio : 1 } as React.CSSProperties}
                         onClick={(e) => handleMediaClick(media, e)}
                     >
                         <Image
