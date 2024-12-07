@@ -14,7 +14,7 @@ interface UseInfiniteScrollProps {
 export const useInfiniteScroll = ({
     onLoadMore,
     isLoading,
-    threshold = 35,
+    threshold = 5e3,
 }: UseInfiniteScrollProps): void => {
     const noLoadMore = useSelector(selectNoLoadMore);
 
@@ -37,14 +37,12 @@ export const useInfiniteScroll = ({
             const windowHeight = window.innerHeight;
             const documentHeight = document.documentElement.scrollHeight;
 
-            // Calculate the distance to the end of the page as a percentage
-            const distanceToBottom =
-                ((documentHeight - scrollTop - windowHeight) / documentHeight) * 100;
+            const distanceToBottom = documentHeight - scrollTop - windowHeight;
 
             if (distanceToBottom < threshold) {
                 await onLoadMoreRef.current();
             }
-        }, 1e3)
+        }, 5e2)
     ).current;
 
     useEffect(() => {
