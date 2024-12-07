@@ -33,10 +33,10 @@ const FallbackIcon: React.FC = () => (
 );
 
 export const VKMediaGrid = React.memo<VKMediaGridProps>(({ mediaCollection }) => {
+    const dispatch = useDispatch<AppDispatch>();
+
     const mediaCount = mediaCollection.length;
     if (!mediaCount) return;
-    
-    const dispatch = useDispatch<AppDispatch>();
 
     const { rows, perRow } = getLayoutConfig(mediaCount);
     const secondRowRatio = getSecondRowAspectRatio(mediaCount);

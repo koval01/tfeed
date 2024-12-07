@@ -13,7 +13,7 @@ interface WrappedImageProps extends React.ComponentProps<typeof Image> {
 
 const WrappedImage: React.FC<WrappedImageProps> = ({ children, ...props }) => {
     return (
-        <Image {...props}>
+        <Image {...props} alt={props.alt}>
             {children}
         </Image>
     );
@@ -24,13 +24,14 @@ const MemoizedImage = React.memo(WrappedImage);
 /*
 * Custom realization Image component in next
 */
-export const NextImage: React.FC<ImageProps> = ({ children, src, proxy = false, ...props }) => {
+export const NextImage: React.FC<ImageProps> = ({ children, src, proxy = false, alt, ...props }) => {
     const modifiedSrc = src ? nextImage(src, 512) : undefined;
+
     return (
         <MemoizedImage
             key={`image__item_${src}`}
-            src={proxy ? modifiedSrc : src} 
-            alt={props.alt}
+            src={proxy ? modifiedSrc : src}
+            alt={alt ?? ""}
             loading="lazy"
             {...props}
         >
