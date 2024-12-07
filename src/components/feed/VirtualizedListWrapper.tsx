@@ -84,7 +84,7 @@ const VirtualizedListWrapper = <T extends WithId>({
                 useWindowScroll
                 components={components}
                 itemContent={(index, item) => memoizedRender(item, index)}
-                computeItemKey={(index, item) => item.id || index}
+                computeItemKey={(index, item) => `virt__post_${item.id}-${index}`}
                 scrollSeekConfiguration={{
                     // Enter scroll seek mode when scrolling faster than 800px/s
                     enter: (velocity) => Math.abs(velocity) > 8e2,
