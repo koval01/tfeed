@@ -17,14 +17,6 @@ type VirtualizedListWrapperProps<T> = {
     loadMoreButton: React.JSX.Element;
 };
 
-/**
- * Props interface for virtualized list items
- */
-type ItemProps = {
-    children?: React.ReactNode;
-    style?: React.CSSProperties;
-} & React.HTMLAttributes<HTMLDivElement>;
-
 interface WithId {
   id: string | number;
 }
@@ -49,23 +41,7 @@ const VirtualizedListWrapper = <T extends WithId>({
 }: VirtualizedListWrapperProps<T>) => {
     const virtuosoRef = useRef<VirtuosoHandle>(null);
 
-    // Custom ItemComponent that properly forwards refs to child elements
-    // This is needed for virtuoso's measurement and positioning system
-    const ItemComponent = React.forwardRef<HTMLDivElement, ItemProps>(
-        ({ children, ...props }, ref) => {
-            const child = React.Children.only(children) as React.ReactElement;
-            return React.cloneElement(child, {
-                ...props,
-                ref,
-            });
-        }
-    );
-
-    ItemComponent.displayName = "VirtuosoItem";
-
-    // Configure components used by Virtuoso
     const components: Components<T> = {
-        Item: ItemComponent,
         Footer: () => loadMoreButton,
         ...{ ScrollSeekPlaceholder }
     };

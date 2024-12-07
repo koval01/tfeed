@@ -22,6 +22,7 @@ import VirtualizedListWrapper from "@/components/feed/VirtualizedListWrapper";
 import {
     Group,
     PullToRefresh,
+    Separator,
     Spacing,
     SplitCol,
     Subhead
@@ -92,22 +93,25 @@ const Post = React.memo(({ item, channel, ...props }: PostProps & Record<string,
     const { handleVisibility } = useAnalytics();
 
     return (
-        <Group {...props}>
-            <InView
-                className="py-2.5 px-4"
-                as="article"
-                threshold={0.3}
-                onChange={(inView, entry) => handleVisibility(entry, inView)}
-            >
-                <div data-id={item.id} data-view={item.view}>
-                    <PostHeader channel={channel} post={item} />
-                    <Spacing />
-                    <PostBody channel={channel} post={item} />
-                    <Spacing />
-                    <PostFooter post={item} />
-                </div>
-            </InView>
-        </Group>
+        <>
+            <Group {...props}>
+                <InView
+                    className="py-2.5 px-4"
+                    as="article"
+                    threshold={0.3}
+                    onChange={(inView, entry) => handleVisibility(entry, inView)}
+                >
+                    <div data-id={item.id} data-view={item.view}>
+                        <PostHeader channel={channel} post={item} />
+                        <Spacing />
+                        <PostBody channel={channel} post={item} />
+                        <Spacing />
+                        <PostFooter post={item} />
+                    </div>
+                </InView>
+            </Group>
+            <Separator className="md:hidden py-2" />
+        </>
     );
 });
 
@@ -127,10 +131,10 @@ export const Posts = ({ channel, posts, onRefresh, isFetching, isFetchingMore }:
         <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>
             <PullToRefresh onRefresh={onRefresh} isFetching={isFetching}>
                 <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto w-full">
-                    <VirtualizedListWrapper 
-                        items={posts} 
-                        renderItem={renderItem} 
-                        loadMoreButton={<LoadingMore isFetchingMore={isFetchingMore} />} 
+                    <VirtualizedListWrapper
+                        items={posts}
+                        renderItem={renderItem}
+                        loadMoreButton={<LoadingMore isFetchingMore={isFetchingMore} />}
                     />
                 </div>
             </PullToRefresh>
