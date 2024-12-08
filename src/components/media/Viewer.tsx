@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { calculateEndDimensions } from '@/helpers/calcEndDimensions';
@@ -15,6 +15,7 @@ import _ from 'lodash';
 import '@/styles/components/mediaGrid.css';
 
 const MediaViewer: React.FC = () => {
+    const videoRef = useRef<HTMLVideoElement>(null);
     const dispatch = useDispatch();
     const { selectedMedia, isAnimating, isClosing, isOverlayVisible, transitionStyle } = useSelector(
         (state: RootState) => state.viewer
@@ -28,6 +29,29 @@ const MediaViewer: React.FC = () => {
             dispatch(resetViewer());
         }, 250);
     }, [dispatch]);
+
+    useEffect(() => {
+        const savedVolume = localStorage.getItem('TF_mediaVolume');
+        if (selectedMedia?.type === 'video' && videoRef.current) {
+            videoRef.current.volume = parseFloat(savedVolume || "") || .7;
+        }
+    }, [selectedMedia]);
+
+    useEffect(() => {
+        const videoElement = videoRef.current;
+
+        if (videoElement) {
+            const handleVolumeChange = () => {
+                localStorage.setItem('TF_mediaVolume', _.round(videoElement.volume, 2).toString());
+            };
+
+            videoElement.addEventListener('volumechange', handleVolumeChange);
+
+            return () => {
+                videoElement.removeEventListener('volumechange', handleVolumeChange);
+            };
+        }
+    }, [selectedMedia]);
 
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
@@ -97,6 +121,7 @@ const MediaViewer: React.FC = () => {
             />
             {selectedMedia.type === 'video' && (
                 <video
+                    ref={videoRef}
                     preload="auto"
                     controls
                     autoPlay
