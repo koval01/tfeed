@@ -22,7 +22,7 @@ const ErrorBody = ({ header, description, actions }: ErrorProps) => (
             ) : null}
             className="select-none max-md:px-0"
         >
-            <Paragraph>
+            <Paragraph className="select-text">
                 {description}
             </Paragraph>
         </Placeholder>
