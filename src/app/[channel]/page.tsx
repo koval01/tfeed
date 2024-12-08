@@ -1,7 +1,7 @@
 "use client";
 
 import type { ChannelPageProps } from "@/types/channel";
-import React from "react";
+import React, { use } from "react";
 
 import { useBody } from "@/hooks/services/useBody";
 
@@ -16,7 +16,8 @@ export const runtime = "edge";
  * ChannelPage component for displaying a specific channel's feed.
  * @param params - ChannelPageProps containing channel parameters.
  */
-const ChannelPage: React.FC<ChannelPageProps> = ({ params }) => {
+const ChannelPage: React.FC<ChannelPageProps> = props => {
+    const params = use(props.params);
     const { channel } = params;
     const { data, error, isLoading } = useBody(channel);
 

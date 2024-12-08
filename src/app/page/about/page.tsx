@@ -23,7 +23,7 @@ const About = () => {
     const features = t("about.features", { returnObjects: true }) as string[];
 
     return (
-        (<SplitLayout>
+        <SplitLayout>
             <SplitCol autoSpaced>
                 <FixedCenter className="top-16">
                     <Placeholder>
@@ -36,7 +36,7 @@ const About = () => {
                         <DisplayTitle level="1">
                             <Trans
                                 i18nKey="about.welcome"
-                                components={{ b: <b /> }}
+                                components={{ b: <b key="welcome-bold" /> }}
                             />
                         </DisplayTitle>
                         <DisplayTitle level="3" className="text-neutral-500 mt-2">
@@ -51,14 +51,23 @@ const About = () => {
                                 <Trans
                                     i18nKey="about.example"
                                     values={{ url: "tfeed.koval.page/durov" }}
-                                    components={{ a: <Link href="https://tfeed.koval.page/durov" /> }}
+                                    components={{
+                                        a: (
+                                            <Link
+                                                key="goal-link"
+                                                href="https://tfeed.koval.page/durov"
+                                            />
+                                        ),
+                                    }}
                                 />
                             </p>
                         </Paragraph>
                         <Spacing size={32} />
 
                         {/* Features Section */}
-                        <Headline className="mb-2.5 text-lg font-bold" Component="h4">{t("about.features_title")}</Headline>
+                        <Headline className="mb-2.5 text-lg font-bold" Component="h4">
+                            {t("about.features_title")}
+                        </Headline>
                         <ul className="list-disc list-inside space-y-1">
                             {features.map((feature, index) => (
                                 <li key={`about__sec_item_${index}`}>
@@ -74,7 +83,7 @@ const About = () => {
                             <p>
                                 <Trans
                                     i18nKey="about.disclaimer"
-                                    components={{ b: <b /> }}
+                                    components={{ b: <b key="disclaimer-bold" /> }}
                                 />
                             </p>
                         </Paragraph>
@@ -100,13 +109,27 @@ const About = () => {
                             <p>
                                 <Trans
                                     i18nKey="about.frontend_hosting"
-                                    components={{ a: <Link href="https://pages.cloudflare.com/" /> }}
+                                    components={{
+                                        a: (
+                                            <Link
+                                                key="frontend-hosting-link"
+                                                href="https://pages.cloudflare.com/"
+                                            />
+                                        ),
+                                    }}
                                 />
                             </p>
                             <p>
                                 <Trans
                                     i18nKey="about.backend_hosting"
-                                    components={{ a: <Link href="https://www.oracle.com/cloud/" /> }}
+                                    components={{
+                                        a: (
+                                            <Link
+                                                key="backend-hosting-link"
+                                                href="https://www.oracle.com/cloud/"
+                                            />
+                                        ),
+                                    }}
                                 />
                             </p>
                         </Paragraph>
@@ -119,7 +142,14 @@ const About = () => {
                                 <Trans
                                     i18nKey="about.feedback_mail"
                                     values={{ email: "tfeed@koval.page" }}
-                                    components={{ a: <Link href="mailto:tfeed@koval.page" /> }}
+                                    components={{
+                                        a: (
+                                            <Link
+                                                key="feedback-email-link"
+                                                href="mailto:tfeed@koval.page"
+                                            />
+                                        ),
+                                    }}
                                 />
                             </p>
                         </Paragraph>
@@ -131,7 +161,7 @@ const About = () => {
                     </Footnote>
                 </Div>
             </SplitCol>
-        </SplitLayout>)
+        </SplitLayout>
     );
 };
 

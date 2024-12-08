@@ -1,3 +1,4 @@
+import type { JSX } from "react";
 import type { PollOptions, Poll as PollProp } from "@/types";
 
 import {

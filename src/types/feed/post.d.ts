@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import type { FC, JSX } from "react";
 import type { ClassValue } from "clsx";
 import type { Channel, Post } from "@/types/body";
 

@@ -284,7 +284,13 @@ const PostNotSupported = () => (
         <Caption level="1" className="text-neutral-500">
             <Trans
                 i18nKey="openPostInTelegramHint"
-                components={{ div: <Icon24ShareOutline className="inline-block text-[#24a1de]" width={13} height={13} /> }}
+                components={{ 
+                    div: <Icon24ShareOutline 
+                        key={`icon__key_${Math.random()}`} 
+                        className="inline-block text-[#24a1de]" 
+                        width={13} 
+                        height={13} /> 
+                }}
             />
         </Caption>
     </div>

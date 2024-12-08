@@ -61,7 +61,8 @@ const buildMetadata = (
  * @param params - Params containing the channel username.
  * @returns Metadata for the channel.
  */
-export const generateMetadata = async ({ params }: { params: { channel: string } }): Promise<Metadata> => {
+export const generateMetadata = async (props: { params: Promise<{ channel: string }> }): Promise<Metadata> => {
+    const params = await props.params;
     const { channel } = params;
     const apiUrl = `${process.env.NEXT_PUBLIC_API_HOST}/v1/preview/${channel}`;
 

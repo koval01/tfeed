@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { type JSX, useCallback } from "react";
 import { useSelector } from "react-redux";
 
 import { selectNoLoadMore } from '@/lib/store';
