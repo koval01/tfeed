@@ -14,7 +14,7 @@ const ErrorBody = ({ header, description, actions }: ErrorProps) => (
     <div className="max-md:w-screen">
         <Placeholder
             icon={<Icons.logo className="size-16 md:size-24 lg:size-32 xl:size-40" />}
-            header={header}
+            title={header}
             action={!!actions ? (
                 <Button type="primary" size="l" onClick={actions.click} aria-label={t("Error action button")}>
                     {actions.name}

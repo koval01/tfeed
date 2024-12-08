@@ -33,8 +33,8 @@ export const Profile: React.FC = () => (
                             className="rounded-full"
                         />
                     }
-                    header={
-                        <Title>
+                    title={
+                        <Title Component="h1">
                             <Skeleton width={250} />
                         </Title>
                     }
@@ -68,7 +68,7 @@ const PostHeader: React.FC = () => (
     <Flex className="flex-row select-none">
         <Skeleton width={40} height={40} className="mr-3 rounded-full" />
         <div className="flex flex-col flex-auto mr-2.5">
-            <Title level="3">
+            <Title level="3" Component="h3">
                 <Skeleton width={180} />
             </Title>
             <Skeleton width={80} height={13} />
@@ -85,7 +85,7 @@ const PostHeader: React.FC = () => (
 const PostBody: React.FC<{ length?: number, noAnimation?: boolean }> = (
     { length = 5, noAnimation = false }
 ) => (
-    <Footnote weight="2" className="whitespace-pre-line">
+    <Footnote weight="2" className="whitespace-pre-line" useAccentWeight>
         {Array.from({ length }).map((_, index) => (
             <Skeleton
                 key={`skeleton__row_item_${index}`}

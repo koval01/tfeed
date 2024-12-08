@@ -38,7 +38,7 @@ const Title: React.FC<TitleProps> = ({ children, verified }) => (
  * Displays the subscriber count for a channel.
  */
 const SubscribersCounter: React.FC<{ channel: Channel }> = ({ channel }) => (
-    <div className="whitespace-nowrap text-ellipsis overflow-hidden text-[12px] leading-[14px] pb-1 relative -top-1 vkuiPlaceholder__text">
+    <div className="whitespace-nowrap text-ellipsis overflow-hidden text-[12px] leading-[14px] pb-1 relative -top-1 text-neutral-500">
         {channel.counters.subscribers} {t("subscribers")}
     </div>
 );
@@ -65,7 +65,7 @@ export const SubscribeButton: React.FC<{ channel: Channel }> = ({ channel }) => 
             onClick={() => window.open(`https://t.me/${channel.username}`, "_blank")}
             aria-label={t("Subscribe button")}
         >
-            <Headline level="2">
+            <Headline level="2" Component="h4">
                 <Trans i18nKey="Subscribe" />
             </Headline>
         </Button>

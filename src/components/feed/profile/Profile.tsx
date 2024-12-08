@@ -1,9 +1,9 @@
 import React from "react";
 
-import type { 
+import type {
     Channel,
-    TitleProps,
-    Counters as CountersProps 
+    Counters as CountersProps,
+    TitleProps
 } from "@/types";
 
 import {
@@ -54,10 +54,10 @@ const Counters = ({ counters }: { counters: CountersProps }) => (
         <div className="grid grid-cols-3 gap-3 p-2 justify-items-center">
             {Object.entries(counters).map(([key, value], index) => (
                 <div key={`counter__item_${index}`} className="text-center w-full">
-                    <TitleVK level="3" className="block w-full text-center">
+                    <TitleVK level="3" className="block w-full text-center" Component="h3">
                         {value}
                     </TitleVK>
-                    <Footnote className="vkuiPlaceholder__text inline-block capitalize align-top mt-1">
+                    <Footnote className="text-neutral-500 inline-block capitalize align-top mt-1">
                         <Trans i18nKey={key} />
                     </Footnote>
                 </div>
@@ -78,7 +78,7 @@ const Footer = () => {
         <div className="text-center pt-0 pb-2">
             {footerLinks.map((item, index) => (
                 <div key={`footer__l_item_${index}`} className="inline-block align-top px-2">
-                    <Footnote className="vkuiPlaceholder__text">
+                    <Footnote className="text-neutral-500">
                         <Link href={item.href}>
                             <Trans i18nKey={item.name} />
                         </Link>
@@ -127,7 +127,7 @@ const Body = ({ channel }: { channel: Channel }) => (
         <Placeholder
             className="pb-6"
             icon={<Avatar size={96} src={channel.avatar} name={channel.title.string} />}
-            header={<ChannelTitle channel={channel} />}
+            title={<ChannelTitle channel={channel} />}
             action={<ActionBlock channel={channel} />}
         >
             @{channel.username}

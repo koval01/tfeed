@@ -23,7 +23,7 @@ const About = () => {
     const features = t("about.features", { returnObjects: true }) as string[];
 
     return (
-        <SplitLayout>
+        (<SplitLayout>
             <SplitCol autoSpaced>
                 <FixedCenter className="top-16">
                     <Placeholder>
@@ -39,7 +39,7 @@ const About = () => {
                                 components={{ b: <b /> }}
                             />
                         </DisplayTitle>
-                        <DisplayTitle level="3" className="vkuiPlaceholder__text mt-2">
+                        <DisplayTitle level="3" className="text-neutral-500 mt-2">
                             {t("about.welcome_sub")}
                         </DisplayTitle>
                         <Spacing size={16} />
@@ -58,7 +58,7 @@ const About = () => {
                         <Spacing size={32} />
 
                         {/* Features Section */}
-                        <Headline className="mb-2.5 text-lg font-bold">{t("about.features_title")}</Headline>
+                        <Headline className="mb-2.5 text-lg font-bold" Component="h4">{t("about.features_title")}</Headline>
                         <ul className="list-disc list-inside space-y-1">
                             {features.map((feature, index) => (
                                 <li key={`about__sec_item_${index}`}>
@@ -70,7 +70,7 @@ const About = () => {
 
                         {/* How It Works Section */}
                         <Paragraph>
-                            <Headline>{t("about.works")}</Headline>
+                            <Headline Component="h4">{t("about.works")}</Headline>
                             <p>
                                 <Trans
                                     i18nKey="about.disclaimer"
@@ -82,7 +82,7 @@ const About = () => {
 
                         {/* Technologies Section */}
                         <Paragraph>
-                            <Headline>{t("about.tech_used")}</Headline>
+                            <Headline Component="h4">{t("about.tech_used")}</Headline>
                             <ul className="list-disc list-inside space-y-1 mt-2">
                                 <li>
                                     {t("about.frontend")}: Next.js, React, TailwindCSS, TypeScript
@@ -96,7 +96,7 @@ const About = () => {
 
                         {/* Hosting Section */}
                         <Paragraph>
-                            <Headline>{t("about.hosted")}</Headline>
+                            <Headline Component="h4">{t("about.hosted")}</Headline>
                             <p>
                                 <Trans
                                     i18nKey="about.frontend_hosting"
@@ -114,7 +114,7 @@ const About = () => {
 
                         {/* Feedback Section */}
                         <Paragraph>
-                            <Headline>{t("about.feedback")}</Headline>
+                            <Headline Component="h4">{t("about.feedback")}</Headline>
                             <p>
                                 <Trans
                                     i18nKey="about.feedback_mail"
@@ -126,12 +126,12 @@ const About = () => {
                     </div>
                 </Group>
                 <Div className="w-full">
-                    <Footnote caps className="vkuiPlaceholder__text text-center mt-0 md:mt-3 lg:mt-6">
+                    <Footnote caps className="text-neutral-500 text-center mt-0 md:mt-3 lg:mt-6">
                         {t("about.thanks")}
                     </Footnote>
                 </Div>
             </SplitCol>
-        </SplitLayout>
+        </SplitLayout>)
     );
 };
 

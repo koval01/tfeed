@@ -16,7 +16,7 @@ const ImageSticker = ({ url }: { url: string }) => (
                 <div className="flex">
                     <Icon28StickerSmileOutline className="m-auto justify-center" width={96} height={96} />
                 </div>
-                <Headline className="text-center">
+                <Headline className="text-center" Component="h4">
                     {t("error_sticker")}
                 </Headline>
             </Div>
@@ -33,22 +33,17 @@ const StickerComponent = ({ post }: { post: Post }) => {
     const url = media.url;
     const thumb = media.thumb;
 
-    return (
-        /\.webm(\?|$)/i.test(url) ?
-            (
-                <video
-                    className="max-h-72 w-auto !rounded-none"
-                    src={url}
-                    poster={thumb}
-                    controls={false}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    disablePictureInPicture
-                />
-            ) : <ImageSticker url={url} />
-    );
+    return (/\.webm(\?|$)/i.test(url) ? (<video
+        className="max-h-72 w-auto !rounded-none"
+        src={url}
+        poster={thumb}
+        controls={false}
+        autoPlay
+        muted
+        loop
+        playsInline
+        disablePictureInPicture
+    />) : <ImageSticker url={url} />);
 }
 
 export const Sticker = React.memo(({ post }: { post: Post }) => {

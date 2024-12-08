@@ -20,7 +20,7 @@ export const Badge = ({ Icon, text, ...props }: ContentBadgeProps) => (
             </ContentBadge.SlotIcon>
         )}
         {text && (
-            <Footnote weight="1" caps>
+            <Footnote weight="1" caps useAccentWeight>
                 {text}
             </Footnote>
         )}

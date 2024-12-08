@@ -25,7 +25,7 @@ const Home: React.FC = () => (
             <Trans i18nKey="Nothing" />
           </DisplayTitle>
         </Placeholder>
-        <Headline className="text-center">
+        <Headline className="text-center" Component="h4">
           <Trans i18nKey="MainSubText" />
         </Headline>
       </FixedCenter>

@@ -85,21 +85,20 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
     useInterval(() => refreshPosts(false), 3e3);
 
     return (
-        <Panel>
+        (<Panel>
             {/* Header */}
             <FeedHeader channel={data?.channel} isLoading={isLoading} />
-
             {/* Main layout */}
             <SplitLayout center>
                 {isLoading ? (
                     // Show skeletons during loading
-                    <>
+                    (<>
                         <PostsSkeleton />
                         <ProfileSkeleton />
-                    </>
+                    </>)
                 ) : (
                     // Show posts and profile when data is ready
-                    <>
+                    (<>
                         <Posts
                             channel={data.channel}
                             posts={posts}
@@ -108,12 +107,11 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
                             isFetchingMore={isFetchingMore}
                         />
                         <Profile channel={data.channel} />
-                    </>
+                    </>)
                 )}
             </SplitLayout>
-
             {/* Snackbar */}
             {snackbar}
-        </Panel>
+        </Panel>)
     );
 };

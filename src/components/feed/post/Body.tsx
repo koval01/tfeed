@@ -52,7 +52,10 @@ const handleRedirect = (channel: Channel, post: Post) =>
  */
 const Title = ({ children, verified, channelName }: TitleProps) => (
     <div className="inline-flex overflow-hidden text-ellipsis text-[13px] leading-4 font-medium">
-        <Headline level="2" className="inline-flex max-w-full overflow-hidden text-ellipsis text-[13px] leading-4">
+        <Headline
+            level="2"
+            className="inline-flex max-w-full overflow-hidden text-ellipsis text-[13px] leading-4"
+            Component="h4">
             {children}
         </Headline>
         {verified && (
@@ -88,16 +91,18 @@ const HeadProfile = ({ channel, post }: PostBodyProps) => {
     const formattedDate = useFormattedDate(post.footer.date.unix);
 
     return (
-        <div className="flex flex-col mr-2.5 whitespace-nowrap min-w-0 flex-auto">
+        (<div className="flex flex-col mr-2.5 whitespace-nowrap min-w-0 flex-auto">
             <div className="flex overflow-hidden text-ellipsis min-w-full items-center">
                 <div className="inline-flex min-w-full">
                     <ChannelTitle channel={channel} />
                 </div>
             </div>
-            <Subhead className="vkuiPlaceholder__text overflow-hidden text-ellipsis font-normal text-[13px]">
+            <Subhead
+                className="text-neutral-500 overflow-hidden text-ellipsis font-normal text-[13px]"
+                Component="h5">
                 {formattedDate}
             </Subhead>
-        </div>
+        </div>)
     );
 };
 
@@ -109,7 +114,7 @@ const MoreButton = ({ channel, post }: PostBodyProps) => (
         <div className="flex items-center">
             <div className="relative">
                 <Tappable onClick={() => handleRedirect(channel, post)} className="rounded-lg">
-                    <Icon24ShareOutline className="vkuiPlaceholder__text" />
+                    <Icon24ShareOutline className="text-neutral-500" />
                 </Tappable>
             </div>
         </div>
@@ -140,11 +145,11 @@ const FooterComponent = ({
 }: FooterComponentProps) => (
     <div
         className={cn(
-            "flex items-center whitespace-nowrap overflow-hidden leading-5 h-6 vkuiPlaceholder__text",
+            "flex items-center whitespace-nowrap overflow-hidden leading-5 h-6 text-neutral-500",
             className
         )}
     >
-        <span className="flex vkuiPlaceholder__text" style={{ width: iconSize, height: iconSize }}>
+        <span className="flex text-neutral-500" style={{ width: iconSize, height: iconSize }}>
             <Icon />
         </span>
         <Caption className="relative leading-[15px] h-3.5 text-sm/7 font-medium">
@@ -200,7 +205,7 @@ const PostMedia = ({ post }: { post: Post }) => {
  */
 const PostText = ({ post }: { post: Post }) => (
     <div>
-        <Footnote weight="2" className="whitespace-pre-line">
+        <Footnote weight="2" className="whitespace-pre-line" useAccentWeight>
             <TextComponent htmlString={post.content.text?.html} />
         </Footnote>
     </div>
@@ -224,7 +229,7 @@ const PostReply = ({ channel, post }: { channel: Channel, post: Post }) => {
             <>
                 <Banner
                     className="select-none my-1.5 md:my-2"
-                    asideMode="expand"
+                    after="chevron"
                     onClick={() => handleRedirect(channel, post)}
                     before={
                         <div className="inline-flex items-center space-x-2">
@@ -240,14 +245,18 @@ const PostReply = ({ channel, post }: { channel: Channel, post: Post }) => {
                             />}
                         </div>
                     }
-                    header={
-                        <Subhead weight="2" className="text-sm text-[--vkui--color_text_accent]">
+                    title={
+                        <Subhead
+                            weight="2"
+                            className="text-sm text-[--vkui--color_text_accent]"
+                            Component="h5"
+                            useAccentWeight>
                             <EllipsisText>
                                 <TextComponent htmlString={reply.name?.html} />
                             </EllipsisText>
                         </Subhead>
                     }
-                    subheader={
+                    subtitle={
                         <span className="text-[13px]">
                             <EllipsisText>
                                 {reply.text ? 
@@ -261,7 +270,7 @@ const PostReply = ({ channel, post }: { channel: Channel, post: Post }) => {
                 />
                 <Spacing />
             </>
-        )
+        );
 }
 
 /**
@@ -272,7 +281,7 @@ const PostNotSupported = () => (
         <Text className="text-lg font-bold TFeed__GradientText">
             <Trans i18nKey="thisPostNotSupported" />
         </Text>
-        <Caption level="1" className="vkuiPlaceholder__text">
+        <Caption level="1" className="text-neutral-500">
             <Trans
                 i18nKey="openPostInTelegramHint"
                 components={{ div: <Icon24ShareOutline className="inline-block text-[#24a1de]" width={13} height={13} /> }}

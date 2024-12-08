@@ -16,7 +16,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.4.0",
     "@vkontakte/icons": "^2.158.0",
-    "@vkontakte/vkui": "^6.7.4",
+    "@vkontakte/vkui": "^7.0.0",
     "axios": "^1.7.9",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",

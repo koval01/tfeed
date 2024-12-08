@@ -35,17 +35,14 @@ const Message = ({ channelName }: { channelName?: string }) => (
 
 const Content = ({ channelName }: { channelName?: string }) => (
     <div className="mt-2">
-        <Subhead className="text-left">
+        <Subhead className="text-left" Component="h5">
             <Message channelName={channelName} />
         </Subhead>
     </div>
 )
 
 export const Verified = ({ className, Icon, channelName }: VerifiedProps) => (
-    <Tooltip
-        header={<Header />}
-        text={<Content channelName={channelName} />}
-    >
+    <Tooltip title={<Header />} description={<Content channelName={channelName} />}>
         <Icon className={className} />
     </Tooltip>
 )

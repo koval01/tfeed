@@ -37,8 +37,8 @@ import {
 import { useAnalytics } from "@/hooks/services/useAnalytics";
 import { InView } from "react-intersection-observer";
 
-import { Button } from "@/components/ui/Button";
 import { Forward } from "@/components/feed/post/Forward";
+import { Button } from "@/components/ui/Button";
 import { ThreeDot } from "react-loading-indicators";
 
 /**
@@ -68,7 +68,11 @@ const LoadingMoreButton = ({ isFetchingMore }: { isFetchingMore: boolean }): JSX
             className="w-24 h-[30px]"
             aria-label={t("Load more button")}
         >
-            <Subhead weight="1" className="text-xs vkuiPlaceholder__text">Load more</Subhead>
+            <Subhead
+                weight="1"
+                className="text-xs text-neutral-500"
+                Component="h5"
+                useAccentWeight>Load more</Subhead>
         </Button>
     </div>
 );
@@ -110,7 +114,7 @@ const Post = React.memo(({ item, channel, ...props }: PostProps & Record<string,
                     </div>
                 </InView>
             </Group>
-            <Separator className="md:hidden py-2" />
+            <Separator className="md:hidden py-2 px-4" />
         </>
     );
 });

@@ -1,12 +1,11 @@
-import React from "react";
-import type { Poll as PollProp, PollOptions } from "@/types";
+import type { PollOptions, Poll as PollProp } from "@/types";
 
-import { 
-    Headline, 
-    Subhead, 
-    Caption, 
-    FormItem, 
-    Progress 
+import {
+    Caption,
+    FormItem,
+    Headline,
+    Progress,
+    Subhead
 } from "@vkontakte/vkui";
 
 import { t } from "i18next";
@@ -17,11 +16,11 @@ import { t } from "i18next";
  */
 const PollHeader = ({ poll }: { poll: PollProp }): JSX.Element => (
     <>
-        <Headline weight="1" level="2">
+        <Headline weight="1" level="2" Component="h4" useAccentWeight>
             {poll.question}
         </Headline>
         <div className="flex space-x-1.5 text-[--vkui--color_text_secondary]">
-            <Subhead className="font-normal text-xs">{t(poll.type)}</Subhead>
+            <Subhead className="font-normal text-xs" Component="h5">{t(poll.type)}</Subhead>
             <span className="align-top leading-3">|</span>
             <Caption>{poll.votes} {t("votes")}</Caption>
         </div>
@@ -34,11 +33,15 @@ const PollHeader = ({ poll }: { poll: PollProp }): JSX.Element => (
 const PollOption = ({ option }: { option: PollOptions }): JSX.Element => (
     <div className="flex items-center relative justify-between max-md:pt-1 pt-3 pb-0">
         <div className="block w-full">
-            <FormItem id="progresslabel" className="p-0 pr-2" top={option.name}>
+            <FormItem
+                id="progresslabel"
+                className="p-0 pr-2"
+                top={option.name}
+                topComponent="h5">
                 <Progress aria-labelledby="progresslabel" value={option.percent} />
             </FormItem>
         </div>
-        <div className="flex w-[34px] items-center whitespace-nowrap overflow-hidden vkuiPlaceholder__text">
+        <div className="flex w-[34px] items-center whitespace-nowrap overflow-hidden text-neutral-500">
             {option.percent}%
         </div>
     </div>

@@ -27,18 +27,18 @@ export const Button = ({
     ...restProps
 }: VKUIButtonProps): React.ReactNode => {
     return (
-        <VKButton {...restProps} loading={false}>
+        (<VKButton {...restProps} loading={false}>
             {
                 loading
                     ? (loader && <Loader loader={loader} />) || (
                         <Spinner
-                            size="small"
+                            size="s"
                             disableAnimation={restProps.disableSpinnerAnimation}
                             noColor
                         />
                     )
                     : children
             }
-        </VKButton>
+        </VKButton>)
     );
 };
