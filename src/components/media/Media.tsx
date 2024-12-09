@@ -18,7 +18,7 @@ import {
 
 import { calculateEndDimensions } from '@/helpers/calcEndDimensions';
 
-import { NextImage as Image } from '@/components/media/NextImage';
+import { LazyImage as Image } from '@/components/media/LazyImage';
 import { Icons } from '@/components/ui/Icons';
 import { Icon28Play } from '@vkontakte/icons';
 
