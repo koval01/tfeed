@@ -139,7 +139,7 @@ export const AudioPost = React.memo(({ post }: { post: Post }) => {
                 className="inline-block float-left size-12 rounded-full bg-[--vkui--color_background_accent]"
                 onClick={() => setPlaying(!playing)}
             >
-                <div className="flex justify-center m-auto">
+                <div className="flex justify-center m-auto text-[--vkui--color_text_contrast]">
                     {!playing ? <Icon28Play /> : <Icon28Pause />}
                 </div>
             </button>
@@ -159,12 +159,12 @@ export const AudioPost = React.memo(({ post }: { post: Post }) => {
                                     key={`audio__s_${post.id}_${index}`}
                                     className={cn(
                                         "inline-block max-lg:w-[3.5px] max-sm:w-0.5 lg:w-[2.5px]",
-                                        "pt-1 -mt-1 mr-0.5 rounded-sm align-bottom box-border"
+                                        "pt-1 -mt-1 mr-0.5 rounded-sm align-bottom box-border",
+                                        index / spectrogramData.length <= playedFraction
+                                            ? "bg-[--vkui--color_background_accent]"
+                                            : "bg-neutral-300 dark:bg-neutral-600",
                                     )}
-                                    style={{
-                                        height: `${value * 3}%`,
-                                        backgroundColor: index / spectrogramData.length <= playedFraction ? "#529ef4" : "#4B5563",
-                                    }}
+                                    style={{ height: `${value * 3}%` }}
                                 />
                             ))}
                         </div>
