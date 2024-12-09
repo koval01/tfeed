@@ -43,11 +43,12 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
 
     // Function to show error notifications
     const showErrorSnackbar = useCallback(
-        (message: string, Icon?: FC, iconColor?: string) => {
+        (message: string, subtext?: string, Icon?: FC, iconColor?: string) => {
             if (!snackbar) {
                 setSnackbar(
                     <ErrorSnackbar
                         text={message}
+                        subtext={subtext}
                         onClose={() => setSnackbar(null)}
                         Icon={Icon}
                         iconColor={iconColor}

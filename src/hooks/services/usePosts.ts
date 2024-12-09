@@ -19,7 +19,7 @@ interface UsePostsReturn {
 
 export const usePosts = (
     channelUsername: string | undefined,
-    showErrorSnackbar: (message: string) => void
+    showErrorSnackbar: (message: string, subtext?: string) => void
 ): UsePostsReturn => {
     const dispatch = useDispatch();
 

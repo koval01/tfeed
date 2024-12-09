@@ -13,14 +13,14 @@ type Direction = "before" | "after";
 
 interface ErrorHandlerOptions {
     context: string;
-    showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string) => void;
+    showErrorSnackbar?: (message: string, subtext?: string, Icon?: FC, iconColor?: string) => void;
 }
 
 interface FetcherConfig {
     channelUsername?: string;
     setPosts: (value: SetStateAction<Post[]>) => void;
     setOffset: (value: SetStateAction<Offset>) => void;
-    showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string) => void;
+    showErrorSnackbar?: (message: string, subtext?: string, Icon?: FC, iconColor?: string) => void;
 }
 
 /**
@@ -39,14 +39,11 @@ const handleFetchError = (error: unknown, { context, showErrorSnackbar }: ErrorH
             ? t("noFreshPosts")
             : t("noMorePosts")
         :
-        t('errorUpdate', {
-            context, ...{
-                statusText: isAxiosError ? `. Status: ${error.response?.statusText || error.message}` : "."
-            }
-        });
+        t('errorUpdate', { context });
 
     showErrorSnackbar?.(
         message,
+        isAxiosError ? error.response?.statusText || error.message : void 0,
         is404 ? Icon28SearchStarsOutline : undefined,
         is404 ? "--vkui--color_icon_accent" : undefined
     );
@@ -115,7 +112,7 @@ export const onRefresh = async (
     setIsFetching: (value: SetStateAction<boolean>) => void,
     setPosts: (value: SetStateAction<Post[]>) => void,
     setOffset: (value: SetStateAction<Offset>) => void,
-    showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string) => void
+    showErrorSnackbar?: (message: string, subtext?: string, Icon?: FC, iconColor?: string) => void
 ): Promise<void> => {
     const config: FetcherConfig = {
         channelUsername,
@@ -128,7 +125,7 @@ export const onRefresh = async (
 
     if (posts?.length) {
         updatePostsAndOffset(posts, "after", setPosts, setOffset);
-        showErrorSnackbar?.(t("feedUpdated"), Icon28CheckCircleFill);
+        showErrorSnackbar?.(t("feedUpdated"), "", Icon28CheckCircleFill);
     }
 };
 
@@ -142,7 +139,7 @@ export const onMore = async (
     setPosts: (value: SetStateAction<Post[]>) => void,
     setOffset: (value: SetStateAction<Offset>) => void,
     setNoLoadMore: (state: boolean) => void,
-    showErrorSnackbar?: (message: string, Icon?: FC, iconColor?: string) => void
+    showErrorSnackbar?: (message: string, subtext?: string, Icon?: FC, iconColor?: string) => void
 ): Promise<void> => {
     const config: FetcherConfig = {
         channelUsername,
@@ -159,6 +156,7 @@ export const onMore = async (
         setNoLoadMore(true);
         showErrorSnackbar?.(
             t("noMorePosts"),
+            "",
             Icon28SearchStarsOutline,
             "--vkui--color_icon_accent"
         );

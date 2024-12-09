@@ -7,6 +7,7 @@ import { Snackbar } from "@vkontakte/vkui";
 
 interface ErrorSnackbarProps {
     text: string;
+    subtext?: string;
     onClose: () => void;
     Icon?: FC;
     iconColor?: string;
@@ -14,6 +15,7 @@ interface ErrorSnackbarProps {
 
 const ErrorSnackbar: FC<ErrorSnackbarProps> = ({ 
     text, 
+    subtext,
     onClose, 
     Icon = Icon28ErrorCircleOutline, 
     iconColor = "--vkui--color_icon_negative" 
@@ -21,6 +23,7 @@ const ErrorSnackbar: FC<ErrorSnackbarProps> = ({
     return (
         <Snackbar
             onClose={onClose}
+            subtitle={subtext}
             before={<Icon fill={!iconColor ? "" : `var(${iconColor})`} />}
         >
             {text}
