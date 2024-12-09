@@ -19,16 +19,22 @@ import '@/styles/components/emoji.css';
  */
 const extractTextContent = (element: Element | undefined): string => {
     if (!element?.children?.length) return '';
-    const firstChild = element.children[0] as DOMNode | undefined;
 
-    if (firstChild && isTextNode(firstChild)) return firstChild.data;
+    return Array.from(element.children).reduce<string>((text, child) => {
+        if (isTextNode(child)) {
+            return text + child.data.trim();
+        }
 
-    if (firstChild && 'children' in firstChild && firstChild.children?.length) {
-        const nestedChild = firstChild.children[0] as DOMNode | undefined;
-        return nestedChild && isTextNode(nestedChild) ? nestedChild.data : '';
-    }
+        if ('name' in child && child.name === 'br') {
+            return text + '\n';
+        }
 
-    return '';
+        if ('children' in child && child.children?.length) {
+            return text + extractTextContent(child as Element);
+        }
+
+        return text;
+    }, '');
 };
 
 /**
@@ -36,8 +42,8 @@ const extractTextContent = (element: Element | undefined): string => {
  * @param node - The DOM node to check.
  * @returns True if the node is a text node; otherwise, false.
  */
-const isTextNode = (node: DOMNode | undefined): node is Text => {
-    return !!node && 'data' in node;
+const isTextNode = (node: unknown): node is Text => {
+    return !!node && typeof node === 'object' && node !== null && 'data' in node;
 };
 
 /**
@@ -95,6 +101,16 @@ const renderEmoji = (element: Element): JSX.Element | string => {
 };
 
 /**
+ * Renders a <pre> tag with whitespace style.
+ * @param element - The DOM element representing the pre tag.
+ * @returns JSX element for the <Spoiler> component.
+ */
+const renderPre = (element: Element): JSX.Element => {
+    const text = extractTextContent(element);
+    return <pre className="whitespace-pre-wrap">{text}</pre>;
+};
+
+/**
  * Creates parser options for handling specific HTML elements.
  * Custom handlers are provided for <a>, <i> (emoji), and custom spoiler tags.
  * @returns The HTMLReactParserOptions object with replacement logic.
@@ -111,6 +127,8 @@ const getParserOptions = (): HTMLReactParserOptions => ({
             case 'i':
                 if (element.attribs?.class === 'emoji') return renderEmoji(element);
                 break;
+            case 'pre':
+                return renderPre(element);
             case 'tg-spoiler':
                 return renderSpoiler(element);
         }
