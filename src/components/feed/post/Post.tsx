@@ -61,7 +61,7 @@ const LoadingMoreButton = ({ isFetchingMore }: { isFetchingMore: boolean }): JSX
     <div className="flex justify-center">
         <Button
             size="s"
-            appearance="neutral"
+            appearance="overlay"
             loading={isFetchingMore}
             loader={<ThreeDot variant="pulsate" color="#818c99" style={{ fontSize: "4px" }} />}
             disabled={isFetchingMore}
