@@ -18,7 +18,7 @@ export const GifPost = React.memo(({ post }: { post: Post }) => {
             {post.content.text && <Spacing size={12} />}
             <div className="block">
                 <video
-                    className="max-h-svh h-auto w-full rounded-lg"
+                    className="max-h-svh min-h-28 h-auto w-full rounded-lg"
                     src={url}
                     poster={thumb}
                     controls={false}
