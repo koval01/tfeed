@@ -84,7 +84,7 @@ importers:
     devDependencies:
       '@cloudflare/next-on-pages':
         specifier: ^1.13.7
-        version: 1.13.7(vercel@39.1.2(@swc/core@1.9.1(@swc/helpers@0.5.15))(encoding@0.1.13))(wrangler@3.62.0)
+        version: 1.13.7(vercel@39.1.3(@swc/core@1.9.1)(encoding@0.1.13))(wrangler@3.62.0)
       '@emotion/react':
         specifier: ^11.14.0
         version: 11.14.0(@types/react@19.0.1)(react@19.0.0)
@@ -111,13 +111,13 @@ importers:
         version: 8.4.49
       tailwindcss:
         specifier: ^3.4.16
-        version: 3.4.16(ts-node@10.9.1(@swc/core@1.9.1(@swc/helpers@0.5.15))(@types/node@22.10.1)(typescript@5.7.2))
+        version: 3.4.16(ts-node@10.9.1(@swc/core@1.9.1)(@types/node@22.10.1)(typescript@5.7.2))
       typescript:
         specifier: ^5.7.2
         version: 5.7.2
       vercel:
-        specifier: 39.1.2
-        version: 39.1.2(@swc/core@1.9.1(@swc/helpers@0.5.15))(encoding@0.1.13)
+        specifier: 39.1.3
+        version: 39.1.3(@swc/core@1.9.1)(encoding@0.1.13)
 
 packages:
 
@@ -997,8 +997,8 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
-  '@vercel/node@3.2.27':
-    resolution: {integrity: sha512-vvTBD8Rz2jgbnm9/mTe+wB1rh/uISr7HRkyECUt92IlI4tYxOf/vS7ARgR86TGzb9WDwTrnRVxCl92q//f7hHA==}
+  '@vercel/node@3.2.28':
+    resolution: {integrity: sha512-1TJqaBs8iiZX8l18rW2UGWB9XhHIBpkigFitqMRPapU3W8AaS29Uns64lgH4t9OVlcH4Jd9+3gNcy7amB7vhLQ==}
 
   '@vercel/python@4.5.1':
     resolution: {integrity: sha512-nZX1oezs5E+Un5Pw21P7cEXV9WBohRSq8gDAqipu7KHFfdAQ7ubfBclRmDTGaHOiYvdLsJPiE599vsUfKKob/w==}
@@ -3455,8 +3455,8 @@ packages:
   v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
 
-  vercel@39.1.2:
-    resolution: {integrity: sha512-L6oidHoWgcHsP58p7yHbYJL6ZErO2HmloBJs75+qu9tDND7/X/NaMLDb2F0PMiwuWRnMk93k+qVgtpWmAgR6lg==}
+  vercel@39.1.3:
+    resolution: {integrity: sha512-dB9soUMRY+MHg5JDyztBWpOWYPTAS5PoU/4YwyrOI+QfF9d5GUVIQ3TVb/CccFSXGrpAgLdkoaEBNDmg9+700g==}
     engines: {node: '>= 16'}
     hasBin: true
 
@@ -3659,7 +3659,7 @@ snapshots:
     dependencies:
       mime: 3.0.0
 
-  '@cloudflare/next-on-pages@1.13.7(vercel@39.1.2(@swc/core@1.9.1(@swc/helpers@0.5.15))(encoding@0.1.13))(wrangler@3.62.0)':
+  '@cloudflare/next-on-pages@1.13.7(vercel@39.1.3(@swc/core@1.9.1)(encoding@0.1.13))(wrangler@3.62.0)':
     dependencies:
       acorn: 8.14.0
       ast-types: 0.14.2
@@ -3673,7 +3673,7 @@ snapshots:
       package-manager-manager: 0.2.0
       pcre-to-regexp: 1.1.0
       semver: 7.6.3
-      vercel: 39.1.2(@swc/core@1.9.1(@swc/helpers@0.5.15))(encoding@0.1.13)
+      vercel: 39.1.3(@swc/core@1.9.1)(encoding@0.1.13)
       wrangler: 3.62.0
     transitivePeerDependencies:
       - bufferutil
@@ -4172,7 +4172,7 @@ snapshots:
   '@swc/core-win32-x64-msvc@1.9.1':
     optional: true
 
-  '@swc/core@1.9.1(@swc/helpers@0.5.15)':
+  '@swc/core@1.9.1':
     dependencies:
       '@swc/counter': 0.1.3
       '@swc/types': 0.1.17
@@ -4187,7 +4187,6 @@ snapshots:
       '@swc/core-win32-arm64-msvc': 1.9.1
       '@swc/core-win32-ia32-msvc': 1.9.1
       '@swc/core-win32-x64-msvc': 1.9.1
-      '@swc/helpers': 0.5.15
     optional: true
 
   '@swc/counter@0.1.3': {}
@@ -4409,7 +4408,7 @@ snapshots:
       - encoding
       - supports-color
 
-  '@vercel/node@3.2.27(@swc/core@1.9.1(@swc/helpers@0.5.15))(encoding@0.1.13)':
+  '@vercel/node@3.2.28(@swc/core@1.9.1)(encoding@0.1.13)':
     dependencies:
       '@edge-runtime/node-utils': 2.3.0
       '@edge-runtime/primitives': 4.1.0
@@ -4428,7 +4427,7 @@ snapshots:
       node-fetch: 2.6.9(encoding@0.1.13)
       path-to-regexp: 6.2.1
       ts-morph: 12.0.0
-      ts-node: 10.9.1(@swc/core@1.9.1(@swc/helpers@0.5.15))(@types/node@16.18.11)(typescript@4.9.5)
+      ts-node: 10.9.1(@swc/core@1.9.1)(@types/node@16.18.11)(typescript@4.9.5)
       typescript: 4.9.5
       undici: 5.28.4
     transitivePeerDependencies:
@@ -4881,7 +4880,7 @@ snapshots:
 
   debug@4.1.1:
     dependencies:
-      ms: 2.1.1
+      ms: 2.1.3
 
   debug@4.4.0:
     dependencies:
@@ -6387,13 +6386,13 @@ snapshots:
       camelcase-css: 2.0.1
       postcss: 8.4.49
 
-  postcss-load-config@4.0.2(postcss@8.4.49)(ts-node@10.9.1(@swc/core@1.9.1(@swc/helpers@0.5.15))(@types/node@22.10.1)(typescript@5.7.2)):
+  postcss-load-config@4.0.2(postcss@8.4.49)(ts-node@10.9.1(@swc/core@1.9.1)(@types/node@22.10.1)(typescript@5.7.2)):
     dependencies:
       lilconfig: 3.1.3
       yaml: 2.6.1
     optionalDependencies:
       postcss: 8.4.49
-      ts-node: 10.9.1(@swc/core@1.9.1(@swc/helpers@0.5.15))(@types/node@22.10.1)(typescript@5.7.2)
+      ts-node: 10.9.1(@swc/core@1.9.1)(@types/node@22.10.1)(typescript@5.7.2)
 
   postcss-nested@6.2.0(postcss@8.4.49):
     dependencies:
@@ -6861,7 +6860,7 @@ snapshots:
 
   tailwind-merge@2.5.5: {}
 
-  tailwindcss@3.4.16(ts-node@10.9.1(@swc/core@1.9.1(@swc/helpers@0.5.15))(@types/node@22.10.1)(typescript@5.7.2)):
+  tailwindcss@3.4.16(ts-node@10.9.1(@swc/core@1.9.1)(@types/node@22.10.1)(typescript@5.7.2)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -6880,7 +6879,7 @@ snapshots:
       postcss: 8.4.49
       postcss-import: 15.1.0(postcss@8.4.49)
       postcss-js: 4.0.1(postcss@8.4.49)
-      postcss-load-config: 4.0.2(postcss@8.4.49)(ts-node@10.9.1(@swc/core@1.9.1(@swc/helpers@0.5.15))(@types/node@22.10.1)(typescript@5.7.2))
+      postcss-load-config: 4.0.2(postcss@8.4.49)(ts-node@10.9.1(@swc/core@1.9.1)(@types/node@22.10.1)(typescript@5.7.2))
       postcss-nested: 6.2.0(postcss@8.4.49)
       postcss-selector-parser: 6.1.2
       resolve: 1.22.8
@@ -6942,7 +6941,7 @@ snapshots:
       '@ts-morph/common': 0.11.1
       code-block-writer: 10.1.1
 
-  ts-node@10.9.1(@swc/core@1.9.1(@swc/helpers@0.5.15))(@types/node@16.18.11)(typescript@4.9.5):
+  ts-node@10.9.1(@swc/core@1.9.1)(@types/node@16.18.11)(typescript@4.9.5):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
@@ -6960,9 +6959,9 @@ snapshots:
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     optionalDependencies:
-      '@swc/core': 1.9.1(@swc/helpers@0.5.15)
+      '@swc/core': 1.9.1
 
-  ts-node@10.9.1(@swc/core@1.9.1(@swc/helpers@0.5.15))(@types/node@22.10.1)(typescript@5.7.2):
+  ts-node@10.9.1(@swc/core@1.9.1)(@types/node@22.10.1)(typescript@5.7.2):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
@@ -6980,7 +6979,7 @@ snapshots:
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     optionalDependencies:
-      '@swc/core': 1.9.1(@swc/helpers@0.5.15)
+      '@swc/core': 1.9.1
     optional: true
 
   ts-toolbelt@6.15.5: {}
@@ -7081,14 +7080,14 @@ snapshots:
 
   v8-compile-cache-lib@3.0.1: {}
 
-  vercel@39.1.2(@swc/core@1.9.1(@swc/helpers@0.5.15))(encoding@0.1.13):
+  vercel@39.1.3(@swc/core@1.9.1)(encoding@0.1.13):
     dependencies:
       '@vercel/build-utils': 8.6.0
       '@vercel/fun': 1.1.0(encoding@0.1.13)
       '@vercel/go': 3.2.1
       '@vercel/hydrogen': 1.0.9
       '@vercel/next': 4.4.0(encoding@0.1.13)
-      '@vercel/node': 3.2.27(@swc/core@1.9.1(@swc/helpers@0.5.15))(encoding@0.1.13)
+      '@vercel/node': 3.2.28(@swc/core@1.9.1)(encoding@0.1.13)
       '@vercel/python': 4.5.1
       '@vercel/redwood': 2.1.8(encoding@0.1.13)
       '@vercel/remix-builder': 2.2.14(encoding@0.1.13)
