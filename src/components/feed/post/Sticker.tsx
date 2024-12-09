@@ -6,26 +6,29 @@ import { Div, Headline } from "@vkontakte/vkui";
 import { LazyImage as Image } from "@/components/media/LazyImage";
 import { t } from "i18next";
 
+const Fallback = () => (
+    <Div>
+        <div className="flex">
+            <Icon28StickerSmileOutline className="m-auto justify-center" width={96} height={96} />
+        </div>
+        <Headline className="text-center" Component="h4">
+            {t("error_sticker")}
+        </Headline>
+    </Div>
+);
+
 const ImageSticker = ({ url }: { url: string }) => (
     <Image
         src={url}
         alt={"Sticker"}
         widthSize={"auto"}
         heightSize={"auto"}
-        fallbackIcon={
-            <Div>
-                <div className="flex">
-                    <Icon28StickerSmileOutline className="m-auto justify-center" width={96} height={96} />
-                </div>
-                <Headline className="text-center" Component="h4">
-                    {t("error_sticker")}
-                </Headline>
-            </Div>
-        }
+        fallbackIcon={<Fallback />}
         noBorder
         keepAspectRatio
         withTransparentBackground
         className="!max-w-72 !min-h-40 rounded-none"
+        disableLoader
     />
 )
 
@@ -34,17 +37,29 @@ const StickerComponent = ({ post }: { post: Post }) => {
     const url = media.url;
     const thumb = media.thumb;
 
-    return (/\.webm(\?|$)/i.test(url) ? (<video
-        className="max-h-72 w-auto !rounded-none"
-        src={url}
-        poster={thumb}
-        controls={false}
-        autoPlay
-        muted
-        loop
-        playsInline
-        disablePictureInPicture
-    />) : <ImageSticker url={url} />);
+    if (/\.webm(\?|$)/i.test(url)) {
+        return (<video
+            className="max-h-72 w-auto !rounded-none"
+            src={url}
+            poster={thumb}
+            controls={false}
+            autoPlay
+            muted
+            loop
+            playsInline
+            disablePictureInPicture
+        />)
+    }
+
+    if (/\.(webp|png)(\?|$)/i.test(url)) {
+        return <ImageSticker url={url} />;
+    }
+
+    return (
+        <div className="max-w-72 opacity-50">
+            <Fallback />
+        </div>
+    );
 }
 
 export const Sticker = React.memo(({ post }: { post: Post }) => {

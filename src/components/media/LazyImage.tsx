@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 const withLazyLoad = (ImageComponent: React.ComponentType<any>) => {
     // eslint-disable-next-line react/display-name  
     return (props: any) => {
-        const { src, alt, className, ...rest } = props;
+        const { src, alt, className, disableLoader, ...rest } = props;
         const [isIntersecting, setIsIntersecting] = useState(false);
         const [isLoaded, setIsLoaded] = useState(false);
         const imgRef = useRef<HTMLDivElement>(null);
@@ -38,7 +38,7 @@ const withLazyLoad = (ImageComponent: React.ComponentType<any>) => {
 
         return (
             <div ref={imgRef}>
-                {isIntersecting && !isLoaded && (
+                {isIntersecting && !isLoaded && !disableLoader && (
                     <div className="absolute top-0 animate-pulse bg-neutral-300 dark:bg-neutral-800 w-full h-full" />
                 )}
                 <div className={cn(
