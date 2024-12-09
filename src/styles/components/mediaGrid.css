@@ -14,7 +14,7 @@
 .MediaGrid {
     --mg-border-radius-wrapper: 8px;
     --mg-grid-width: 100%;
-    --mg-spacer: 3px;
+    --mg-spacer: 2px;
     --mg-third-row-count: 3;
     display: flex;
     flex-flow: row wrap;
@@ -42,26 +42,26 @@
 
 .MediaGrid__thumb--firstRowItem {
     --grid-width-divided-by-row-count: var(--mg-grid-width, 100%) / var(--mg-first-row-count, 2);
-    --spacer-divided-by-row-count: var(--mg-spacer, 3px) / var(--mg-first-row-count, 2);
+    --spacer-divided-by-row-count: var(--mg-spacer, 2px) / var(--mg-first-row-count, 2);
     --mg-width: calc(var(--grid-width-divided-by-row-count) - var(--spacer-divided-by-row-count));
 }
 
 .MediaGrid__thumb--secondRowItem {
-    --mg-margin: var(--mg-spacer, 3px) 0 0 var(--mg-spacer, 3px);
+    --mg-margin: var(--mg-spacer, 2px) 0 0 var(--mg-spacer, 2px);
     --mg-height: calc((var(--mg-grid-width, 100%)/var(--mg-second-row-count, 3))/var(--mg-ratio, 1));
-    --spacer-divided-by-row-count: var(--mg-spacer, 3px) / var(--mg-second-row-count, 3);
+    --spacer-divided-by-row-count: var(--mg-spacer, 2px) / var(--mg-second-row-count, 3);
     --mg-width: calc(var(--mg-grid-width, 100%)/var(--mg-second-row-count, 3) - (var(--mg-second-row-count, 3) - 1)*var(--spacer-divided-by-row-count));
 }
 
 .MediaGrid__thumb--thirdRowItem {
-    --mg-margin: var(--mg-spacer, 3px) 0 0 var(--mg-spacer, 3px);
+    --mg-margin: var(--mg-spacer, 2px) 0 0 var(--mg-spacer, 2px);
     --mg-height: calc((var(--mg-grid-width, 100%)/var(--mg-third-row-count, 3))/var(--mg-ratio, 1));
-    --spacer-divided-by-row-count: var(--mg-spacer, 3px) / var(--mg-third-row-count, 3);
+    --spacer-divided-by-row-count: var(--mg-spacer, 2px) / var(--mg-third-row-count, 3);
     --mg-width: calc(var(--mg-grid-width, 100%)/var(--mg-third-row-count, 3) - (var(--mg-third-row-count, 3) - 1)*var(--spacer-divided-by-row-count));
 }
 
 .MediaGrid__thumb--thirdRowItemFirstColumn {
-    --mg-margin: var(--mg-spacer, 3px) 0 0 0;
+    --mg-margin: var(--mg-spacer, 2px) 0 0 0;
 }
 
 .MediaGrid__thumb--topLeft {
@@ -85,11 +85,11 @@
 }
 
 .MediaGrid__thumb--firstRowItem+.MediaGrid__thumb--firstRowItem {
-    --mg-margin: 0 0 0 var(--mg-spacer, 3px);
+    --mg-margin: 0 0 0 var(--mg-spacer, 2px);
 }
 
 .MediaGrid__thumb--secondRowItemFirstColumn {
-    --mg-margin: var(--mg-spacer, 3px) 0 0 0;
+    --mg-margin: var(--mg-spacer, 2px) 0 0 0;
 }
 
 .MediaGrid__thumb--fullWidth {
