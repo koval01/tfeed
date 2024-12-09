@@ -4,20 +4,25 @@ import { NextImage } from "@/components/media/NextImage";
 import { cn } from "@/lib/utils";
 
 const withLazyLoad = (ImageComponent: React.ComponentType<any>) => {
+    // eslint-disable-next-line react/display-name  
     return (props: any) => {
         const { src, alt, className, ...rest } = props;
-        const [isVisible, setIsVisible] = useState(false);
+        const [isIntersecting, setIsIntersecting] = useState(false);
+        const [isLoaded, setIsLoaded] = useState(false);
         const imgRef = useRef<HTMLDivElement>(null);
 
         useEffect(() => {
             const observer = new IntersectionObserver(
                 (entries) => {
-                    entries.forEach((entry) => {
-                        setIsVisible(true);
+                    entries.forEach(() => {
+                        setIsIntersecting(true);
                         observer.disconnect();
                     });
                 },
-                { threshold: 0 }
+                {
+                    threshold: .1,
+                    rootMargin: '50px'
+                }
             );
 
             if (imgRef.current) {
@@ -25,11 +30,31 @@ const withLazyLoad = (ImageComponent: React.ComponentType<any>) => {
             }
 
             return () => observer.disconnect();
-        }, [imgRef]);
+        }, []);
+
+        const handleImageLoad = () => {
+            setIsLoaded(true);
+        };
 
         return (
-            <div ref={imgRef} className={cn("transition-opacity duration-700 ease-in-out", isVisible ? "opacity-100" : "opacity-0")}>
-                {isVisible && <ImageComponent src={src} alt={alt} className={className} {...rest} />}
+            <div ref={imgRef}>
+                {isIntersecting && !isLoaded && (
+                    <div className="absolute top-0 animate-pulse bg-neutral-300 dark:bg-neutral-800 w-full h-full" />
+                )}
+                <div className={cn(
+                    "transition-opacity duration-700 ease-in-out",
+                    isIntersecting && isLoaded ? "opacity-100" : "opacity-0"
+                )}>
+                    {isIntersecting && (
+                        <ImageComponent
+                            src={src}
+                            alt={alt}
+                            className={className}
+                            onLoad={handleImageLoad}
+                            {...rest}
+                        />
+                    )}
+                </div>
             </div>
         );
     };
