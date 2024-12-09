@@ -2,7 +2,8 @@ import React from "react";
 import type { Post } from "@/types";
 
 import { Icon28StickerSmileOutline } from "@vkontakte/icons";
-import { Div, Headline, Image } from "@vkontakte/vkui";
+import { Div, Headline } from "@vkontakte/vkui";
+import { LazyImage as Image } from "@/components/media/LazyImage";
 import { t } from "i18next";
 
 const ImageSticker = ({ url }: { url: string }) => (
