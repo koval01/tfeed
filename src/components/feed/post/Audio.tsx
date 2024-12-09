@@ -1,0 +1,198 @@
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import type { Post } from "@/types";
+
+import { Icon28Pause, Icon28Play } from "@vkontakte/icons";
+import { Slider } from "@vkontakte/vkui";
+
+import ReactPlayer from "react-player";
+import { clamp } from "lodash";
+import { cn } from "@/lib/utils";
+
+export const AudioPost = React.memo(({ post }: { post: Post }) => {
+    const [playing, setPlaying] = useState(false);
+    const [playedFraction, setPlayedFraction] = useState(0);
+    const [remainingTime, setRemainingTime] = useState<string>("0:00");
+    const [isDragging, setIsDragging] = useState(false);
+
+    const playerRef = useRef<ReactPlayer | null>(null);
+    const spectrogramRef = useRef<HTMLDivElement>(null);
+
+    const updateFraction = useCallback((value: number) => {
+        const fraction = value / 100;
+        setPlayedFraction(fraction);
+
+        if (playerRef.current) {
+            const duration = playerRef.current.getDuration();
+            const newTime = duration * fraction;
+            setRemainingTime(formatTime(duration - newTime));
+            playerRef.current.seekTo(fraction, "fraction");
+        }
+    }, []);
+
+    const handleSpectrogramInteraction = useCallback(
+        (event: React.MouseEvent | React.TouchEvent) => {
+            if (!spectrogramRef.current) return;
+
+            const rect = spectrogramRef.current.getBoundingClientRect();
+            const clientX = 'touches' in event
+                ? event.touches[0].clientX
+                : event.clientX;
+
+            const relativeX = clientX - rect.left;
+            const fraction = clamp(relativeX / rect.width, 0, 1);
+
+            updateFraction(fraction * 100);
+        },
+        [updateFraction]
+    );
+
+    const handleMouseDown = useCallback((event: React.MouseEvent) => {
+        setIsDragging(true);
+        handleSpectrogramInteraction(event);
+    }, [handleSpectrogramInteraction]);
+
+    const handleMouseMove = useCallback((event: React.MouseEvent) => {
+        if (isDragging) {
+            handleSpectrogramInteraction(event);
+        }
+    }, [isDragging, handleSpectrogramInteraction]);
+
+    const handleMouseUp = useCallback(() => {
+        setIsDragging(false);
+    }, []);
+
+    const handleTouchStart = useCallback((event: React.TouchEvent) => {
+        setIsDragging(true);
+        handleSpectrogramInteraction(event);
+    }, [handleSpectrogramInteraction]);
+
+    const handleTouchMove = useCallback((event: React.TouchEvent) => {
+        if (isDragging) {
+            handleSpectrogramInteraction(event);
+        }
+    }, [isDragging, handleSpectrogramInteraction]);
+
+    const handleTouchEnd = useCallback(() => {
+        setIsDragging(false);
+    }, []);
+
+    useEffect(() => {
+        document.addEventListener('mouseup', handleMouseUp);
+        document.addEventListener('touchend', handleTouchEnd);
+
+        return () => {
+            document.removeEventListener('mouseup', handleMouseUp);
+            document.removeEventListener('touchend', handleTouchEnd);
+        };
+    }, [handleMouseUp, handleTouchEnd]);
+
+    useEffect(() => {
+        let animationFrameId: number | null = null;
+
+        const updatePlayedFractionAndTime = () => {
+            if (playerRef.current) {
+                const currentTime = playerRef.current.getCurrentTime();
+                const duration = playerRef.current.getDuration();
+
+                if (duration > 0) {
+                    setPlayedFraction(currentTime / duration);
+                    setRemainingTime(formatTime(duration - currentTime));
+                }
+            }
+            animationFrameId = requestAnimationFrame(updatePlayedFractionAndTime);
+        };
+
+        if (playing) {
+            animationFrameId = requestAnimationFrame(updatePlayedFractionAndTime);
+        } else if (animationFrameId !== null) {
+            cancelAnimationFrame(animationFrameId);
+        }
+
+        return () => {
+            if (animationFrameId !== null) {
+                cancelAnimationFrame(animationFrameId);
+            }
+        };
+    }, [playing]);
+
+    if (!post.content.media?.[0] || !(["voice", "audio"].includes(post.content.media[0].type))) {
+        return null;
+    }
+
+    const media = post.content.media[0];
+    const spectrogramData = media.waves ?
+        media.waves.split(",").map(Number)
+        :
+        Array.from({ length: 1e2 }, () => 1);
+
+    const formatTime = (seconds: number): string => {
+        const clampedSeconds = clamp(seconds, 0, Infinity);
+        const minutes = Math.floor(clampedSeconds / 60);
+        const remainingSeconds = Math.floor(clampedSeconds % 60);
+
+        return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+    };
+
+    return (
+        <div className="block mt-3 mb-0">
+            <button
+                className="inline-block float-left size-12 rounded-full bg-[--vkui--color_background_accent]"
+                onClick={() => setPlaying(!playing)}
+            >
+                <div className="flex justify-center m-auto">
+                    {!playing ? <Icon28Play /> : <Icon28Pause />}
+                </div>
+            </button>
+            <div className="ml-[60px] pt-[1px] sm:pt-0 w-full">
+                <div
+                    ref={spectrogramRef}
+                    className="relative mt-1.5 h-3.5 overflow-hidden select-none max-sm:hidden cursor-pointer"
+                    onMouseDown={handleMouseDown}
+                    onMouseMove={handleMouseMove}
+                    onTouchStart={handleTouchStart}
+                    onTouchMove={handleTouchMove}
+                >
+                    <div className="block max-w-full">
+                        <div className="absolute h-3.5 leading-[14px] whitespace-nowrap w-full">
+                            {spectrogramData.map((value, index) => (
+                                <s
+                                    key={`audio__s_${post.id}_${index}`}
+                                    className={cn(
+                                        "inline-block max-lg:w-[3.5px] max-sm:w-0.5 lg:w-[2.5px]",
+                                        "pt-1 -mt-1 mr-0.5 rounded-sm align-bottom box-border"
+                                    )}
+                                    style={{
+                                        height: `${value * 3}%`,
+                                        backgroundColor: index / spectrogramData.length <= playedFraction ? "#529ef4" : "#4B5563",
+                                    }}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </div>
+                <div className="sm:hidden w-full pr-16">
+                    <Slider value={playedFraction * 100} aria-labelledby="basic" onChange={updateFraction} />
+                </div>
+                <time className="inline-block text-sm leading-[19px] mt-[5px] mb-0.5 text-neutral-500">
+                    {!playedFraction ? media.duration.formatted : remainingTime}
+                </time>
+            </div>
+            <div className="hidden absolute">
+                <ReactPlayer
+                    ref={playerRef}
+                    url={media.url}
+                    playing={playing}
+                    controls={true}
+                    width="0"
+                    height="0"
+                    onEnded={() => {
+                        setPlaying(false);
+                        updateFraction(0);
+                    }}
+                />
+            </div>
+        </div>
+    );
+});
+
+AudioPost.displayName = "AudioPost";

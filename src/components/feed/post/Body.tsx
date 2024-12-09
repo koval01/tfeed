@@ -34,6 +34,7 @@ import {
 import { Avatar } from "@/components/avatar/Avatar";
 import { VKMediaGrid } from "@/components/media/Media";
 
+import { AudioPost } from "@/components/feed/post/Audio";
 import { GifPost } from "@/components/feed/post/GifPost";
 import { Poll } from "@/components/feed/post/Poll";
 import { RoundVideo } from "@/components/feed/post/RoundVideo";
@@ -304,7 +305,9 @@ const PostSupport = ({ children, post }: PropsWithChildren<{ post: Post }>) => {
     const isSupported = !!(
         content.text?.string ||
         content.poll ||
-        content.media?.some(media => ["video", "image", "roundvideo", "sticker", "gif"].includes(media.type))
+        content.media?.some(media => [
+            "video", "image", "roundvideo", "sticker", "gif", "voice", "audio"
+        ].includes(media.type))
     );
 
     return isSupported ? children : <PostNotSupported />
@@ -322,5 +325,6 @@ export const PostContent = React.memo(({ channel, post }: PostBodyProps) => (
         <RoundVideo post={post} />
         <Sticker post={post} />
         <GifPost post={post} />
+        <AudioPost post={post} />
     </PostSupport>
 ));
