@@ -2,3 +2,13 @@ body {
     overscroll-behavior-y: none;
     overscroll-behavior-x: none;
 }
+
+::-moz-selection {
+  color: var(--vkui--color_text_contrast);
+  background: var(--vkui--color_background_accent);
+}
+
+::selection {
+  color: var(--vkui--color_text_contrast);
+  background: var(--vkui--color_background_accent);
+}
