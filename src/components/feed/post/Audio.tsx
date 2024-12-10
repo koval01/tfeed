@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback, memo } from "react";
 import type { Post } from "@/types";
 
 import { Icon28Pause, Icon28Play } from "@vkontakte/icons";
@@ -8,7 +8,84 @@ import ReactPlayer from "react-player";
 import { clamp } from "lodash";
 import { cn } from "@/lib/utils";
 
-export const AudioPost = React.memo(({ post }: { post: Post }) => {
+type AudioSpectrogramProps = {
+    data: number[];
+    playedFraction: number;
+    onMouseDown: (event: React.MouseEvent) => void;
+    onMouseMove: (event: React.MouseEvent) => void;
+    onTouchStart: (event: React.TouchEvent) => void;
+    onTouchMove: (event: React.TouchEvent) => void;
+    spectrogramRef: React.RefObject<HTMLDivElement | null>;
+};
+
+const AudioSpectrogram = memo<AudioSpectrogramProps>(
+    ({ data, playedFraction, onMouseDown, onMouseMove, onTouchStart, onTouchMove, spectrogramRef }) => (
+        <div
+            ref={spectrogramRef}
+            className="relative pt-0 mt-0 h-4 overflow-hidden select-none max-sm:hidden cursor-pointer w-full"
+            onMouseDown={onMouseDown}
+            onMouseMove={onMouseMove}
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+        >
+            <div className="block">
+                <div className="absolute h-3.5 leading-[14px] whitespace-nowrap">
+                    {data.map((value, index) => (
+                        <s
+                            key={`spectrogram-bg-${index}`}
+                            className={cn(
+                                "inline-block max-lg:w-[3.5px] max-sm:w-0.5 lg:w-[2.5px]",
+                                "pt-1 -mt-1 mr-0.5 rounded-sm align-bottom box-border",
+                                "bg-neutral-300 dark:bg-neutral-600"
+                            )}
+                            style={{ height: `${value * 3}%` }}
+                        />
+                    ))}
+                </div>
+            </div>
+            <div
+                className="relative h-[18px] -mt-1 pt-1 overflow-hidden w-0"
+                style={{ width: `${playedFraction * 100}%` }}
+            >
+                <div className="absolute h-3.5 leading-[14px] whitespace-nowrap">
+                    {data.map((value, index) => (
+                        <s
+                            key={`spectrogram-fg-${index}`}
+                            className={cn(
+                                "inline-block max-lg:w-[3.5px] max-sm:w-0.5 lg:w-[2.5px]",
+                                "mr-0.5 pt-1 -mt-1 rounded-sm align-bottom box-border",
+                                "bg-[--vkui--color_background_accent]"
+                            )}
+                            style={{ height: `${value * 3}%` }}
+                        />
+                    ))}
+                </div>
+            </div>
+        </div>
+    )
+);
+
+AudioSpectrogram.displayName = "AudioSpectrogram";
+
+type AudioControlsProps = {
+    playing: boolean;
+    setPlaying: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const AudioControls = memo<AudioControlsProps>(({ playing, setPlaying }) => (
+    <button
+        className="inline-block float-left size-12 rounded-full bg-[--vkui--color_background_accent]"
+        onClick={() => setPlaying((prev) => !prev)}
+    >
+        <div className="flex justify-center m-auto text-[--vkui--color_text_contrast]">
+            {!playing ? <Icon28Play /> : <Icon28Pause />}
+        </div>
+    </button>
+));
+
+AudioControls.displayName = "AudioControls";
+
+export const AudioPost = memo(({ post }: { post: Post }) => {
     const [playing, setPlaying] = useState(false);
     const [playedFraction, setPlayedFraction] = useState(0);
     const [remainingTime, setRemainingTime] = useState<string>("0:00");
@@ -16,6 +93,13 @@ export const AudioPost = React.memo(({ post }: { post: Post }) => {
 
     const playerRef = useRef<ReactPlayer | null>(null);
     const spectrogramRef = useRef<HTMLDivElement>(null);
+
+    const formatTime = useCallback((seconds: number): string => {
+        const clampedSeconds = clamp(seconds, 0, Infinity);
+        const minutes = Math.floor(clampedSeconds / 60);
+        const remainingSeconds = Math.floor(clampedSeconds % 60);
+        return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+    }, []);
 
     const updateFraction = useCallback((value: number) => {
         const fraction = value / 100;
@@ -27,20 +111,16 @@ export const AudioPost = React.memo(({ post }: { post: Post }) => {
             setRemainingTime(formatTime(duration - newTime));
             playerRef.current.seekTo(fraction, "fraction");
         }
-    }, []);
+    }, [formatTime]);
 
-    const handleSpectrogramInteraction = useCallback(
+    const handleInteraction = useCallback(
         (event: React.MouseEvent | React.TouchEvent) => {
             if (!spectrogramRef.current) return;
 
             const rect = spectrogramRef.current.getBoundingClientRect();
-            const clientX = 'touches' in event
-                ? event.touches[0].clientX
-                : event.clientX;
-
+            const clientX = "touches" in event ? event.touches[0].clientX : event.clientX;
             const relativeX = clientX - rect.left;
-            const boundedX = Math.max(0, Math.min(relativeX, rect.width));
-            const fraction = boundedX / rect.width;
+            const fraction = clamp(relativeX / rect.width, 0, 1);
 
             updateFraction(fraction * 100);
         },
@@ -49,148 +129,72 @@ export const AudioPost = React.memo(({ post }: { post: Post }) => {
 
     const handleMouseDown = useCallback((event: React.MouseEvent) => {
         setIsDragging(true);
-        handleSpectrogramInteraction(event);
-    }, [handleSpectrogramInteraction]);
-
-    const handleMouseMove = useCallback((event: React.MouseEvent) => {
-        if (isDragging) {
-            handleSpectrogramInteraction(event);
-        }
-    }, [isDragging, handleSpectrogramInteraction]);
-
-    const handleMouseUp = useCallback(() => {
-        setIsDragging(false);
-    }, []);
+        handleInteraction(event);
+    }, [handleInteraction]);
 
     const handleTouchStart = useCallback((event: React.TouchEvent) => {
         setIsDragging(true);
-        handleSpectrogramInteraction(event);
-    }, [handleSpectrogramInteraction]);
+        handleInteraction(event);
+    }, [handleInteraction]);
 
-    const handleTouchMove = useCallback((event: React.TouchEvent) => {
-        if (isDragging) {
-            handleSpectrogramInteraction(event);
-        }
-    }, [isDragging, handleSpectrogramInteraction]);
-
-    const handleTouchEnd = useCallback(() => {
+    const handleMouseUpOrTouchEnd = useCallback(() => {
         setIsDragging(false);
     }, []);
 
     useEffect(() => {
-        document.addEventListener('mouseup', handleMouseUp);
-        document.addEventListener('touchend', handleTouchEnd);
+        if (!playing) return;
 
-        return () => {
-            document.removeEventListener('mouseup', handleMouseUp);
-            document.removeEventListener('touchend', handleTouchEnd);
-        };
-    }, [handleMouseUp, handleTouchEnd]);
-
-    useEffect(() => {
-        let animationFrameId: number | null = null;
-
-        const updatePlayedFractionAndTime = () => {
+        const intervalId = setInterval(() => {
             if (playerRef.current) {
                 const currentTime = playerRef.current.getCurrentTime();
                 const duration = playerRef.current.getDuration();
-
-                if (duration > 0) {
-                    setPlayedFraction(currentTime / duration);
-                    setRemainingTime(formatTime(duration - currentTime));
-                }
+                setPlayedFraction(currentTime / duration);
+                setRemainingTime(formatTime(duration - currentTime));
             }
-            animationFrameId = requestAnimationFrame(updatePlayedFractionAndTime);
-        };
+        }, 80);
 
-        if (playing) {
-            animationFrameId = requestAnimationFrame(updatePlayedFractionAndTime);
-        } else if (animationFrameId !== null) {
-            cancelAnimationFrame(animationFrameId);
-        }
+        return () => clearInterval(intervalId);
+    }, [playing, formatTime]);
+
+    useEffect(() => {
+        document.addEventListener("mouseup", handleMouseUpOrTouchEnd);
+        document.addEventListener("touchend", handleMouseUpOrTouchEnd);
 
         return () => {
-            if (animationFrameId !== null) {
-                cancelAnimationFrame(animationFrameId);
-            }
+            document.removeEventListener("mouseup", handleMouseUpOrTouchEnd);
+            document.removeEventListener("touchend", handleMouseUpOrTouchEnd);
         };
-    }, [playing]);
+    }, [handleMouseUpOrTouchEnd]);
 
-    if (!post.content.media?.[0] || !(["voice", "audio"].includes(post.content.media[0].type))) {
+    if (!post.content.media?.[0] || !["voice", "audio"].includes(post.content.media[0].type)) {
         return null;
     }
 
     const media = post.content.media[0];
-    const spectrogramData = media.waves ?
-        media.waves.split(",").map(Number)
-        :
-        Array.from({ length: 1e2 }, () => 1);
-
-    const formatTime = (seconds: number): string => {
-        const clampedSeconds = clamp(seconds, 0, Infinity);
-        const minutes = Math.floor(clampedSeconds / 60);
-        const remainingSeconds = Math.floor(clampedSeconds % 60);
-
-        return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
-    };
+    const spectrogramData = media.waves
+        ? media.waves.split(",").map(Number)
+        : Array.from({ length: 100 }, () => 1);
 
     return (
         <div className="block mt-3 mb-0 select-none">
-            <button
-                className="inline-block float-left size-12 rounded-full bg-[--vkui--color_background_accent]"
-                onClick={() => setPlaying(!playing)}
+            <AudioControls playing={playing} setPlaying={setPlaying} />
+            <div
+                className={cn(
+                    "ml-[60px] pt-1",
+                    "max-md:w-full max-md:max-w-[550px]",
+                    "md:max-lg:w-[calc(100%-80px)]",
+                    "lg:w-[calc(100%-64px)]"
+                )}
             >
-                <div className="flex justify-center m-auto text-[--vkui--color_text_contrast]">
-                    {!playing ? <Icon28Play /> : <Icon28Pause />}
-                </div>
-            </button>
-            <div className={cn(
-                "ml-[60px] pt-1",
-                "max-md:w-full max-md:max-w-[550px]",
-                "md:max-lg:w-[calc(100%-80px)]",
-                "lg:w-[calc(100%-64px)]"
-            )}>
-                <div
-                    ref={spectrogramRef}
-                    className="relative pt-0 mt-0 h-4 overflow-hidden select-none max-sm:hidden cursor-pointer w-full"
+                <AudioSpectrogram
+                    data={spectrogramData}
+                    playedFraction={playedFraction}
                     onMouseDown={handleMouseDown}
-                    onMouseMove={handleMouseMove}
+                    onMouseMove={(e) => isDragging && handleInteraction(e)}
                     onTouchStart={handleTouchStart}
-                    onTouchMove={handleTouchMove}
-                >
-                    <div className="block">
-                        <div className="absolute h-3.5 leading-[14px] whitespace-nowrap">
-                            {spectrogramData.map((value, index) => (
-                                <s
-                                    key={`audio__s_${post.id}_${index}`}
-                                    className={cn(
-                                        "inline-block max-lg:w-[3.5px] max-sm:w-0.5 lg:w-[2.5px]",
-                                        "pt-1 -mt-1 mr-0.5 rounded-sm align-bottom box-border",
-                                        "bg-neutral-300 dark:bg-neutral-600"
-                                    )}
-                                    style={{ height: `${value * 3}%` }}
-                                />
-                            ))}
-                        </div>
-                    </div>
-                    <div className="relative h-[18px] -mt-1 pt-1 overflow-hidden w-0" style={{
-                        width: `${playedFraction * 100}%`
-                    }}>
-                        <div className="absolute h-3.5 leading-[14px] whitespace-nowrap">
-                            {spectrogramData.map((value, index) => (
-                                <s
-                                    key={`audio__s_${post.id}_${index}`}
-                                    className={cn(
-                                        "inline-block max-lg:w-[3.5px] max-sm:w-0.5 lg:w-[2.5px]",
-                                        "mr-0.5 pt-1 -mt-1 rounded-sm align-bottom box-border",
-                                        "bg-[--vkui--color_background_accent]"
-                                    )}
-                                    style={{ height: `${value * 3}%` }}
-                                />
-                            ))}
-                        </div>
-                    </div>
-                </div>
+                    onTouchMove={(e) => isDragging && handleInteraction(e)}
+                    spectrogramRef={spectrogramRef}
+                />
                 <div className="sm:hidden w-full pr-16">
                     <Slider value={playedFraction * 100} aria-labelledby="basic" onChange={updateFraction} />
                 </div>
@@ -198,20 +202,18 @@ export const AudioPost = React.memo(({ post }: { post: Post }) => {
                     {!playedFraction ? media.duration.formatted : remainingTime}
                 </time>
             </div>
-            <div className="hidden absolute">
-                <ReactPlayer
-                    ref={playerRef}
-                    url={media.url}
-                    playing={playing}
-                    controls={true}
-                    width="0"
-                    height="0"
-                    onEnded={() => {
-                        setPlaying(false);
-                        updateFraction(0);
-                    }}
-                />
-            </div>
+            <ReactPlayer
+                ref={playerRef}
+                url={media.url}
+                playing={playing}
+                controls={false}
+                width="0"
+                height="0"
+                onEnded={() => {
+                    setPlaying(false);
+                    updateFraction(0);
+                }}
+            />
         </div>
     );
 });
