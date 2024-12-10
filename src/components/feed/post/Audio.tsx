@@ -39,7 +39,8 @@ export const AudioPost = React.memo(({ post }: { post: Post }) => {
                 : event.clientX;
 
             const relativeX = clientX - rect.left;
-            const fraction = clamp(relativeX / rect.width, 0, 1);
+            const boundedX = Math.max(0, Math.min(relativeX, rect.width));
+            const fraction = boundedX / rect.width;
 
             updateFraction(fraction * 100);
         },
@@ -134,7 +135,7 @@ export const AudioPost = React.memo(({ post }: { post: Post }) => {
     };
 
     return (
-        <div className="block mt-3 mb-0">
+        <div className="block mt-3 mb-0 select-none">
             <button
                 className="inline-block float-left size-12 rounded-full bg-[--vkui--color_background_accent]"
                 onClick={() => setPlaying(!playing)}
@@ -143,10 +144,15 @@ export const AudioPost = React.memo(({ post }: { post: Post }) => {
                     {!playing ? <Icon28Play /> : <Icon28Pause />}
                 </div>
             </button>
-            <div className="ml-[60px] pt-[1px] sm:pt-0 w-full">
+            <div className={cn(
+                "ml-[60px] pt-[1px] sm:pt-0",
+                "max-md:w-full max-md:max-w-[550px]",
+                "md:max-lg:w-[calc(100%-80px)]",
+                "lg:w-[calc(100%-64px)]"
+            )}>
                 <div
                     ref={spectrogramRef}
-                    className="relative mt-1.5 h-3.5 overflow-hidden select-none max-sm:hidden cursor-pointer"
+                    className="relative mt-1.5 h-3.5 overflow-hidden select-none max-sm:hidden cursor-pointer w-full"
                     onMouseDown={handleMouseDown}
                     onMouseMove={handleMouseMove}
                     onTouchStart={handleTouchStart}
