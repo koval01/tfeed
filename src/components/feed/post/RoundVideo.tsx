@@ -29,7 +29,8 @@ const VideoControl = ({ isPlaying, isVisible, isBuffering, onToggle }: VideoCont
             "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
             "flex items-center justify-center rounded-full aspect-square",
             "bg-black/50 backdrop-blur-md hover:bg-black/60 transition-opacity duration-300",
-            isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
+            // Show if either isBuffering is true OR isVisible is true
+            isBuffering || isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
         style={{
             width: "clamp(40px, 15%, 60px)",
@@ -121,31 +122,77 @@ export const RoundVideo = React.memo(({ post }: { post: Post }) => {
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const [isBuffering, setIsBuffering] = useState<boolean>(false);
     const [isLoaded, setIsLoaded] = useState<boolean>(false);
+    const [isVideoLoaded, setIsVideoLoaded] = useState<boolean>(false);
     const [isButtonVisible, setIsButtonVisible] = useState<boolean>(true);
+    const [isVisible, setIsVisible] = useState<boolean>(false);
+
+    const containerRef = useRef<HTMLDivElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
 
     useMediaPlayback(videoRef);
 
-    // Determine whether the device is mobile
     const isMobile = window.innerWidth <= 768;
-
-    // Extract the video media from the post
     const videoMedia = post.content.media?.[0];
     const isRoundVideo = videoMedia && videoMedia.type === "roundvideo";
 
-    /**
-     * Effect to hide the play/pause button after 1 second on mobile when the video is playing
-     */
+    // Intersection Observer setup
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    const isIntersecting = entry.isIntersecting;
+                    setIsVisible(isIntersecting);
+
+                    if (!isIntersecting) {
+                        setIsLoaded(false);
+
+                        if (videoRef.current) {
+                            videoRef.current.pause();
+                            setIsPlaying(false);
+                        }
+                    }
+                });
+            },
+            { threshold: 0.1 }
+        );
+
+        if (containerRef.current) {
+            observer.observe(containerRef.current);
+        }
+
+        return () => {
+            observer.disconnect();
+        };
+    }, []);
+
+    // Handle loading state based on both video loaded and visibility
+    useEffect(() => {
+        if (isVideoLoaded && isVisible) {
+            setIsLoaded(true);
+        }
+    }, [isVideoLoaded, isVisible]);
+
+    // Cleanup effect
+    useEffect(() => {
+        return () => {
+            setIsLoaded(false);
+            setIsVideoLoaded(false);
+            setIsVisible(false);
+        };
+    }, []);
+
     useEffect(() => {
         if (isPlaying && (isMobile || !isBuffering)) {
-            const timeout = setTimeout(() => setIsButtonVisible(false), 1e3);
+            const timeout = setTimeout(() => {
+                // Only hide the button if we're not buffering
+                if (!isBuffering) {
+                    setIsButtonVisible(false);
+                }
+            }, 1e3);
             return () => clearTimeout(timeout);
         }
     }, [isPlaying, isMobile, isBuffering]);
 
-    /**
-     * Handles video playback toggling
-     */
     const togglePlay = useCallback(() => {
         const video = videoRef.current;
         if (!video) return;
@@ -159,23 +206,27 @@ export const RoundVideo = React.memo(({ post }: { post: Post }) => {
             setIsPlaying(false);
             setIsButtonVisible(true);
         }
-    }, [videoRef, isMobile]);
+    }, [isMobile]);
 
-    // If the post doesn't have a valid round video, render `null`
+    const handleLoaded = useCallback(() => {
+        setIsVideoLoaded(true);
+    }, []);
+
     if (!isRoundVideo) {
         return null;
     }
 
     return (
         <div
+            ref={containerRef}
             className={cn(
                 "relative size-full max-lg:max-w-96 rounded-full overflow-hidden",
                 "shadow-lg border-2 border-[--vkui--color_image_border_alpha] aspect-square"
             )}
             onMouseEnter={() => !isMobile && setIsButtonVisible(true)}
-            onMouseLeave={() => isPlaying && setIsButtonVisible(false)}
+            onMouseLeave={() => isPlaying && !isBuffering && setIsButtonVisible(false)}
             onTouchStart={() => isMobile && setIsButtonVisible(true)}
-            onTouchEnd={() => isMobile && setIsButtonVisible(false)}
+            onTouchEnd={() => isMobile && !isBuffering && setIsButtonVisible(false)}
         >
             <video
                 ref={videoRef}
@@ -193,9 +244,9 @@ export const RoundVideo = React.memo(({ post }: { post: Post }) => {
                     isMobile && setIsButtonVisible(true);
                 }}
                 onEnded={() => setIsButtonVisible(true)}
-                onCanPlayThrough={() => setIsLoaded(true)}
                 onWaiting={() => setIsBuffering(true)}
                 onCanPlay={() => setIsBuffering(false)}
+                onCanPlayThrough={handleLoaded}
             />
 
             <VideoTime videoRef={videoRef} />
