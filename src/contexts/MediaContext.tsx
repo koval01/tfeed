@@ -6,6 +6,7 @@ type MediaElement = HTMLMediaElement | ReactPlayer;
 interface MediaContextType {
     registerMedia: (element: MediaElement) => () => void;
     playMedia: (element: MediaElement) => void;
+    pauseAllMedia: () => void;
 }
 
 const MediaContext = createContext<MediaContextType | undefined>(undefined);
@@ -30,15 +31,24 @@ export const MediaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 if (element instanceof HTMLMediaElement && !element.paused) {
                     element.pause();
                 } else if (isReactPlayer(element)) {
-                    // React-player specific handling
                     element.getInternalPlayer()?.pause();
                 }
             }
         });
     };
 
+    const pauseAllMedia = () => {
+        mediaElements.current.forEach((element) => {
+            if (element instanceof HTMLMediaElement && !element.paused) {
+                element.pause();
+            } else if (isReactPlayer(element)) {
+                element.getInternalPlayer()?.pause();
+            }
+        });
+    };
+
     return (
-        <MediaContext.Provider value={{ registerMedia, playMedia }}>
+        <MediaContext.Provider value={{ registerMedia, playMedia, pauseAllMedia }}>
             {children}
         </MediaContext.Provider>
     );

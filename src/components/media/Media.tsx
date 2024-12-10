@@ -6,6 +6,7 @@ import type { AppDispatch } from '@/lib/store';
 import type { Media } from '@/types/media';
 
 import { useDispatch } from 'react-redux';
+import { useMediaControl } from "@/hooks/services/useMediaControl";
 
 import { blockScroll } from '@/store/scrollSlice';
 import { openViewer, setVisible } from '@/store/viewerSlice';
@@ -34,6 +35,7 @@ const FallbackIcon: React.FC = () => (
 
 export const VKMediaGrid = React.memo<VKMediaGridProps>(({ mediaCollection }) => {
     const dispatch = useDispatch<AppDispatch>();
+    const { stopAllMedia } = useMediaControl();
 
     const mediaCount = mediaCollection.length;
     if (!mediaCount) return;
@@ -47,6 +49,8 @@ export const VKMediaGrid = React.memo<VKMediaGridProps>(({ mediaCollection }) =>
 
         const tempImage = new window.Image();
         tempImage.src = mediaItem.url;
+
+        stopAllMedia();
 
         tempImage.onload = () => {
             const { naturalWidth, naturalHeight } = tempImage;
