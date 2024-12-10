@@ -131,12 +131,7 @@ export const AudioPost = memo(({ post }: { post: Post }) => {
         [updateFraction]
     );
 
-    const handleMouseDown = useCallback((event: React.MouseEvent) => {
-        setIsDragging(true);
-        handleInteraction(event);
-    }, [handleInteraction]);
-
-    const handleTouchStart = useCallback((event: React.TouchEvent) => {
+    const handleTouchStart = useCallback((event: React.TouchEvent | React.MouseEvent) => {
         setIsDragging(true);
         handleInteraction(event);
     }, [handleInteraction]);
@@ -208,7 +203,7 @@ export const AudioPost = memo(({ post }: { post: Post }) => {
                 <AudioSpectrogram
                     data={spectrogramData}
                     playedFraction={playedFraction}
-                    onMouseDown={handleMouseDown}
+                    onMouseDown={handleTouchStart}
                     onMouseMove={(e) => isDragging && handleInteraction(e)}
                     onTouchStart={handleTouchStart}
                     onTouchMove={(e) => isDragging && handleInteraction(e)}
