@@ -27,6 +27,7 @@ const Message = ({ channelName }: { channelName?: string }) => (
             components={{
                 b: <b className="text-[--vkui--color_icon_accent]" />
             }}
+            key={`verified_message__${Math.random()}`}
         />
     ) : (
         <p><Trans i18nKey="verified_basic" /></p>
