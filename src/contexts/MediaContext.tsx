@@ -1,26 +1,38 @@
 import React, { createContext, useContext, useRef } from 'react';
+import ReactPlayer from 'react-player';
+
+type MediaElement = HTMLMediaElement | ReactPlayer;
 
 interface MediaContextType {
-    registerMedia: (element: HTMLMediaElement) => () => void;
-    playMedia: (element: HTMLMediaElement) => void;
+    registerMedia: (element: MediaElement) => () => void;
+    playMedia: (element: MediaElement) => void;
 }
 
 const MediaContext = createContext<MediaContextType | undefined>(undefined);
 
-export const MediaProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const mediaElements = useRef<Set<HTMLMediaElement>>(new Set());
+const isReactPlayer = (element: MediaElement): element is ReactPlayer => {
+    return 'getInternalPlayer' in element;
+};
 
-    const registerMedia = (element: HTMLMediaElement) => {
+export const MediaProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const mediaElements = useRef<Set<MediaElement>>(new Set());
+
+    const registerMedia = (element: MediaElement) => {
         mediaElements.current.add(element);
         return () => {
             mediaElements.current.delete(element);
         };
     };
 
-    const playMedia = (elementToPlay: HTMLMediaElement) => {
+    const playMedia = (elementToPlay: MediaElement) => {
         mediaElements.current.forEach((element) => {
-            if (element !== elementToPlay && !element.paused) {
-                element.pause();
+            if (element !== elementToPlay) {
+                if (element instanceof HTMLMediaElement && !element.paused) {
+                    element.pause();
+                } else if (isReactPlayer(element)) {
+                    // React-player specific handling
+                    element.getInternalPlayer()?.pause();
+                }
             }
         });
     };

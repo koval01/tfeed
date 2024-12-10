@@ -1,8 +1,18 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useMedia } from '@/contexts/MediaContext';
 
-export const useMediaPlayback = (mediaRef: React.RefObject<HTMLMediaElement | null>) => {
+import ReactPlayer from 'react-player';
+
+type MediaRef = React.RefObject<HTMLMediaElement | ReactPlayer | null>;
+
+export const useMediaPlayback = (mediaRef: MediaRef) => {
     const { registerMedia, playMedia } = useMedia();
+
+    const handlePlay = useCallback(() => {
+        if (mediaRef.current) {
+            playMedia(mediaRef.current);
+        }
+    }, [mediaRef, playMedia]);
 
     useEffect(() => {
         const element = mediaRef.current;
@@ -10,15 +20,21 @@ export const useMediaPlayback = (mediaRef: React.RefObject<HTMLMediaElement | nu
 
         const unregister = registerMedia(element);
 
-        const handlePlay = () => {
-            playMedia(element);
-        };
+        if (element instanceof HTMLMediaElement) {
+            element.addEventListener('play', handlePlay);
 
-        element.addEventListener('play', handlePlay);
+            return () => {
+                element.removeEventListener('play', handlePlay);
+                unregister();
+            };
+        } else {
+            return () => {
+                unregister();
+            };
+        }
+    }, [mediaRef, registerMedia, handlePlay]);
 
-        return () => {
-            element.removeEventListener('play', handlePlay);
-            unregister();
-        };
-    }, [mediaRef, registerMedia, playMedia]);
+    return {
+        onPlay: handlePlay
+    };
 };
