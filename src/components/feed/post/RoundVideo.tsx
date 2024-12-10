@@ -110,7 +110,7 @@ export const RoundVideo = React.memo(({ post }: { post: Post }) => {
                 poster={videoMedia.thumb}
                 className="w-full h-full object-cover aspect-square"
                 controls={false}
-                loop
+                loop={false}
                 onClick={togglePlay}
                 onPlay={() => {
                     setIsPlaying(true);
