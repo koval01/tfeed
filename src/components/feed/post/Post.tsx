@@ -41,6 +41,8 @@ import { Forward } from "@/components/feed/post/Forward";
 import { Button } from "@/components/ui/Button";
 import { ThreeDot } from "react-loading-indicators";
 
+import { MediaProvider } from "@/contexts/MediaContext";
+
 /**
  * Displays the content of a single post, including forwarded content if applicable.
  */
@@ -132,16 +134,18 @@ export const Posts = ({ channel, posts, onRefresh, isFetching, isFetchingMore }:
     }, [channel]);
 
     return (
-        <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>
-            <PullToRefresh onRefresh={onRefresh} isFetching={isFetching}>
-                <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto w-full">
-                    <VirtualizedListWrapper
-                        items={posts}
-                        renderItem={renderItem}
-                        loadMoreButton={<LoadingMore isFetchingMore={isFetchingMore} />}
-                    />
-                </div>
-            </PullToRefresh>
-        </SplitCol>
+        <MediaProvider>
+            <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>
+                <PullToRefresh onRefresh={onRefresh} isFetching={isFetching}>
+                    <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto w-full">
+                        <VirtualizedListWrapper
+                            items={posts}
+                            renderItem={renderItem}
+                            loadMoreButton={<LoadingMore isFetchingMore={isFetchingMore} />}
+                        />
+                    </div>
+                </PullToRefresh>
+            </SplitCol>
+        </MediaProvider>
     );
 }

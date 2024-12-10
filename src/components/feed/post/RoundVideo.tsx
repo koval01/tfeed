@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import type { Post } from "@/types";
 
+import { useMediaPlayback } from '@/hooks/services/useMediaPlayback';
+
 import { Icon28Play, Icon28Pause } from "@vkontakte/icons";
 import { cn } from "@/lib/utils";
 import { t } from "i18next";
@@ -48,6 +50,8 @@ export const RoundVideo = React.memo(({ post }: { post: Post }) => {
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const [isButtonVisible, setIsButtonVisible] = useState<boolean>(true);
     const videoRef = useRef<HTMLVideoElement>(null);
+
+    useMediaPlayback(videoRef);
 
     // Determine whether the device is mobile
     const isMobile = window.innerWidth <= 768;
