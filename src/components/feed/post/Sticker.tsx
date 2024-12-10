@@ -2,7 +2,7 @@ import React from "react";
 import type { Post } from "@/types";
 
 import { Icon28StickerSmileOutline } from "@vkontakte/icons";
-import { Div, Headline } from "@vkontakte/vkui";
+import { Div, Headline, Spacing } from "@vkontakte/vkui";
 import { LazyImage as Image } from "@/components/media/LazyImage";
 import { t } from "i18next";
 
@@ -70,6 +70,7 @@ export const Sticker = React.memo(({ post }: { post: Post }) => {
 
     return (
         <div className="block">
+            {post.content.text && <Spacing size={12} />}
             <StickerComponent post={post} />
         </div>
     );
