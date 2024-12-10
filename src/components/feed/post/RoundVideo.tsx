@@ -3,7 +3,9 @@ import type { Post } from "@/types";
 
 import { useMediaPlayback } from '@/hooks/services/useMediaPlayback';
 
-import { Icon28Play, Icon28Pause } from "@vkontakte/icons";
+import { LazyImage as Image } from "@/components/media/LazyImage";
+import { Icon28Play, Icon28Pause, Icon28Video } from "@vkontakte/icons";
+
 import { cn } from "@/lib/utils";
 import { t } from "i18next";
 
@@ -41,6 +43,20 @@ const VideoControl = ({ isPlaying, isVisible, onToggle }: VideoControlProps) => 
         )}
     </button>
 );
+
+const VideoPreview = ({ thumb }: { thumb?: string }) => (
+    <Image
+        src={thumb}
+        alt={"Round video preview"}
+        widthSize={"100%"}
+        heightSize={"100%"}
+        noBorder
+        keepAspectRatio
+        withTransparentBackground
+        className="absolute z-5 top-0 w-full h-full object-cover aspect-square rounded-none"
+        disableLoader
+    />
+)
 
 /**
  * Main round video component that displays circular video with play/pause controls
@@ -107,7 +123,8 @@ export const RoundVideo = React.memo(({ post }: { post: Post }) => {
             <video
                 ref={videoRef}
                 src={videoMedia.url}
-                poster={videoMedia.thumb}
+                // poster={videoMedia.thumb}
+                // disable poster because used overlay thumb
                 className="w-full h-full object-cover aspect-square"
                 controls={false}
                 loop={false}
@@ -121,6 +138,8 @@ export const RoundVideo = React.memo(({ post }: { post: Post }) => {
                     isMobile && setIsButtonVisible(true);
                 }}
             />
+
+            <VideoPreview thumb={videoMedia?.thumb} />
 
             <VideoControl
                 isPlaying={isPlaying}

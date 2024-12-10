@@ -37,7 +37,7 @@ const withLazyLoad = (ImageComponent: React.ComponentType<any>) => {
         };
 
         return (
-            <div ref={imgRef}>
+            <div ref={imgRef} className="block" data-component="LazyImage">
                 {isIntersecting && !isLoaded && !disableLoader && (
                     <div className="absolute top-0 animate-pulse bg-neutral-300 dark:bg-neutral-800 w-full h-full" />
                 )}
