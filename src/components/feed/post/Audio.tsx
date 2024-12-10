@@ -145,30 +145,45 @@ export const AudioPost = React.memo(({ post }: { post: Post }) => {
                 </div>
             </button>
             <div className={cn(
-                "ml-[60px] pt-[1px] sm:pt-0",
+                "ml-[60px] pt-1",
                 "max-md:w-full max-md:max-w-[550px]",
                 "md:max-lg:w-[calc(100%-80px)]",
                 "lg:w-[calc(100%-64px)]"
             )}>
                 <div
                     ref={spectrogramRef}
-                    className="relative mt-1.5 h-3.5 overflow-hidden select-none max-sm:hidden cursor-pointer w-full"
+                    className="relative pt-0 mt-0 h-4 overflow-hidden select-none max-sm:hidden cursor-pointer w-full"
                     onMouseDown={handleMouseDown}
                     onMouseMove={handleMouseMove}
                     onTouchStart={handleTouchStart}
                     onTouchMove={handleTouchMove}
                 >
-                    <div className="block max-w-full">
-                        <div className="absolute h-3.5 leading-[14px] whitespace-nowrap w-full">
+                    <div className="block">
+                        <div className="absolute h-3.5 leading-[14px] whitespace-nowrap">
                             {spectrogramData.map((value, index) => (
                                 <s
                                     key={`audio__s_${post.id}_${index}`}
                                     className={cn(
                                         "inline-block max-lg:w-[3.5px] max-sm:w-0.5 lg:w-[2.5px]",
                                         "pt-1 -mt-1 mr-0.5 rounded-sm align-bottom box-border",
-                                        index / spectrogramData.length <= playedFraction
-                                            ? "bg-[--vkui--color_background_accent]"
-                                            : "bg-neutral-300 dark:bg-neutral-600",
+                                        "bg-neutral-300 dark:bg-neutral-600"
+                                    )}
+                                    style={{ height: `${value * 3}%` }}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                    <div className="relative h-[18px] -mt-1 pt-1 overflow-hidden w-0" style={{
+                        width: `${playedFraction * 100}%`
+                    }}>
+                        <div className="absolute h-3.5 leading-[14px] whitespace-nowrap">
+                            {spectrogramData.map((value, index) => (
+                                <s
+                                    key={`audio__s_${post.id}_${index}`}
+                                    className={cn(
+                                        "inline-block max-lg:w-[3.5px] max-sm:w-0.5 lg:w-[2.5px]",
+                                        "mr-0.5 pt-1 -mt-1 rounded-sm align-bottom box-border",
+                                        "bg-[--vkui--color_background_accent]"
                                     )}
                                     style={{ height: `${value * 3}%` }}
                                 />
