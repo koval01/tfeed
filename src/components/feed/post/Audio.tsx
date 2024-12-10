@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback, memo } from "react";
 import type { Post } from "@/types";
 
+import { useMediaPlayback } from "@/hooks/services/useMediaPlayback";
+
 import { Icon28Pause, Icon28Play } from "@vkontakte/icons";
 import { Slider } from "@vkontakte/vkui";
 
@@ -94,6 +96,8 @@ export const AudioPost = memo(({ post }: { post: Post }) => {
     const playerRef = useRef<ReactPlayer | null>(null);
     const spectrogramRef = useRef<HTMLDivElement>(null);
 
+    const { onPlay } = useMediaPlayback(playerRef);
+
     const formatTime = useCallback((seconds: number): string => {
         const clampedSeconds = clamp(seconds, 0, Infinity);
         const minutes = Math.floor(clampedSeconds / 60);
@@ -141,6 +145,21 @@ export const AudioPost = memo(({ post }: { post: Post }) => {
         setIsDragging(false);
     }, []);
 
+    const handlePlay = useCallback(() => {
+        setPlaying(true);
+        onPlay();
+    }, [onPlay]);
+
+    const handlePlayPause = useCallback(() => {
+        if (playing) {
+            setPlaying(false);
+            playerRef.current?.getInternalPlayer()?.pause();
+        } else {
+            setPlaying(true);
+            onPlay();
+        }
+    }, [playing, onPlay]);
+
     useEffect(() => {
         if (!playing) return;
 
@@ -177,7 +196,7 @@ export const AudioPost = memo(({ post }: { post: Post }) => {
 
     return (
         <div className="block mt-3 mb-0 select-none">
-            <AudioControls playing={playing} setPlaying={setPlaying} />
+            <AudioControls playing={playing} setPlaying={handlePlayPause} />
             <div
                 className={cn(
                     "ml-[60px] pt-1",
@@ -206,6 +225,8 @@ export const AudioPost = memo(({ post }: { post: Post }) => {
                 ref={playerRef}
                 url={media.url}
                 playing={playing}
+                onPlay={handlePlay}
+                onPause={() => setPlaying(false)}
                 controls={false}
                 width="0"
                 height="0"
