@@ -52,7 +52,7 @@ const VirtualizedListWrapper = <T extends WithId>({
                 ref={virtuosoRef}
                 className="w-full"
                 data={items}
-                overscan={1e2} // Number of items to render outside visible area
+                overscan={6e2} // Number of items to render outside visible area
                 useWindowScroll
                 components={components}
                 itemContent={(index, item) => renderItem(item, index)}
