@@ -231,6 +231,7 @@ export const RoundVideo = React.memo(({ post }: { post: Post }) => {
             <video
                 ref={videoRef}
                 src={videoMedia.url}
+                poster={videoMedia?.thumb}
                 className="w-full h-full object-cover aspect-square"
                 controls={false}
                 loop={false}
