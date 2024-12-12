@@ -8,6 +8,7 @@ export type {
     Post, 
     Poll,
     PollOptions,
+    PreviewLink,
     Media, 
     Offset, 
     Forwarded,

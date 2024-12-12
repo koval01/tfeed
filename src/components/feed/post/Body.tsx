@@ -34,13 +34,14 @@ import {
 import { Avatar } from "@/components/avatar/Avatar";
 import { VKMediaGrid } from "@/components/media/Media";
 
+import { Poll } from "@/components/feed/post/Poll";
 import { AudioPost } from "@/components/feed/post/Audio";
 import { GifPost } from "@/components/feed/post/GifPost";
-import { Poll } from "@/components/feed/post/Poll";
-import { RoundVideo } from "@/components/feed/post/RoundVideo";
 import { Sticker } from "@/components/feed/post/Sticker";
 import { Verified } from "@/components/feed/post/Verified";
+import { RoundVideo } from "@/components/feed/post/RoundVideo";
 import { TextComponent } from "@/components/feed/TextComponent";
+import { PreviewLink } from "@/components/feed/post/PreviewLink";
 
 import { convertMediaArray } from "@/helpers/mediaConvert";
 import { t } from "i18next";
@@ -326,5 +327,6 @@ export const PostContent = React.memo(({ channel, post }: PostBodyProps) => (
         <Sticker post={post} />
         <GifPost post={post} />
         <AudioPost post={post} />
+        <PreviewLink post={post} />
     </PostSupport>
 ));

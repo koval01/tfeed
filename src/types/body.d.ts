@@ -62,12 +62,21 @@ interface Reply {
     to_message: number;
 }
 
+export interface PreviewLink {
+    description?: ParsedAndRaw;
+    site_name: string;
+    thumb?: string;
+    title?: string;
+    url: string;
+}
+
 interface ContentPost {
     text: Text;
     media: Media[];
     poll: Poll;
     inline: Inline;
     reply: Reply;
+    preview_link: PreviewLink;
 }
 
 interface Inline {
