@@ -18,18 +18,19 @@ const Fallback = () => (
 );
 
 const ImageSticker = ({ url }: { url: string }) => (
-    <Image
-        src={url}
-        alt={"Sticker"}
-        widthSize={"auto"}
-        heightSize={"auto"}
-        fallbackIcon={<Fallback />}
-        noBorder
-        keepAspectRatio
-        withTransparentBackground
-        className="!max-w-72 !min-h-40 rounded-none"
-        disableLoader
-    />
+    <div className="relative block w-fit h-auto">
+        <Image
+            src={url}
+            alt={"Sticker"}
+            widthSize={"100%"}
+            heightSize={"100%"}
+            fallbackIcon={<Fallback />}
+            noBorder
+            keepAspectRatio
+            withTransparentBackground
+            className="!max-w-72 !min-w-full rounded-none aspect-square"
+        />
+    </div>
 )
 
 const StickerComponent = ({ post }: { post: Post }) => {
