@@ -39,25 +39,26 @@ const VideoControl = ({ isPlaying, isVisible, isBuffering, onToggle }: VideoCont
         onClick={onToggle}
         aria-label={t("Play media button")}
     >
-        {isPlaying ? isBuffering ? (
-            <Spinner size="l" />
-        ) : (
-            <Icon28Pause className="w-1/2 h-1/2 text-[--vkui--color_text_contrast]" />
-        ) : (
-            <Icon28Play className="w-1/2 h-1/2 text-[--vkui--color_text_contrast]" />
-        )}
+        <div className="text-[--vkui--color_text_contrast]">
+            {isPlaying ? isBuffering ? (
+                <Spinner size="l" className="text-inherit" />
+            ) : (
+                <Icon28Pause className="size-1/2" />
+            ) : (
+                <Icon28Play className="size-1/2" />
+            )}
+        </div>
     </button>
 );
 
 const VideoPreview = ({ thumb, isLoaded }: { thumb?: string, isLoaded: boolean }) => (
-    !isLoaded && <Image
+    !isLoaded  && <Image
         src={thumb}
         alt={"Round video preview"}
         widthSize={"100%"}
         heightSize={"100%"}
         noBorder
         keepAspectRatio
-        withTransparentBackground
         className="absolute z-5 top-0 w-full h-full object-cover aspect-square rounded-none"
     />
 );
@@ -103,7 +104,7 @@ const VideoTime = ({ videoRef }: { videoRef: React.RefObject<HTMLVideoElement | 
 
     return (
         <div
-            className="absolute z-5 bottom-0 left-1/2"
+            className="absolute z-10 bottom-0 left-1/2"
             style={{
                 transform: "translate(-50%, -50%)"
             }}
@@ -163,23 +164,16 @@ export const RoundVideo = React.memo(({ post }: { post: Post }) => {
         return () => {
             observer.disconnect();
         };
-    }, []);
+    }, [videoRef]);
 
     // Handle loading state based on both video loaded and visibility
     useEffect(() => {
         if (isVideoLoaded && isVisible) {
-            setIsLoaded(true);
+            // wait after isVisible changed
+            const timer = setTimeout(() => setIsLoaded(true), 5e2);
+            return () => clearTimeout(timer);
         }
     }, [isVideoLoaded, isVisible]);
-
-    // Cleanup effect
-    useEffect(() => {
-        return () => {
-            setIsLoaded(false);
-            setIsVideoLoaded(false);
-            setIsVisible(false);
-        };
-    }, []);
 
     useEffect(() => {
         if (isPlaying && (isMobile || !isBuffering)) {
@@ -208,10 +202,6 @@ export const RoundVideo = React.memo(({ post }: { post: Post }) => {
         }
     }, [isMobile]);
 
-    const handleLoaded = useCallback(() => {
-        setIsVideoLoaded(true);
-    }, []);
-
     if (!isRoundVideo) {
         return null;
     }
@@ -232,9 +222,10 @@ export const RoundVideo = React.memo(({ post }: { post: Post }) => {
                 ref={videoRef}
                 src={videoMedia.url}
                 poster={videoMedia?.thumb}
-                className="w-full h-full object-cover aspect-square"
+                className={cn("w-full h-full object-cover aspect-square", !isLoaded && "invisible")}
                 controls={false}
                 loop={false}
+                onLoadedData={() => setIsVideoLoaded(true)}
                 onClick={togglePlay}
                 onPlay={() => {
                     setIsPlaying(true);
@@ -247,7 +238,6 @@ export const RoundVideo = React.memo(({ post }: { post: Post }) => {
                 onEnded={() => setIsButtonVisible(true)}
                 onWaiting={() => setIsBuffering(true)}
                 onCanPlay={() => setIsBuffering(false)}
-                onCanPlayThrough={handleLoaded}
             />
 
             <VideoTime videoRef={videoRef} />
