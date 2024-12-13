@@ -95,7 +95,7 @@ const LoadingMore = ({ isFetchingMore }: LoadingMoreProps): JSX.Element => {
 /**
  * Displays an individual post with its metadata and content.
  */
-const Post = React.memo(({ item, channel, ...props }: PostProps & Record<string, any>): JSX.Element => {
+const Post = ({ item, channel, ...props }: PostProps & Record<string, any>): JSX.Element => {
     const { handleVisibility } = useAnalytics();
 
     return (
@@ -119,7 +119,7 @@ const Post = React.memo(({ item, channel, ...props }: PostProps & Record<string,
             <Separator className="md:hidden py-2 px-4" />
         </>
     );
-});
+};
 
 Post.displayName = "Post";
 
