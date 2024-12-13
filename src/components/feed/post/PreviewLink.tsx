@@ -28,5 +28,8 @@ const Preview = ({ preview }: { preview: PreviewLinkProp }) => (
 export const PreviewLink = ({ post }: { post: Post }) => {
     const preview = post.content.preview_link;
 
+    if (!preview?.site_name)
+        return null;
+
     return preview && <Preview preview={preview} />;
 };

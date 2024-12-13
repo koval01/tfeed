@@ -10,7 +10,25 @@ const nextConfig: NextConfig = {
         styledComponents: {
             pure: true
         }
-    }
+    },
+    experimental: {
+        optimizePackageImports: [
+            '@reduxjs/toolkit',
+            '@vkontakte/icons',
+            '@vkontakte/vkui',
+            'clsx',
+            'lodash',
+            'spoiled',
+            'i18next',
+            'react',
+            'react-dom',
+            'react-redux',
+            'react-player',
+            'react-virtuoso',
+            'react-loading-indicators',
+            'react-intersection-observer',
+        ],
+    },
 };
 
 export default withSentryConfig(nextConfig, {
