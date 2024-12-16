@@ -28,7 +28,11 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   generator: "Next.js",
-  robots: "index, follow",
+  robots: {
+    index: true,
+    follow: true,
+    nocache: true,
+  },
   alternates: { canonical: "https://tfeed.koval.page" },
   appLinks: {
     ios: {
