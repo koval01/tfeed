@@ -41,6 +41,9 @@ export const metadata: Metadata = {
       app_name: "Telegram",
       url: "tg://resolve?domain=telegram"
     }
+  },
+  appleWebApp: {
+    title: siteConfig.name
   }
 }
 
