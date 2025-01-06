@@ -15,8 +15,8 @@ importers:
         specifier: ^8.47.0
         version: 8.47.0(@opentelemetry/core@1.29.0(@opentelemetry/api@1.9.0))(@opentelemetry/instrumentation@0.56.0(@opentelemetry/api@1.9.0))(@opentelemetry/sdk-trace-base@1.29.0(@opentelemetry/api@1.9.0))(encoding@0.1.13)(next@15.1.0(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react@19.0.0)(webpack@5.97.1(@swc/core@1.9.1(@swc/helpers@0.5.15))(esbuild@0.17.19))
       '@vkontakte/icons':
-        specifier: ^2.159.0
-        version: 2.159.0(react@19.0.0)
+        specifier: ^2.160.0
+        version: 2.160.0(react@19.0.0)
       '@vkontakte/vkui':
         specifier: ^7.0.0
         version: 7.0.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -1407,8 +1407,8 @@ packages:
     peerDependencies:
       react: ^16.9.34 || ^17 || ^18
 
-  '@vkontakte/icons@2.159.0':
-    resolution: {integrity: sha512-rXVFHMycfFgZ5mPFW/nPT8tQ+4PsHtNkbBskkeuqbxKt+MfOMHnDrcGx3wIVRgAbO8sdt6XxMP5rlfTIP4tZiA==}
+  '@vkontakte/icons@2.160.0':
+    resolution: {integrity: sha512-1oWjaLxXIuto/Z88hCpF4q/xP9iSht9YTJAEImyaUOwM1kjXFvnF7txYOpGwKt8l8DW0qGmt+FBLSz+LZgf07A==}
     peerDependencies:
       react: ^16.9.34 || ^17 || ^18
 
@@ -5739,7 +5739,7 @@ snapshots:
       '@swc/helpers': 0.5.15
       react: 19.0.0
 
-  '@vkontakte/icons@2.159.0(react@19.0.0)':
+  '@vkontakte/icons@2.160.0(react@19.0.0)':
     dependencies:
       '@vkontakte/icons-sprite': 2.3.1(react@19.0.0)
       react: 19.0.0
@@ -5759,7 +5759,7 @@ snapshots:
   '@vkontakte/vkui@7.0.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
       '@swc/helpers': 0.5.15
-      '@vkontakte/icons': 2.159.0(react@19.0.0)
+      '@vkontakte/icons': 2.160.0(react@19.0.0)
       '@vkontakte/vkjs': 2.0.1
       '@vkontakte/vkui-floating-ui': 0.2.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       date-fns: 4.1.0
