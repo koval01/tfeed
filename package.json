@@ -42,7 +42,7 @@
   "devDependencies": {
     "@cloudflare/next-on-pages": "1.13.3",
     "@emotion/react": "^11.14.0",
-    "@types/lodash": "^4.17.13",
+    "@types/lodash": "^4.17.14",
     "@types/node": "^22.10.2",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
