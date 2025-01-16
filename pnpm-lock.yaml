@@ -18,8 +18,8 @@ importers:
         specifier: ^2.160.0
         version: 2.160.0(react@19.0.0)
       '@vkontakte/vkui':
-        specifier: ^7.0.0
-        version: 7.0.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: ^7.1.0
+        version: 7.1.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       axios:
         specifier: ^1.7.9
         version: 1.7.9
@@ -1421,11 +1421,11 @@ packages:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
 
-  '@vkontakte/vkui@7.0.0':
-    resolution: {integrity: sha512-WmBfTG6+Av6YRfh/XYjDDsSj1oePe4gy2lhiKGYykzcxoiAaKGjU8zlxSLi0Ow/kALBfqYX1XNBJ8rZPur6TSg==}
+  '@vkontakte/vkui@7.1.0':
+    resolution: {integrity: sha512-Fe9ug9mbcxYnl/xpRWJMNMfymXdreI0tTlqYXNMc2R3WBM4YFUF1jbCXtYMghozxmBtxWr88envgYayj3DeDzw==}
     peerDependencies:
-      react: ^18.2.0
-      react-dom: ^18.2.0
+      react: ^18.2.0 || ^19.0.0
+      react-dom: ^18.2.0 || ^19.0.0
 
   '@webassemblyjs/ast@1.14.1':
     resolution: {integrity: sha512-nuBEDgQfm1ccRp/8bCQrx1frohyufl4JlbMMZ4P1wpeOfDhF6FQkxZJ1b/e+PLwr6X1Nhw6OLme5usuBWYBvuQ==}
@@ -5760,7 +5760,7 @@ snapshots:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
-  '@vkontakte/vkui@7.0.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+  '@vkontakte/vkui@7.1.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
       '@swc/helpers': 0.5.15
       '@vkontakte/icons': 2.160.0(react@19.0.0)
