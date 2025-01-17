@@ -23,6 +23,8 @@ import { ErrorPage } from '@/components/error/ErrorPage';
 
 import { useDidMount } from '@/hooks/utils/useDidMount';
 
+import { GoogleAnalytics } from '@next/third-parties/google';
+
 // global application styles
 import '@/styles/global.css';
 import '@/styles/tailwind.css';
@@ -75,6 +77,7 @@ const RootInner = ({ children }: PropsWithChildren) => (
     <App>
       {children}
       <MediaViewer />
+      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_ANALYTICS_ID as string} />
     </App>
   </StoreProvider>
 );
