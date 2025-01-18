@@ -48,6 +48,9 @@ export const metadata: Metadata = {
   },
   appleWebApp: {
     title: siteConfig.name
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_VERIFY as string
   }
 }
 
