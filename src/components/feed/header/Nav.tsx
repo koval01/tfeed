@@ -76,7 +76,7 @@ export const SubscribeButton: React.FC<{ channel: Channel }> = ({ channel }) => 
  * Renders the navigation block for a channel, including avatar, title, and subscriber count.
  */
 const Nav: React.FC<{ channel: Channel }> = ({ channel }) => (
-    <div className="flex items-center relative justify-between space-x-2 overflow-hidden py-1.5 md:pt-3">
+    <div className="flex items-center relative justify-between space-x-2 overflow-hidden py-1.5 pl-[5px] md:pt-3">
         <div className="block select-none items-center min-w-40">
             <NavAvatar channel={channel} />
             <ChannelTitle channel={channel} />
