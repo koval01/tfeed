@@ -3,7 +3,7 @@ interface Channel {
     subscribers: string;
     is_verified: boolean;
     description?: string;
-    avatar: string;
+    avatar?: string;
 }
 
 export interface Preview {

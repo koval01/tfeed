@@ -8,6 +8,7 @@ import type {
 } from "next/dist/lib/metadata/types/extra-types";
 
 import { removeEmojies } from "@/helpers/string";
+import { TelegramChannelParser } from "@/api/telegram";
 
 export const runtime = "edge";
 
@@ -64,19 +65,20 @@ const buildMetadata = (
 export const generateMetadata = async (props: { params: Promise<{ channel: string }> }): Promise<Metadata> => {
     const params = await props.params;
     const { channel } = params;
-    const apiUrl = `${process.env.NEXT_PUBLIC_API_HOST}/v1/preview/${channel}`;
 
     try {
-        const response = await fetch(apiUrl, {
-            headers: { BackEndSecret: process.env.BACKEND_SECRET || "" },
+        const parser = new TelegramChannelParser(channel, {
+            timeout: 3000,
+            retries: 2,
         });
+        const response = await parser.getPreview();
 
-        if (!response.ok) {
-            console.warn(`Error fetching metadata for "${channel}": ${response.status} ${response.statusText}`);
+        if (!response.success || !response.data) {
+            console.warn(`Error fetching metadata for "${channel}"`);
             throw new Error(`Failed to fetch metadata for channel ${channel}`);
         }
 
-        const metadata: Preview = await response.json();
+        const metadata: Preview = response.data;
         const { title, description, avatar } = metadata.channel;
 
         return buildMetadata(channel, title, description, avatar);
