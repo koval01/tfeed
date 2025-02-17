@@ -17,7 +17,7 @@
     "@next/third-parties": "^15.1.5",
     "@reduxjs/toolkit": "^2.5.1",
     "@sentry/nextjs": "^8.50.0",
-    "@vkontakte/icons": "^2.165.0",
+    "@vkontakte/icons": "^2.166.0",
     "@vkontakte/vkui": "^7.1.1",
     "axios": "^1.7.9",
     "clsx": "^2.1.1",
