@@ -24,6 +24,7 @@ import { ErrorPage } from '@/components/error/ErrorPage';
 import { useDidMount } from '@/hooks/utils/useDidMount';
 
 import { GoogleAnalytics } from '@next/third-parties/google';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 // global application styles
 import '@/styles/global.css';
@@ -77,7 +78,10 @@ const RootInner = ({ children }: PropsWithChildren) => (
     <App>
       {children}
       <MediaViewer />
-      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_ANALYTICS_ID as string} />
+      {process.env.NEXT_PUBLIC_ANALYTICS_ID ? 
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_ANALYTICS_ID} />
+      : null}
+      <SpeedInsights />
     </App>
   </StoreProvider>
 );
