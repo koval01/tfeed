@@ -1,7 +1,7 @@
 import type { Post, PreviewLink as PreviewLinkProp } from "@/types";
 
-import { EllipsisText, Spacing } from "@vkontakte/vkui";
 import { TextComponent } from "@/components/feed/TextComponent";
+import { EllipsisText, Spacing } from "@vkontakte/vkui";
 
 import "@/styles/components/previewLink.css";
 
@@ -18,7 +18,7 @@ const Preview = ({ preview }: { preview: PreviewLinkProp }) => (
                     {preview.title}
                 </EllipsisText>
             </div>
-            <div className="link_preview_description text-neutral-700 dark:text-neutral-400" dir="auto">
+            <div className="link_preview_description text-neutral-700 dark:text-neutral-600" dir="auto">
                 <TextComponent htmlString={preview.description?.html} />
             </div>
         </a>

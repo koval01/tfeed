@@ -67,7 +67,7 @@ export const Forward: React.FC<PropsWithChildren<{ post: Post }>> = ({ children,
             </div>
             <div className="ml-[52px] mt-[3px]">
                 <ForwardName forwarded={post.forwarded} />
-                <Subhead className="text-neutral-500 select-none" Component="h5">
+                <Subhead className="text-neutral-600 select-none" Component="h5">
                     <Trans i18nKey="forwarded message" />
                 </Subhead>
             </div>

@@ -1,5 +1,5 @@
-import type { JSX } from "react";
 import type { PollOptions, Poll as PollProp } from "@/types";
+import type { JSX } from "react";
 
 import {
     Caption,
@@ -42,7 +42,7 @@ const PollOption = ({ option }: { option: PollOptions }): JSX.Element => (
                 <Progress aria-labelledby="progresslabel" value={option.percent} />
             </FormItem>
         </div>
-        <div className="flex w-[34px] items-center whitespace-nowrap overflow-hidden text-neutral-500">
+        <div className="flex w-[34px] items-center whitespace-nowrap overflow-hidden text-neutral-600">
             {option.percent}%
         </div>
     </div>

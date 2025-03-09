@@ -12,3 +12,10 @@ body {
   color: var(--vkui--color_text_contrast);
   background: var(--vkui--color_background_accent);
 }
+
+.vkui--vkBase--dark, .vkui--vkIOS--dark {
+  ::selection {
+    color: #000;
+    background: #fff;
+  }
+}

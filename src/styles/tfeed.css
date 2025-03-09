@@ -10,3 +10,35 @@
     background: rgb(156 105 232);
     background: linear-gradient(25deg, rgb(112 155 255) 0%, rgb(197 82 241) 36%, rgb(156 105 232) 64%, rgb(239 36 25) 100%);
 }
+
+.vkui--vkBase--light, .vkui--vkIOS--light, :root {
+    --vkui--color_background: #fff;
+    --vkui--color_background_secondary: #f9f9f9;
+}
+
+.vkui--vkBase--dark, .vkui--vkIOS--dark {
+    --vkui--color_background_content: #000;
+    --vkui--color_background_secondary: #101010;
+    --vkui--color_skeleton_from: #181819;
+    --vkui--color_skeleton_from--hover: #1f1f20;
+    --vkui--color_skeleton_from--active: #252526;
+    --vkui--color_skeleton_to: #242525;
+    --vkui--color_skeleton_to--hover: #232425;
+    --vkui--color_skeleton_to--active: #2f3031;
+}
+
+.vkuiGroup__sizeXNone.vkuiGroup__modeNone+.vkuiGroup__separatorSibling {
+    height: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+}
+
+.vkuiDiv__host {
+    padding-top: 0;
+}
+
+@media not all and (min-width: 768px) {
+    .vkuiDiv__host {
+        padding-top: 8px;
+    }
+}

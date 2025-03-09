@@ -34,14 +34,14 @@ import {
 import { Avatar } from "@/components/avatar/Avatar";
 import { VKMediaGrid } from "@/components/media/Media";
 
-import { Poll } from "@/components/feed/post/Poll";
 import { AudioPost } from "@/components/feed/post/Audio";
 import { GifPost } from "@/components/feed/post/GifPost";
+import { Poll } from "@/components/feed/post/Poll";
+import { PreviewLink } from "@/components/feed/post/PreviewLink";
+import { RoundVideo } from "@/components/feed/post/RoundVideo";
 import { Sticker } from "@/components/feed/post/Sticker";
 import { Verified } from "@/components/feed/post/Verified";
-import { RoundVideo } from "@/components/feed/post/RoundVideo";
 import { TextComponent } from "@/components/feed/TextComponent";
-import { PreviewLink } from "@/components/feed/post/PreviewLink";
 
 import { convertMediaArray } from "@/helpers/mediaConvert";
 import { t } from "i18next";
@@ -100,7 +100,7 @@ const HeadProfile = ({ channel, post }: PostBodyProps) => {
                 </div>
             </div>
             <Subhead
-                className="text-neutral-500 overflow-hidden text-ellipsis font-normal text-[13px]"
+                className="text-neutral-600 overflow-hidden text-ellipsis font-normal text-[13px]"
                 Component="h5">
                 {formattedDate}
             </Subhead>
@@ -116,7 +116,7 @@ const MoreButton = ({ channel, post }: PostBodyProps) => (
         <div className="flex items-center">
             <div className="relative">
                 <Tappable onClick={() => handleRedirect(channel, post)} className="rounded-lg">
-                    <Icon24ShareOutline className="text-neutral-500" />
+                    <Icon24ShareOutline className="text-neutral-600" />
                 </Tappable>
             </div>
         </div>
@@ -147,14 +147,14 @@ const FooterComponent = ({
 }: FooterComponentProps) => (
     <div
         className={cn(
-            "flex items-center whitespace-nowrap overflow-hidden leading-5 h-6 text-neutral-500",
+            "flex items-center whitespace-nowrap overflow-hidden leading-5 h-6 text-neutral-600",
             className
         )}
     >
-        <span className="flex text-neutral-500" style={{ width: iconSize, height: iconSize }}>
+        <span className="flex text-neutral-600 max-md:!w-3" style={{ width: iconSize, height: iconSize }}>
             <Icon />
         </span>
-        <Caption className="relative leading-[15px] h-3.5 text-sm/7 font-medium">
+        <Caption className="relative leading-[15px] h-3.5 text-sm/7 max-md:text-xs font-medium">
             {context}
         </Caption>
     </div>
@@ -186,7 +186,7 @@ const PostAuthor = ({ footer }: { footer?: Footer }) =>
  */
 export const PostFooter = ({ post }: { post: Post }) => (
     <div className="py-0 select-none">
-        <div className="flex items-center relative justify-between max-md:pt-1 pt-3 pb-0">
+        <div className="flex items-center relative justify-between max-md:pt-0.5 pt-0 pb-0">
             <PostAuthor footer={post.footer} />
             <PostViews views={post.footer.views} />
         </div>
@@ -283,7 +283,7 @@ const PostNotSupported = () => (
         <Text className="text-lg font-bold TFeed__GradientText">
             <Trans i18nKey="thisPostNotSupported" />
         </Text>
-        <Caption level="1" className="text-neutral-500">
+        <Caption level="1" className="text-neutral-600">
             <Trans
                 i18nKey="openPostInTelegramHint"
                 components={{ 
