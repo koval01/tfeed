@@ -11,7 +11,7 @@ import 'normalize.css/normalize.css';
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
-    template: `%s - ${siteConfig.name}`,
+    template: `%s / ${siteConfig.name}`,
   },
   applicationName: siteConfig.name,
   description: siteConfig.description,
@@ -55,6 +55,10 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "white" },
     { media: "(prefers-color-scheme: dark)", color: "black" },
@@ -64,7 +68,7 @@ export const viewport: Viewport = {
 const RootLayout = ({ children }: PropsWithChildren) => {
   return (
     <html lang='en'>
-      <body className="antialiased bg-[#ebedf0] max-md:bg-white dark:bg-black dark:max-md:bg-[#19191a]">
+      <body className="antialiased bg-white dark:bg-black">
         <Root>
           {children}
         </Root>

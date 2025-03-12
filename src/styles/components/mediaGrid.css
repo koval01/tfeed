@@ -12,7 +12,7 @@
 }
 
 .MediaGrid {
-    --mg-border-radius-wrapper: 8px;
+    --mg-border-radius-wrapper: 16px;
     --mg-grid-width: 100%;
     --mg-spacer: 2px;
     --mg-third-row-count: 3;
@@ -65,23 +65,23 @@
 }
 
 .MediaGrid__thumb--topLeft {
-    border-top-left-radius: var(--mg-border-radius-wrapper, 8px);
+    border-top-left-radius: var(--mg-border-radius-wrapper, 16px);
 }
 
 .MediaGrid__thumb--topRight {
-    border-top-right-radius: var(--mg-border-radius-wrapper, 8px);
+    border-top-right-radius: var(--mg-border-radius-wrapper, 16px);
 }
 
 .MediaGrid__thumb--bottomLeft {
-    border-bottom-left-radius: var(--mg-border-radius-wrapper, 8px);
+    border-bottom-left-radius: var(--mg-border-radius-wrapper, 16px);
 }
 
 .MediaGrid__thumb--bottomRight {
-    border-bottom-right-radius: var(--mg-border-radius-wrapper, 8px);
+    border-bottom-right-radius: var(--mg-border-radius-wrapper, 16px);
 }
 
 .MediaGrid__thumb--allSide {
-    border-radius: var(--mg-border-radius-wrapper, 8px);
+    border-radius: var(--mg-border-radius-wrapper, 16px);
 }
 
 .MediaGrid__thumb--firstRowItem+.MediaGrid__thumb--firstRowItem {
@@ -143,7 +143,7 @@
 
 .MediaGrid__imageTransition {
     position: absolute;
-    border-radius: 12px;
+    border-radius: 16px;
 
     top: var(--start-top);
     left: var(--start-left);

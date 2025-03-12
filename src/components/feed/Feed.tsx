@@ -90,7 +90,7 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
             {/* Header */}
             <FeedHeader channel={data?.channel} isLoading={isLoading} />
             {/* Main layout */}
-            <SplitLayout center>
+            <SplitLayout center className="relative lg:right-8">
                 {isLoading ? (
                     // Show skeletons during loading
                     (<>

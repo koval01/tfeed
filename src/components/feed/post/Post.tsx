@@ -1,6 +1,6 @@
 "use client";
 
-import React, { type JSX, useCallback } from "react";
+import { type JSX, useCallback } from "react";
 import { useSelector } from "react-redux";
 
 import { selectNoLoadMore } from '@/lib/store';
@@ -72,7 +72,7 @@ const LoadingMoreButton = ({ isFetchingMore }: { isFetchingMore: boolean }): JSX
         >
             <Subhead
                 weight="1"
-                className="text-xs text-neutral-500"
+                className="text-xs text-neutral-600"
                 Component="h5"
                 useAccentWeight>Load more</Subhead>
         </Button>
@@ -87,7 +87,10 @@ const LoadingMore = ({ isFetchingMore }: LoadingMoreProps): JSX.Element => {
 
     return (
         <Group mode="plain" className="my-0.5 md:my-1 lg:my-1.5 pb-12 md:pb-24">
-            {!noMorePosts && <LoadingMoreButton isFetchingMore={isFetchingMore} />}
+            <div className="invisible">
+                {/* temporary hidden */}
+                {!noMorePosts && <LoadingMoreButton isFetchingMore={isFetchingMore} />}
+            </div>
         </Group>
     )
 };
@@ -99,10 +102,10 @@ const Post = ({ item, channel, ...props }: PostProps & Record<string, any>): JSX
     const { handleVisibility } = useAnalytics();
 
     return (
-        <>
-            <Group {...props}>
+        <Group {...props} mode="plain" className="py-0">
+            <div className="border-b md:border-x dark:border-[#2f3336]">
                 <InView
-                    className="py-2.5 px-4"
+                    className="py-2 px-2.5"
                     as="article"
                     threshold={0.3}
                     onChange={(inView, entry) => handleVisibility(entry, inView)}
@@ -115,9 +118,8 @@ const Post = ({ item, channel, ...props }: PostProps & Record<string, any>): JSX
                         <PostFooter post={item} />
                     </div>
                 </InView>
-            </Group>
-            <Separator className="md:hidden py-2 px-4" />
-        </>
+            </div>
+        </Group>
     );
 };
 
@@ -135,7 +137,7 @@ export const Posts = ({ channel, posts, onRefresh, isFetching, isFetchingMore }:
 
     return (
         <MediaProvider>
-            <SplitCol width="100%" maxWidth="560px" stretchedOnMobile autoSpaced>
+            <SplitCol width="100%" maxWidth="600px" stretchedOnMobile autoSpaced>
                 <PullToRefresh onRefresh={onRefresh} isFetching={isFetching}>
                     <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto w-full">
                         <VirtualizedListWrapper

@@ -88,9 +88,10 @@ const renderEmoji = (element: Element): JSX.Element | string => {
         if (!emojiUrl) return extractTextContent(element);
 
         const resolvedUrl = emojiUrl.startsWith('//') ? `https:${emojiUrl}` : emojiUrl;
+        const defaultEmoji = "https://telegram.org/img/emoji/40/F09F9982.png";
 
         return (
-            <span className="emoji" style={{ backgroundImage: `url(${resolvedUrl})` }}>
+            <span className="emoji" style={{ backgroundImage: `url(${resolvedUrl ? resolvedUrl : defaultEmoji})` }}>
                 <b>{extractTextContent(element)}</b>
             </span>
         );

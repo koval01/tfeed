@@ -1,14 +1,14 @@
-import React, { useState, useRef, useEffect, useCallback, memo } from "react";
 import type { Post } from "@/types";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 
 import { useMediaPlayback } from "@/hooks/services/useMediaPlayback";
 
 import { Icon28Pause, Icon28Play } from "@vkontakte/icons";
 import { Slider } from "@vkontakte/vkui";
 
-import ReactPlayer from "react-player";
-import { clamp } from "lodash";
 import { cn } from "@/lib/utils";
+import { clamp } from "lodash";
+import ReactPlayer from "react-player";
 
 type AudioSpectrogramProps = {
     data: number[];
@@ -212,7 +212,7 @@ export const AudioPost = memo(({ post }: { post: Post }) => {
                 <div className="sm:hidden w-full pr-16">
                     <Slider value={playedFraction * 100} aria-labelledby="basic" onChange={updateFraction} />
                 </div>
-                <time className="inline-block text-sm leading-[19px] mt-[5px] mb-0.5 text-neutral-500">
+                <time className="inline-block text-sm leading-[19px] mt-[5px] mb-0.5 text-neutral-600">
                     {!playedFraction ? media.duration.formatted : remainingTime}
                 </time>
             </div>

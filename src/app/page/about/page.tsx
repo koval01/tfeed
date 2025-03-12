@@ -39,7 +39,7 @@ const About = () => {
                                 components={{ b: <b key="welcome-bold" /> }}
                             />
                         </DisplayTitle>
-                        <DisplayTitle level="3" className="text-neutral-500 mt-2">
+                        <DisplayTitle level="3" className="text-neutral-600 mt-2">
                             {t("about.welcome_sub")}
                         </DisplayTitle>
                         <Spacing size={16} />
@@ -156,7 +156,7 @@ const About = () => {
                     </div>
                 </Group>
                 <Div className="w-full">
-                    <Footnote caps className="text-neutral-500 text-center mt-0 md:mt-3 lg:mt-6">
+                    <Footnote caps className="text-neutral-600 text-center mt-0 md:mt-3 lg:mt-6">
                         {t("about.thanks")}
                     </Footnote>
                 </Div>

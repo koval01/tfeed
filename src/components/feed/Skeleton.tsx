@@ -106,13 +106,17 @@ const PostBody: React.FC<{ length?: number, noAnimation?: boolean }> = (
 export const Post: React.FC<{ rows?: number, noAnimation?: boolean }> = React.memo((
     { rows = 5, noAnimation = false }
 ) => (
-    <Group>
-        <div className="py-2.5 px-4">
-            <PostHeader />
-            <Spacing />
-            <PostBody length={rows} noAnimation={noAnimation} />
-        </div>
-    </Group>
+    <div>
+        <Group mode="plain" className="py-0">
+            <div className="border-b md:border-x dark:border-[#2f3336]">
+                <div className="py-2 px-2.5">
+                    <PostHeader />
+                    <Spacing />
+                    <PostBody length={rows} noAnimation={noAnimation} />
+                </div>
+            </div>
+        </Group>
+    </div>
 ));
 
 Post.displayName = "Post";
@@ -126,10 +130,10 @@ Post.displayName = "Post";
 export const Posts: React.FC = () => (
     <SplitCol
         width="100%"
-        maxWidth="560px"
+        maxWidth="600px"
         stretchedOnMobile
         autoSpaced
-        className="pt-3"
+        className="md:pt-0"
     >
         <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto px-0">
             {Array.from({ length: 10 }).map((_, index) => (

@@ -52,16 +52,16 @@ const VirtualizedListWrapper = <T extends WithId>({
                 ref={virtuosoRef}
                 className="w-full"
                 data={items}
-                overscan={6e2} // Number of items to render outside visible area
+                overscan={2e3} // Number of items to render outside visible area
                 useWindowScroll
                 components={components}
                 itemContent={(index, item) => renderItem(item, index)}
                 computeItemKey={(_, item) => `virt__post_${item.id}`}
                 scrollSeekConfiguration={{
-                    // Enter scroll seek mode when scrolling faster than 800px/s
-                    enter: (velocity) => Math.abs(velocity) > 8e2,
-                    // Exit scroll seek mode when scrolling slower than 10px/s
-                    exit: (velocity) => Math.abs(velocity) < 10,
+                    // Enter scroll seek mode when scrolling faster than 1200px/s
+                    enter: (velocity) => Math.abs(velocity) > 12e2,
+                    // Exit scroll seek mode when scrolling slower than 40px/s
+                    exit: (velocity) => Math.abs(velocity) < 40,
                 }}
             />
         </Div>

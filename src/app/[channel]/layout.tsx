@@ -24,7 +24,7 @@ const buildMetadata = (
     description?: string,
     avatar?: string
 ): Metadata => {
-    const clearTitle = removeEmojies(title || `Channel @${channel}`);
+    const clearTitle = removeEmojies(`${title} (@${channel})` || `Channel @${channel}`);
     const baseDescription = description || `Channel of user @${channel}`;
     
     const channelUrl = `https://t.me/${channel}`;

@@ -12,7 +12,6 @@ import {
     DisplayTitle,
     EllipsisText,
     Footnote,
-    Gradient,
     Group,
     Paragraph,
     Placeholder,
@@ -57,7 +56,7 @@ const Counters = ({ counters }: { counters: CountersProps }) => (
                     <TitleVK level="3" className="block w-full text-center" Component="h3">
                         {value}
                     </TitleVK>
-                    <Footnote className="text-neutral-500 inline-block capitalize align-top mt-1">
+                    <Footnote className="text-neutral-600 inline-block capitalize align-top mt-1">
                         <Trans i18nKey={key} />
                     </Footnote>
                 </div>
@@ -78,7 +77,7 @@ const Footer = () => {
         <div className="text-center pt-0 pb-2">
             {footerLinks.map((item, index) => (
                 <div key={`footer__l_item_${index}`} className="inline-block align-top px-2">
-                    <Footnote className="text-neutral-500">
+                    <Footnote className="text-neutral-600">
                         <Link href={item.href}>
                             <Trans i18nKey={item.name} />
                         </Link>
@@ -123,7 +122,7 @@ const ChannelTitle = ({ channel }: { channel: Channel }) => (
 )
 
 const Body = ({ channel }: { channel: Channel }) => (
-    <Gradient mode="tint" to="top" className="rounded-xl">
+    <>
         <Placeholder
             className="pb-6"
             icon={<Avatar size={96} src={channel.avatar} name={channel.title.string} />}
@@ -133,14 +132,16 @@ const Body = ({ channel }: { channel: Channel }) => (
             @{channel.username}
         </Placeholder>
         <Footer />
-    </Gradient>
+    </>
 )
 
 export const Profile = React.memo(({ channel }: { channel: Channel }) => (
     <SplitCol className="max-lg:hidden pt-3 ScrollStickyWrapper" width={280} maxWidth={280}>
         <div className="fixed w-[345px]">
-            <Group className="select-none p-0">
-                <Body channel={channel} />
+            <Group className="select-none p-0" mode="plain">
+                <div className="relative block border dark:border-[#2f3336] rounded-2xl">
+                    <Body channel={channel} />
+                </div>
             </Group>
         </div>
     </SplitCol>
