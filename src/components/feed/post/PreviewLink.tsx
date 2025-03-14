@@ -11,7 +11,7 @@ const Preview = ({ preview }: { preview: PreviewLinkProp }) => {
     return (
         <>
             <Spacing />
-            <a className="message_link_preview" href={preview.url} target="_blank">
+            <a className="message_link_preview select-none" href={preview.url} target="_blank">
                 <i className="link_preview_right_image" style={{ backgroundImage: `url(${_preview})` }}></i>
                 <div className="link_preview_site_name" dir="auto">
                     {preview.site_name}
@@ -21,7 +21,7 @@ const Preview = ({ preview }: { preview: PreviewLinkProp }) => {
                         {preview.title}
                     </EllipsisText>
                 </div>
-                <div className="link_preview_description text-neutral-700 dark:text-neutral-600" dir="auto">
+                <div className="link_preview_description text-neutral-700 dark:text-neutral-400" dir="auto">
                     <TextComponent htmlString={preview.description?.html} />
                 </div>
             </a>
