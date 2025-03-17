@@ -42,7 +42,7 @@
     "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "1.13.3",
+    "@cloudflare/next-on-pages": "1.13.10",
     "@emotion/react": "^11.14.0",
     "@types/lodash": "^4.17.16",
     "@types/node": "^22.13.10",
