@@ -17,7 +17,7 @@ export const i18nStrings = {
             "UnhandledError": "An unhandled error occurred!",
             "thisPostNotSupported": "Go to Telegram to view this post",
             "openPostInTelegramHint": "To open this post on Telegram, use the <div /> symbol in the upper right corner of the post.",
-            "replyWithoutReply": "Diese Antwort ist ohne Text",
+            "replyWithoutReply": "This answer is without text",
         }
     },
     "de": {
@@ -43,6 +43,7 @@ export const i18nStrings = {
             "Play media button": "Schaltfläche Medien abspielen",
             "Load more button": "Schaltfläche Mehr laden",
             "replyWithoutReply": "This reply is without text",
+            "edited": "Bearb.",
         }
     },
     "ru": {
@@ -68,6 +69,7 @@ export const i18nStrings = {
             "Play media button": "Кнопка воспроизведения медиа",
             "Load more button": "Кнопка \"Загрузить еще\"",
             "replyWithoutReply": "Этот ответ без текста",
+            "edited": "ред.",
         }
     },
     "uk": {
@@ -93,6 +95,7 @@ export const i18nStrings = {
             "Play media button": "Кнопка відтворення медіа",
             "Load more button": "Кнопка \"Завантажити більше\"",
             "replyWithoutReply": "Ця відповідь без тексту",
+            "edited": "ред.",
         }
     }
 }
