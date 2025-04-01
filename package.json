@@ -17,7 +17,7 @@
     "@google/generative-ai": "^0.24.0",
     "@next/third-parties": "^15.2.4",
     "@reduxjs/toolkit": "^2.6.1",
-    "@sentry/nextjs": "^8.55.0",
+    "@sentry/nextjs": "^9.10.1",
     "@vercel/speed-insights": "^1.2.0",
     "@vkontakte/icons": "^2.169.0",
     "@vkontakte/vkui": "^7.2.0",
