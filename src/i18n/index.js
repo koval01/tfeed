@@ -17,7 +17,8 @@ export const i18nStrings = {
             "UnhandledError": "An unhandled error occurred!",
             "thisPostNotSupported": "Go to Telegram to view this post",
             "openPostInTelegramHint": "To open this post on Telegram, use the <div /> symbol in the upper right corner of the post.",
-            "replyWithoutReply": "Diese Antwort ist ohne Text",
+            "replyWithoutReply": "This answer is without text",
+            "postSysInstruction": "You get a json post from Telegram, and your task is to analyze it, tell what you think about it, maybe see some weirdness in it. If you need to, adapt the content to the anglophone user so that he understands everything. In general, your task is to make the post short and clear, adapt it to the cultural peculiarities, if the post is in another language, maybe suggest googling something to the user to understand the topic better."
         }
     },
     "de": {
@@ -42,7 +43,10 @@ export const i18nStrings = {
             "Subscribe button": "Schaltfläche Abonnieren",
             "Play media button": "Schaltfläche Medien abspielen",
             "Load more button": "Schaltfläche Mehr laden",
+            "Load more": "Mehr laden",
             "replyWithoutReply": "This reply is without text",
+            "edited": "Bearb.",
+            "postSysInstruction": "Du bekommst einen json-Post von Telegram, und deine Aufgabe ist es, ihn zu analysieren, ihnen zu sagen, was du davon hältst, und vielleicht ein paar Merkwürdigkeiten darin zu entdecken. Wenn nötig, passen Sie den Inhalt an einen deutschsprachigen Nutzer an, damit er alles versteht. Im Allgemeinen besteht Ihre Aufgabe darin, den Beitrag kurz und klar zu machen, ihn an die kulturellen Besonderheiten anzupassen und, wenn der Beitrag in einer anderen Sprache verfasst ist, dem Nutzer vielleicht anzubieten, etwas zu googeln, damit er das Thema besser versteht."
         }
     },
     "ru": {
@@ -67,7 +71,10 @@ export const i18nStrings = {
             "Subscribe button": "Кнопка подписки",
             "Play media button": "Кнопка воспроизведения медиа",
             "Load more button": "Кнопка \"Загрузить еще\"",
+            "Load more": "Загрузить еще",
             "replyWithoutReply": "Этот ответ без текста",
+            "edited": "ред.",
+            "postSysInstruction": "Ты получаешь на вход json-пост из Telegram, и твоя задача - проанализировать его, рассказать, что ты о нем думаешь, может быть, увидеть в нем какие-то странности. Если нужно адаптируйте контент под русскоязычного пользователя, чтобы он все понял. В общем твоя задача изложить пост коротко и ясно, адаптировать под культурные особенности, если пост на другом языке, возможно предложить погуглить что-то пользователю чтобы понять лучше тему."
         }
     },
     "uk": {
@@ -92,7 +99,10 @@ export const i18nStrings = {
             "Subscribe button": "Кнопка підписки",
             "Play media button": "Кнопка відтворення медіа",
             "Load more button": "Кнопка \"Завантажити більше\"",
+            "Load more": "Завантажити більше",
             "replyWithoutReply": "Ця відповідь без тексту",
+            "edited": "ред.",
+            "postSysInstruction": "Ти отримуєш на вхід json-пост із Telegram, і твоє завдання - проаналізувати його, розповісти, що ти про нього думаєш, можливо, побачити в ньому якісь дивацтва. Якщо потрібно адаптуйте контент під україномовного користувача, щоб він усе зрозумів. Загалом твоє завдання викласти пост коротко і зрозуміло, адаптувати під культурні особливості, якщо пост іншою мовою, можливо запропонувати погуглити щось користувачеві, щоб зрозуміти краще тему."
         }
     }
 }

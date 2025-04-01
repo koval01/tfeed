@@ -17,7 +17,7 @@ export const FeedHeader: FC<FeedHeaderProps> = ({ channel, isLoading }) => (
             before={isLoading ? <ChannelNavSkeleton /> : <ChannelNav channel={channel} />}
             after={
                 !isLoading && (
-                    <div className="inline-block items-center overflow-hidden lg:hidden">
+                    <div className="relative max-md:-top-1 inline-block items-center overflow-hidden lg:hidden">
                         <SubscribeButton channel={channel} />
                     </div>
                 )
@@ -26,7 +26,7 @@ export const FeedHeader: FC<FeedHeaderProps> = ({ channel, isLoading }) => (
             shadow={false}
             transparent
         />
-        <div className="fixed z-[5] bg-white/70 dark:bg-black/70 h-12 max-md:h-14 w-screen">
+        <div className="fixed z-[5] bg-white/70 dark:bg-black/70 h-12 w-screen">
             <div className="relative block h-full backdrop-blur-xl backdrop-saturate-[180%]">
                 <div className="relative block h-full border-b dark:border-[#2f3336]" />
             </div>

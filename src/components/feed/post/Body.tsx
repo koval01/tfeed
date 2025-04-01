@@ -164,7 +164,7 @@ const FooterComponent = ({
  * Displays the view count in the post footer.
  */
 const PostViews = ({ views }: { views?: string }) =>
-    views ? <FooterComponent Icon={Icon16View} context={views} className="space-x-1.5" /> : null;
+    views ? <FooterComponent Icon={Icon16View} iconSize={15} context={views} className="space-x-0.5 md:space-x-1" /> : null;
 
 /**
  * Displays the author in the post footer.
@@ -188,7 +188,12 @@ export const PostFooter = ({ post }: { post: Post }) => (
     <div className="py-0 select-none">
         <div className="flex items-center relative justify-between max-md:pt-0.5 pt-0 pb-0">
             <PostAuthor footer={post.footer} />
-            <PostViews views={post.footer.views} />
+            <div className="inline-flex space-x-0.5 md:space-x-1">
+                {post.footer.edited ? 
+                    <Caption level="2" className="text-neutral-600 !leading-6">{t("edited")}</Caption> 
+                : null}
+                <PostViews views={post.footer.views} />
+            </div>
         </div>
     </div>
 );

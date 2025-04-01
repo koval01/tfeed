@@ -1,6 +1,0 @@
-name = "tfeed"
-compatibility_flags = [ "nodejs_compat" ]
-pages_build_output_dir = ".vercel/output/static"
-compatibility_date = "2024-11-11"
-vars = { NODE_VERSION = "22.13.1" }
-

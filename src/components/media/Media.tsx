@@ -87,35 +87,48 @@ export const VKMediaGrid = React.memo<VKMediaGridProps>(({ mediaCollection }) =>
                     '--mg-third-row-count': rows === 3 ? perRow[2] || 0 : 0
                 } as React.CSSProperties}
             >
-                {mediaCollection.map((media, index) => (
-                    <div
-                        key={`media__item_${media.url}`}
-                        className={getItemClass(index, mediaCount, perRow)}
-                        style={{ '--mg-ratio': index < 2 ? 1 : index < 2 + perRow[1] ? secondRowRatio : 1 } as React.CSSProperties}
-                        onClick={(e) => handleMediaClick(media, e)}
-                    >
-                        <Image
-                            className="MediaGrid__imageElement cursor-pointer"
-                            widthSize={'100%'}
-                            heightSize={'100%'}
-                            src={media.url}
-                            alt={media.type || ''}
-                            fallbackIcon={<FallbackIcon />}
-                        >
-                            {media.type === "video" && (
-                                <div
-                                    className="flex items-center justify-center rounded-full bg-black/50 backdrop-blur-lg w-auto aspect-square"
-                                    style={{
-                                        height: "clamp(40px, 15%, 120px)"
-                                    }}
-                                >
-                                    <Icon28Play className="object-contain size-[70%] text-[--vkui--color_text_contrast]" />
-                                </div>
+                {mediaCollection.map((media, index) => {
+                    const isLastItem = index === mediaCollection.length - 1;
+                    const isFirstInLastRow = index === mediaCollection.length - perRow[perRow.length - 1];
 
-                            )}
-                        </Image>
-                    </div>
-                ))}
+                    let additionalClasses = '';
+                    if (isLastItem) {
+                        additionalClasses += ' MediaGrid__thumb--bottomRightCorner';
+                    }
+                    if (isFirstInLastRow) {
+                        additionalClasses += ' MediaGrid__thumb--bottomLeftCorner';
+                    }
+
+                    return (
+                        <div
+                            key={`media__item_${media.url}`}
+                            className={`${getItemClass(index, mediaCount, perRow)}${additionalClasses}`}
+                            style={{ '--mg-ratio': index < 2 ? 1 : index < 2 + perRow[1] ? secondRowRatio : 1 } as React.CSSProperties}
+                            onClick={(e) => handleMediaClick(media, e)}
+                        >
+                            <Image
+                                className="MediaGrid__imageElement cursor-pointer"
+                                widthSize={'100%'}
+                                heightSize={'100%'}
+                                src={media.url}
+                                alt={media.type || ''}
+                                fallbackIcon={<FallbackIcon />}
+                            >
+                                {media.type === "video" && (
+                                    <div
+                                        className="flex items-center justify-center rounded-full bg-black/50 backdrop-blur-lg w-auto aspect-square"
+                                        style={{
+                                            height: "clamp(40px, 15%, 120px)"
+                                        }}
+                                    >
+                                        <Icon28Play className="object-contain size-[70%] text-[--vkui--color_text_contrast]" />
+                                    </div>
+
+                                )}
+                            </Image>
+                        </div>
+                    )
+                })}
             </div>
         </div>
     );

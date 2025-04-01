@@ -58,7 +58,7 @@ const ChannelTitle: React.FC<{ channel: Channel }> = ({ channel }) => (
  * Renders a subscription button that redirects to the channel's Telegram page.
  */
 export const SubscribeButton: React.FC<{ channel: Channel }> = ({ channel }) => (
-    <div className="block pr-1 w-full">
+    <div className="relative block pr-1 w-full">
         <Button
             appearance="accent-invariable"
             size="s"
