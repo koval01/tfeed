@@ -24,8 +24,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0(next@15.2.4(@babel/core@7.26.10)(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       '@vkontakte/icons':
-        specifier: ^2.169.0
-        version: 2.169.0(react@19.1.0)
+        specifier: ^3.1.1
+        version: 3.1.1(react@19.1.0)
       '@vkontakte/vkui':
         specifier: ^7.2.0
         version: 7.2.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -1277,8 +1277,8 @@ packages:
   '@swc/helpers@0.5.15':
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
 
-  '@swc/types@0.1.20':
-    resolution: {integrity: sha512-/rlIpxwKrhz4BIplXf6nsEHtqlhzuNN34/k3kMAXH4/lvVoA3cdq+60aqVNnyvw2uITEaCi0WV3pxBe4dQqoXQ==}
+  '@swc/types@0.1.21':
+    resolution: {integrity: sha512-2YEtj5HJVbKivud9N4bpPBAyZhj4S2Ipe5LkUG94alTpr7in/GU/EARgPAd3BwU+YOmFVJC2+kjqhGRi3r0ZpQ==}
 
   '@tootallnate/once@2.0.0':
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
@@ -1334,6 +1334,9 @@ packages:
 
   '@types/node@22.13.14':
     resolution: {integrity: sha512-Zs/Ollc1SJ8nKUAgc7ivOEdIBM8JAKgrqqUYi2J997JuKO7/tpQC+WCetQ1sypiKCQWHdvdg9wBNpUPEWZae7w==}
+
+  '@types/node@22.13.16':
+    resolution: {integrity: sha512-15tM+qA4Ypml/N7kyRdvfRjBQT2RL461uF1Bldn06K0Nzn1lY3nAPgHlsVrJxdZ9WhZiW0Fmc1lOYMtDsAuB3w==}
 
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
@@ -1562,10 +1565,20 @@ packages:
     peerDependencies:
       react: ^16.9.34 || ^17 || ^18
 
+  '@vkontakte/icons-sprite@3.0.0':
+    resolution: {integrity: sha512-rJd0wtMOp3XOKhnPzRatO2kcS4vjWSktd4t1MbflpA2tMvas1h0+3V/a0gzqzXvm0jnUTsxZw8VSzhYoPrzOMQ==}
+    peerDependencies:
+      react: ^18 || ^19
+
   '@vkontakte/icons@2.169.0':
     resolution: {integrity: sha512-tIGeH0YPyYGAQ5ec/e+kdjCOsdZjKc4t4FYqvoTU4hKe+zNNvqglWgsGakfJozPjVuPMIG8g22f2LTvHpHIKJQ==}
     peerDependencies:
       react: ^16.9.34 || ^17 || ^18
+
+  '@vkontakte/icons@3.1.1':
+    resolution: {integrity: sha512-AzOkyAfDNJZJM1RZREX++cdhM8DUGQBviXTkpL6ZAnGk/XqH8PUvbj5cZljaJ3z6NclwCT05Qlns6vm4/CmVoA==}
+    peerDependencies:
+      react: ^18 || ^19
 
   '@vkontakte/vkjs@2.0.1':
     resolution: {integrity: sha512-VPce+45X7mXpukkLwDaXwFfqfq0NZecoZ3Js3XwXFfhwNanetxMo/6XqG3sV319mxJoAqW8gMQoSv+ExLTlmYg==}
@@ -5634,7 +5647,7 @@ snapshots:
   '@swc/core@1.9.1(@swc/helpers@0.5.15)':
     dependencies:
       '@swc/counter': 0.1.3
-      '@swc/types': 0.1.20
+      '@swc/types': 0.1.21
     optionalDependencies:
       '@swc/core-darwin-arm64': 1.9.1
       '@swc/core-darwin-x64': 1.9.1
@@ -5655,7 +5668,7 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@swc/types@0.1.20':
+  '@swc/types@0.1.21':
     dependencies:
       '@swc/counter': 0.1.3
     optional: true
@@ -5710,11 +5723,15 @@ snapshots:
 
   '@types/node-forge@1.3.11':
     dependencies:
-      '@types/node': 22.13.14
+      '@types/node': 22.13.16
 
   '@types/node@16.18.11': {}
 
   '@types/node@22.13.14':
+    dependencies:
+      undici-types: 6.20.0
+
+  '@types/node@22.13.16':
     dependencies:
       undici-types: 6.20.0
 
@@ -6026,9 +6043,20 @@ snapshots:
       '@swc/helpers': 0.5.15
       react: 19.1.0
 
+  '@vkontakte/icons-sprite@3.0.0(react@19.1.0)':
+    dependencies:
+      '@swc/helpers': 0.5.15
+      react: 19.1.0
+
   '@vkontakte/icons@2.169.0(react@19.1.0)':
     dependencies:
       '@vkontakte/icons-sprite': 2.3.1(react@19.1.0)
+      react: 19.1.0
+
+  '@vkontakte/icons@3.1.1(react@19.1.0)':
+    dependencies:
+      '@swc/helpers': 0.5.15
+      '@vkontakte/icons-sprite': 3.0.0(react@19.1.0)
       react: 19.1.0
 
   '@vkontakte/vkjs@2.0.1':
@@ -7000,7 +7028,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.12.0(@typescript-eslint/parser@8.28.0(eslint@9.23.0(jiti@1.21.7))(typescript@5.8.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.0(eslint-plugin-import@2.31.0)(eslint@9.23.0(jiti@1.21.7)))(eslint@9.23.0(jiti@1.21.7)):
+  eslint-module-utils@2.12.0(@typescript-eslint/parser@8.28.0(eslint@9.23.0(jiti@1.21.7))(typescript@5.8.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.0)(eslint@9.23.0(jiti@1.21.7)):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
@@ -7022,7 +7050,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 9.23.0(jiti@1.21.7)
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.0(@typescript-eslint/parser@8.28.0(eslint@9.23.0(jiti@1.21.7))(typescript@5.8.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.0(eslint-plugin-import@2.31.0)(eslint@9.23.0(jiti@1.21.7)))(eslint@9.23.0(jiti@1.21.7))
+      eslint-module-utils: 2.12.0(@typescript-eslint/parser@8.28.0(eslint@9.23.0(jiti@1.21.7))(typescript@5.8.2))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.0)(eslint@9.23.0(jiti@1.21.7))
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3
@@ -7644,7 +7672,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 22.13.14
+      '@types/node': 22.13.16
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
