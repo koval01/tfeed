@@ -1,7 +1,12 @@
+import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev';
 import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
 const production = process.env.NODE_ENV === "production";
+
+if (!production) {
+    setupDevPlatform();
+}
 
 const nextConfig: NextConfig = {
     compiler: {
@@ -59,7 +64,6 @@ export default withSentryConfig(nextConfig, {
     // tunnelRoute: "/monitoring",
 
     // Hides source maps from generated client bundles
-    hideSourceMaps: true,
     sourcemaps: {
         deleteSourcemapsAfterUpload: true
     },

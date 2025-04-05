@@ -7,7 +7,7 @@ import { RootState } from '@/lib/store';
 import { closeViewer, resetViewer, updateViewer } from '@/store/viewerSlice';
 
 import { NextImage as Image } from '@/components/media/NextImage';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/clsx';
 import { unblockScroll } from '@/store/scrollSlice';
 
 import _ from 'lodash';

@@ -84,6 +84,14 @@
     border-radius: var(--mg-border-radius-wrapper, 16px);
 }
 
+.MediaGrid__thumb--bottomLeftCorner {
+    border-bottom-left-radius: var(--mg-border-radius-wrapper, 16px) !important;
+}
+
+.MediaGrid__thumb--bottomRightCorner {
+    border-bottom-right-radius: var(--mg-border-radius-wrapper, 16px) !important;
+}
+
 .MediaGrid__thumb--firstRowItem+.MediaGrid__thumb--firstRowItem {
     --mg-margin: 0 0 0 var(--mg-spacer, 2px);
 }

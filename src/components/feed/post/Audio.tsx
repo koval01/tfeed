@@ -6,7 +6,7 @@ import { useMediaPlayback } from "@/hooks/services/useMediaPlayback";
 import { Icon28Pause, Icon28Play } from "@vkontakte/icons";
 import { Slider } from "@vkontakte/vkui";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/clsx";
 import { clamp } from "lodash";
 import ReactPlayer from "react-player";
 
