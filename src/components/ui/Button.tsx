@@ -1,44 +1,51 @@
 'use client';
 
 import * as React from 'react';
-
-import { Spinner, Button as VKButton, type ButtonProps } from '@vkontakte/vkui';
+import { Spinner, TappableProps, Button as VKButton, type ButtonProps as VKUIButtonProps } from '@vkontakte/vkui';
 
 export interface CustomButtonProps {
+    /** Custom loader element to show when loading is true */
     loader?: React.ReactNode;
+    /** Whether the button is in a loading state */
+    loading?: boolean;
 }
 
-export interface VKUIButtonProps extends ButtonProps, CustomButtonProps { }
+export type ButtonProps = Omit<TappableProps, 'size'> & VKUIButtonProps & CustomButtonProps;
 
 const Loader = ({ loader }: { loader?: React.ReactNode }) => (
     <div className="inline-block align-super">
         {loader}
     </div>
-)
+);
 
 /**
- * Modified component Buttom from VK UI lib
+ * Enhanced Button component based on VK UI with custom loader support
  * @see https://vkcom.github.io/VKUI/#/Button
  */
 export const Button = ({
-    loader, // Custom loader
-    loading, // Whether the button is in a loading state
+    loader,
+    loading,
     children,
     ...restProps
-}: VKUIButtonProps): React.ReactNode => {
+}: ButtonProps): React.ReactNode => {
+    // Create props for VKButton by excluding our custom props
+    const vkButtonProps = restProps;
+
     return (
-        (<VKButton {...restProps} loading={false}>
-            {
-                loading
-                    ? (loader && <Loader loader={loader} />) || (
-                        <Spinner
-                            size="s"
-                            disableAnimation={restProps.disableSpinnerAnimation}
-                            noColor
-                        />
-                    )
-                    : children
-            }
-        </VKButton>)
+        <VKButton {...vkButtonProps} loading={loading}>
+            {loading ? (
+                loader ? (
+                    <Loader loader={loader} />
+                ) : (
+                    <Spinner
+                        size="s"
+                        disableAnimation={restProps.disableSpinnerAnimation}
+                        noColor
+                    />
+                )
+            ) : (
+                children
+            )}
+        </VKButton>
     );
 };

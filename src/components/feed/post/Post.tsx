@@ -1,6 +1,6 @@
 "use client";
 
-import { type JSX, useCallback } from "react";
+import { type JSX, useCallback, useRef } from "react";
 import { useSelector } from "react-redux";
 
 import { selectNoLoadMore } from '@/lib/store';
@@ -42,6 +42,7 @@ import { Button } from "@/components/ui/Button";
 import { ThreeDot } from "react-loading-indicators";
 
 import { MediaProvider } from "@/contexts/MediaContext";
+import { PostAiProvider } from "@/contexts/PostAiContext";
 
 /**
  * Displays the content of a single post, including forwarded content if applicable.
@@ -74,7 +75,10 @@ const LoadingMoreButton = ({ isFetchingMore }: { isFetchingMore: boolean }): JSX
                 weight="1"
                 className="text-xs text-neutral-600"
                 Component="h5"
-                useAccentWeight>Load more</Subhead>
+                useAccentWeight
+            >
+                {t("Load more")}
+            </Subhead>
         </Button>
     </div>
 );
@@ -87,12 +91,11 @@ const LoadingMore = ({ isFetchingMore }: LoadingMoreProps): JSX.Element => {
 
     return (
         <Group mode="plain" className="my-0.5 md:my-1 lg:my-1.5 pb-12 md:pb-24">
-            <div className="invisible">
-                {/* temporary hidden */}
+            <div className="relative">
                 {!noMorePosts && <LoadingMoreButton isFetchingMore={isFetchingMore} />}
             </div>
         </Group>
-    )
+    );
 };
 
 /**
@@ -128,26 +131,32 @@ Post.displayName = "Post";
 /**
  * Main Posts component that renders a list of posts with pull-to-refresh and load-more functionality.
  */
-export const Posts = ({ channel, posts, onRefresh, isFetching, isFetchingMore }: PostsProps): JSX.Element => {
+export const Posts = ({ channel, posts, onRefresh, isFetching }: PostsProps): JSX.Element => {
     const renderItem = useCallback((item: PostInterface) => {
         return (
             <Post key={`post__item_${item.id}`} item={item} channel={channel} />
         );
     }, [channel]);
 
+    const feedRef = useRef<HTMLDivElement>(null);
+
     return (
         <MediaProvider>
-            <SplitCol width="100%" maxWidth="600px" stretchedOnMobile autoSpaced>
-                <PullToRefresh onRefresh={onRefresh} isFetching={isFetching}>
-                    <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto w-full">
-                        <VirtualizedListWrapper
-                            items={posts}
-                            renderItem={renderItem}
-                            loadMoreButton={<LoadingMore isFetchingMore={isFetchingMore} />}
-                        />
-                    </div>
-                </PullToRefresh>
-            </SplitCol>
+            <PostAiProvider>
+                <SplitCol width="100%" maxWidth="600px" stretchedOnMobile autoSpaced>
+                    <PullToRefresh onRefresh={onRefresh} isFetching={isFetching}>
+                        <div ref={feedRef} className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto w-full">
+                            <div className="relative block">
+                                <VirtualizedListWrapper
+                                    items={posts}
+                                    parentRef={feedRef}
+                                    renderItem={renderItem}
+                                />
+                            </div>
+                        </div>
+                    </PullToRefresh>
+                </SplitCol>
+            </PostAiProvider>
         </MediaProvider>
     );
 }

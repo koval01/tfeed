@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 
 import { NextImage } from "@/components/media/NextImage";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/clsx";
 
 const withLazyLoad = (ImageComponent: React.ComponentType<any>) => {
     // eslint-disable-next-line react/display-name  
