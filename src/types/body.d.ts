@@ -15,14 +15,14 @@ export interface Channel {
     description: ParsedAndRaw;
     avatar: string | undefined;
     counters: Counters;
-    labels: string[];
+    labels?: string[];
 }
 
 interface Content {
     posts: Post[];
 }
 
-interface Meta {
+export interface Meta {
     offset: Offset | null;
 }
 
@@ -45,6 +45,7 @@ export interface Forwarded {
 }
 
 export interface Footer {
+    edited?: boolean;
     views?: string;
     author?: ParsedAndRaw;
     date: FooterDate;

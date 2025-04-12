@@ -39,7 +39,7 @@ const Verified = ({ verified }: { verified: boolean }) => (
 
 const Title = ({ children, verified }: TitleProps) => (
     <div className="inline-flex items-center max-w-60">
-        <DisplayTitle level="1" className="!leading-8 w-full whitespace-nowrap">
+        <DisplayTitle className="!leading-8 w-full whitespace-nowrap text-lg lg-h:text-xl">
             <EllipsisText>{children}</EllipsisText>
         </DisplayTitle>
         <div className="inline ml-1">
@@ -50,13 +50,13 @@ const Title = ({ children, verified }: TitleProps) => (
 
 const Counters = ({ counters }: { counters: CountersProps }) => (
     <Card>
-        <div className="grid grid-cols-3 gap-3 p-2 justify-items-center">
+        <div className="grid grid-cols-3 gap-2 lg-h:gap-3 p-1 lg-h:p-2 justify-items-center">
             {Object.entries(counters).map(([key, value], index) => (
                 <div key={`counter__item_${index}`} className="text-center w-full">
-                    <TitleVK level="3" className="block w-full text-center" Component="h3">
+                    <TitleVK className="block w-full text-center text-base lg-h:!text-lg" Component="h3">
                         {value}
                     </TitleVK>
-                    <Footnote className="text-neutral-600 inline-block capitalize align-top mt-1">
+                    <Footnote className="text-neutral-600 inline-block capitalize align-top mt-0.5 lg-h:mt-1 text-xs lg-h:text-sm">
                         <Trans i18nKey={key} />
                     </Footnote>
                 </div>
@@ -77,7 +77,7 @@ const Footer = () => {
         <div className="text-center pt-0 pb-2">
             {footerLinks.map((item, index) => (
                 <div key={`footer__l_item_${index}`} className="inline-block align-top px-2">
-                    <Footnote className="text-neutral-600">
+                    <Footnote className="text-neutral-600 text-[10px]">
                         <Link href={item.href}>
                             <Trans i18nKey={item.name} />
                         </Link>
@@ -89,7 +89,7 @@ const Footer = () => {
 }
 
 const Description = ({ channel }: { channel: Channel }) => (
-    <Paragraph className="select-text">
+    <Paragraph className="select-text text-xs md-h:text-sm lg-h:text-base">
         {!!channel.description && <TextComponent htmlString={channel.description.html} />}
     </Paragraph>
 )
@@ -103,7 +103,7 @@ const ActionBlock = ({ channel }: { channel: Channel }) => (
         <Spacing size={16} />
         {/* */}
         <Button
-            size="l"
+            size="m"
             mode="primary"
             aria-label={t("Subscribe button")}
             onClick={() => { window.open(`https://t.me/${channel.username}`, "_blank") }}
@@ -115,7 +115,7 @@ const ActionBlock = ({ channel }: { channel: Channel }) => (
 
 const ChannelTitle = ({ channel }: { channel: Channel }) => (
     <div className="block w-full">
-        <Title verified={channel.labels.includes("verified")}>
+        <Title verified={channel?.labels?.includes("verified") ?? false}>
             <TextComponent htmlString={channel.title.html} />
         </Title>
     </div>
@@ -129,7 +129,9 @@ const Body = ({ channel }: { channel: Channel }) => (
             title={<ChannelTitle channel={channel} />}
             action={<ActionBlock channel={channel} />}
         >
-            @{channel.username}
+            <span className="text-sm lg-h:text-base">
+                @{channel.username}
+            </span>
         </Placeholder>
         <Footer />
     </>

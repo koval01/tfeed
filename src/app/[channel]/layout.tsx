@@ -10,6 +10,7 @@ import type {
 import { removeEmojies } from "@/helpers/string";
 
 export const runtime = "edge";
+export const dynamic = "auto";
 
 /**
  * Builds metadata for the given channel.
@@ -24,7 +25,7 @@ const buildMetadata = (
     description?: string,
     avatar?: string
 ): Metadata => {
-    const clearTitle = removeEmojies(`${title} (@${channel})` || `Channel @${channel}`);
+    const clearTitle = removeEmojies(title ? `${title} (@${channel})` : `Channel @${channel}`);
     const baseDescription = description || `Channel of user @${channel}`;
     
     const channelUrl = `https://t.me/${channel}`;
@@ -69,6 +70,9 @@ export const generateMetadata = async (props: { params: Promise<{ channel: strin
     try {
         const response = await fetch(apiUrl, {
             headers: { BackEndSecret: process.env.BACKEND_SECRET || "" },
+            next: {
+                revalidate: 7200, // 2 hours
+            },
         });
 
         if (!response.ok) {

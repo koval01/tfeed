@@ -11,6 +11,7 @@ import { Feed } from "@/components/feed/Feed";
 import { PanelHeader, SplitCol, SplitLayout } from "@vkontakte/vkui";
 
 export const runtime = "edge";
+export const dynamic = "auto";
 
 /**
  * ChannelPage component for displaying a specific channel's feed.

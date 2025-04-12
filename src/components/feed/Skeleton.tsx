@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import {
     Group,
     Paragraph,
@@ -103,7 +103,7 @@ const PostBody: React.FC<{ length?: number, noAnimation?: boolean }> = (
  *
  * @returns The complete Post skeleton component
  */
-export const Post: React.FC<{ rows?: number, noAnimation?: boolean }> = React.memo((
+export const Post: React.FC<{ rows?: number, noAnimation?: boolean }> = memo((
     { rows = 5, noAnimation = false }
 ) => (
     <div>
@@ -149,9 +149,9 @@ export const Posts: React.FC = () => (
  *
  * @returns The ChannelNavSkeleton component.
  */
-export const ChannelNavSkeleton: React.FC = () => (
+export const ChannelNavSkeleton: React.FC = memo(() => (
     <div
-        className="block select-none items-center space-x-2 pl-2 overflow-hidden py-1"
+        className="relative max-md:-top-1 block select-none items-center space-x-2 pl-2 overflow-hidden py-1"
     >
         <div className="inline-block overflow-hidden float-left mr-2 relative">
             <Skeleton width={36} height={36} className="rounded-full" />
@@ -163,4 +163,5 @@ export const ChannelNavSkeleton: React.FC = () => (
             <Skeleton width={100} height={10} />
         </div>
     </div>
-);
+));
+ChannelNavSkeleton.displayName = "ChannelNavSkeleton";

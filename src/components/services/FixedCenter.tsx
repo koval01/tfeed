@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from "react";
 import type { ClassValue } from "clsx";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/clsx";
 
 interface FixedCenterProps extends PropsWithChildren {
     className?: ClassValue;

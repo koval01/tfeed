@@ -10,6 +10,7 @@ export type {
     PollOptions,
     PreviewLink,
     Media, 
+    Meta,
     Offset, 
     Forwarded,
     Footer

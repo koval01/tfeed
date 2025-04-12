@@ -7,7 +7,7 @@ import { LazyImage as Image } from "@/components/media/LazyImage";
 import { Icon28Play, Icon28Pause } from "@vkontakte/icons";
 import { Spinner } from "@vkontakte/vkui";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/clsx";
 import { t } from "i18next";
 
 /**

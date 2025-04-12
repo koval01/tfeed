@@ -1,164 +1,232 @@
 import { type FC, SetStateAction } from "react";
-import type { Offset, Post } from "@/types";
+import type { Offset, Post, Meta } from "@/types";
 import { AxiosError } from "axios";
+
 import {
     Icon28CheckCircleFill,
     Icon28SearchStarsOutline,
 } from "@vkontakte/icons";
 
-import { getMore } from "@/components/feed/fetcher";
+import { apiClient } from "@/components/feed/fetcher";
 import { t } from "i18next";
 
-type Direction = "before" | "after";
+type FetchDirection = "before" | "after";
 
-interface ErrorHandlerOptions {
-    context: string;
-    showErrorSnackbar?: (message: string, subtext?: string, Icon?: FC, iconColor?: string) => void;
+interface ErrorContext {
+    operation: "refresh" | "load-more";
+    direction: FetchDirection;
 }
 
-interface FetcherConfig {
-    channelUsername?: string;
+interface PostFetcherDependencies {
     setPosts: (value: SetStateAction<Post[]>) => void;
     setOffset: (value: SetStateAction<Offset>) => void;
-    showErrorSnackbar?: (message: string, subtext?: string, Icon?: FC, iconColor?: string) => void;
+    showErrorSnackbar?: SnackbarHandler;
 }
 
-/**
- * Handles error scenarios during post fetching operations
- */
-const handleFetchError = (error: unknown, { context, showErrorSnackbar }: ErrorHandlerOptions): boolean => {
-    const isAxiosError = error instanceof AxiosError;
-    const is404 = isAxiosError && error.response?.status === 404;
+interface FetchMoreResponse {
+    posts: Post[];
+    meta: Meta;
+}
 
-    if (!is404) {
-        console.error(`Error during ${context}`, error);
+type SnackbarHandler = (
+    message: string,
+    subtext?: string,
+    Icon?: FC,
+    iconColor?: string
+) => void;
+
+class PostFetcherError extends Error {
+    constructor(
+        message: string,
+        public readonly context: ErrorContext,
+        public readonly originalError?: unknown
+    ) {
+        super(message);
+        this.name = "PostFetcherError";
+    }
+}
+
+class PostFetcher {
+    private constructor(private readonly dependencies: PostFetcherDependencies) { }
+
+    static create(dependencies: PostFetcherDependencies): PostFetcher {
+        return new PostFetcher(dependencies);
     }
 
-    const message = is404
-        ? context === "refreshing data"
-            ? t("noFreshPosts")
-            : t("noMorePosts")
-        :
-        t('errorUpdate', { context });
-
-    showErrorSnackbar?.(
-        message,
-        isAxiosError ? error.response?.statusText || error.message : void 0,
-        is404 ? Icon28SearchStarsOutline : undefined,
-        is404 ? "--vkui--color_icon_accent" : undefined
-    );
-
-    return is404;
-};
-
-/**
- * Updates posts and offset state based on fetch results
- */
-const updatePostsAndOffset = (
-    posts: Post[],
-    direction: Direction,
-    setPosts: (value: SetStateAction<Post[]>) => void,
-    setOffset: (value: SetStateAction<Offset>) => void
-): void => {
-    if (posts.length === 0) return;
-
-    setPosts((prevPosts) =>
-        direction === "after" ? [...posts, ...prevPosts] : [...prevPosts, ...posts]
-    );
-
-    setOffset((prevOffset) => ({
-        ...prevOffset,
-        [direction]: direction === "after"
-            ? posts[0]?.id
-            : posts[posts.length - 1]?.id,
-    }));
-};
-
-/**
- * Fetches posts from the server with error handling
- */
-const fetchPosts = async (
-    config: FetcherConfig,
-    offsetKey: number | undefined,
-    direction: Direction,
-    setIsFetching: (value: SetStateAction<boolean>) => void
-): Promise<Post[] | null> => {
-    const { channelUsername, showErrorSnackbar } = config;
-
-    if (!channelUsername || offsetKey === undefined) return null;
-
-    setIsFetching(true);
-
-    try {
-        const response = await getMore(channelUsername, offsetKey, direction);
-        return response?.posts?.slice().reverse() || [];
-    } catch (error) {
-        const is404 = handleFetchError(error, {
-            context: direction === "after" ? "refreshing data" : "fetching older posts",
-            showErrorSnackbar
-        });
-        return is404 ? [] : null;
-    } finally {
-        setIsFetching(false);
+    private async handleApiRequest<T>(
+        operation: () => Promise<T>,
+        context: ErrorContext
+    ): Promise<T | null> {
+        try {
+            return await operation();
+        } catch (error) {
+            this.handleError(error, context);
+            return null;
+        }
     }
+
+    private handleError(error: unknown, context: ErrorContext): void {
+        const isAxiosError = error instanceof AxiosError;
+        const is404 = isAxiosError && error.response?.status === 404;
+
+        if (!is404) {
+            console.error(
+                `Error during ${context.operation} (${context.direction})`,
+                error
+            );
+        }
+
+        const messageKey = is404
+            ? context.operation === "refresh"
+                ? "noFreshPosts"
+                : "noMorePosts"
+            : "errorUpdate";
+
+        this.dependencies.showErrorSnackbar?.(
+            t(messageKey, { context: context.operation }),
+            isAxiosError ? error.response?.statusText || error.message : undefined,
+            is404 ? Icon28SearchStarsOutline : undefined,
+            is404 ? "--vkui--color_icon_accent" : undefined
+        );
+
+        if (!is404) {
+            throw new PostFetcherError(
+                `Failed to ${context.operation} posts`,
+                context,
+                error
+            );
+        }
+    }
+
+    private updateState(posts: Post[], direction: FetchDirection): void {
+        if (posts.length === 0) return;
+
+        this.dependencies.setPosts(prevPosts =>
+            direction === "after"
+                ? [...posts, ...prevPosts]
+                : [...prevPosts, ...posts]
+        );
+
+        this.dependencies.setOffset(prevOffset => ({
+            ...prevOffset,
+            [direction]: this.getOffsetKey(posts, direction),
+        }));
+    }
+
+    private getOffsetKey(posts: Post[], direction: FetchDirection): number | undefined {
+        const post = direction === "after" ? posts[0] : posts[posts.length - 1];
+        return post?.id;
+    }
+
+    private async fetchPosts(
+        channelUsername: string,
+        offsetKey: number | undefined,
+        direction: FetchDirection,
+        setIsLoading: (value: SetStateAction<boolean>) => void
+    ): Promise<Post[] | null> {
+        if (offsetKey === undefined) return null;
+
+        setIsLoading(true);
+        try {
+            const response = await this.handleApiRequest<FetchMoreResponse>(
+                () => apiClient.getMore(channelUsername, offsetKey, direction),
+                {
+                    operation: direction === "after" ? "refresh" : "load-more",
+                    direction,
+                }
+            );
+
+            return response?.posts?.slice().reverse() ?? null;
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    async refresh(
+        channelUsername: string,
+        offset: Offset,
+        setIsFetching: (value: SetStateAction<boolean>) => void
+    ): Promise<void> {
+        const posts = await this.fetchPosts(
+            channelUsername,
+            offset.after,
+            "after",
+            setIsFetching
+        );
+
+        if (posts?.length) {
+            this.updateState(posts, "after");
+            this.dependencies.showErrorSnackbar?.(
+                t("feedUpdated"),
+                "",
+                Icon28CheckCircleFill
+            );
+        }
+    }
+
+    async loadMore(
+        channelUsername: string,
+        offset: Offset,
+        setIsFetchingMore: (value: SetStateAction<boolean>) => void,
+        setNoLoadMore: (state: boolean) => void
+    ): Promise<void> {
+        const posts = await this.fetchPosts(
+            channelUsername,
+            offset.before,
+            "before",
+            setIsFetchingMore
+        );
+
+        if (!posts) return;
+
+        if (posts.length > 0) {
+            this.updateState(posts, "before");
+        } else {
+            setNoLoadMore(true);
+        }
+    }
+}
+
+export const createPostFetcher = (dependencies: PostFetcherDependencies) => {
+    return PostFetcher.create(dependencies);
 };
 
-/**
- * Refreshes the feed with new posts
- */
-export const onRefresh = async (
-    channelUsername: string | undefined,
+export const onRefresh = (
+    channelUsername: string,
     offset: Offset,
     setIsFetching: (value: SetStateAction<boolean>) => void,
     setPosts: (value: SetStateAction<Post[]>) => void,
     setOffset: (value: SetStateAction<Offset>) => void,
-    showErrorSnackbar?: (message: string, subtext?: string, Icon?: FC, iconColor?: string) => void
+    showErrorSnackbar?: SnackbarHandler
 ): Promise<void> => {
-    const config: FetcherConfig = {
-        channelUsername,
+    const fetcher = createPostFetcher({
         setPosts,
         setOffset,
-        showErrorSnackbar
-    };
+        showErrorSnackbar,
+    });
 
-    const posts = await fetchPosts(config, offset.after, "after", setIsFetching);
-
-    if (posts?.length) {
-        updatePostsAndOffset(posts, "after", setPosts, setOffset);
-        showErrorSnackbar?.(t("feedUpdated"), "", Icon28CheckCircleFill);
-    }
+    return fetcher.refresh(channelUsername, offset, setIsFetching);
 };
 
-/**
- * Loads more posts and handles pagination
- */
-export const onMore = async (
-    channelUsername: string | undefined,
+export const onMore = (
+    channelUsername: string,
     offset: Offset,
     setIsFetchingMore: (value: SetStateAction<boolean>) => void,
     setPosts: (value: SetStateAction<Post[]>) => void,
     setOffset: (value: SetStateAction<Offset>) => void,
     setNoLoadMore: (state: boolean) => void,
-    showErrorSnackbar?: (message: string, subtext?: string, Icon?: FC, iconColor?: string) => void
+    showErrorSnackbar?: SnackbarHandler
 ): Promise<void> => {
-    const config: FetcherConfig = {
-        channelUsername,
+    const fetcher = createPostFetcher({
         setPosts,
         setOffset,
-        showErrorSnackbar
-    };
+        showErrorSnackbar,
+    });
 
-    const posts = await fetchPosts(config, offset.before, "before", setIsFetchingMore);
-
-    if (posts && posts.length > 0) {
-        updatePostsAndOffset(posts, "before", setPosts, setOffset);
-    } else if (posts && posts.length === 0) {
-        setNoLoadMore(true);
-        showErrorSnackbar?.(
-            t("noMorePosts"),
-            "",
-            Icon28SearchStarsOutline,
-            "--vkui--color_icon_accent"
-        );
-    }
+    return fetcher.loadMore(
+        channelUsername,
+        offset,
+        setIsFetchingMore,
+        setNoLoadMore
+    );
 };
