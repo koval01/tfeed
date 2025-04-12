@@ -27,7 +27,7 @@
     "html-react-parser": "^5.2.3",
     "i18next": "^24.2.3",
     "lodash": "^4.17.21",
-    "lucide-react": "^0.482.0",
+    "lucide-react": "^0.487.0",
     "next": "^15.3.0",
     "normalize.css": "^8.0.1",
     "react": "^19.1.0",
