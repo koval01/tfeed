@@ -6,15 +6,12 @@ import React, {
     useContext, 
     useEffect, 
     useMemo, 
-    useRef, 
     useState, 
     type PropsWithChildren 
 } from "react";
 
 import type { Channel, Footer, Post, TitleProps } from "@/types";
 import type { FooterComponentProps, PostBodyProps } from "@/types/feed/post";
-
-import Markdown from 'react-markdown'
 
 import { useFormattedDate } from "@/hooks/utils/useFormattedDate";
 import { useIntelligence } from "@/hooks/services/useIntelligence";
@@ -44,8 +41,6 @@ import {
     Footnote,
     Headline,
     Image,
-    Paragraph,
-    Skeleton,
     Spacing,
     Subhead,
     Tappable,
@@ -64,6 +59,7 @@ import { RoundVideo } from "@/components/feed/post/RoundVideo";
 import { Sticker } from "@/components/feed/post/Sticker";
 import { Verified } from "@/components/feed/post/Verified";
 import { TextComponent } from "@/components/feed/TextComponent";
+import { AIBlock } from "@/components/feed/post/AIBlock";
 
 import { Icons } from "@/components/ui/Icons";
 
@@ -441,100 +437,6 @@ const PostSupport = memo(({ children, post }: PropsWithChildren<{ post: Post }>)
     return isSupported ? children : <PostNotSupported />
 });
 PostSupport.displayName = "PostSupport";
-
-const AIBlock = memo(({ postId }: { postId: number }) => {
-    const { states, setAiState } = useContext(PostAiContext);
-    const aiState = states[postId] || DEFAULT_AI_STATE;
-    const contentRef = useRef<HTMLDivElement>(null);
-
-    const [contentHeight, setContentHeight] = useState<string>('0');
-    const [skipAnimation, setSkipAnimation] = useState(!!aiState.cachedHeight);
-
-    useEffect(() => {
-        if (!contentRef.current) return;
-
-        if (aiState.cachedHeight) {
-            setContentHeight(aiState.cachedHeight);
-            setSkipAnimation(true);
-            return;
-        }
-
-        const newHeight = aiState.triggered
-            ? (aiState.result || aiState.error
-                ? `${contentRef.current.scrollHeight}px`
-                : '150px')
-            : '0';
-
-        setContentHeight(newHeight);
-
-        if (aiState.triggered && aiState.result && !aiState.cachedHeight) {
-            const timer = setTimeout(() => {
-                setAiState(postId, {
-                    ...aiState,
-                    cachedHeight: newHeight
-                });
-                setSkipAnimation(true);
-            }, 500);
-
-            return () => clearTimeout(timer);
-        }
-    }, [aiState, postId, setAiState]);
-
-    return (
-        <div className={cn(
-            "relative p-1 md:p-2 mb-1 md:mb-2",
-            { 'block': aiState.triggered, 'hidden': !aiState.triggered }
-        )}>
-            <div className={cn(
-                "ai__background_color w-full relative block",
-                "px-1.5 sm:px-2 md:px-2.5 py-2 md:py-3",
-                "rounded-md md:rounded-xl",
-                "overflow-hidden",
-                {
-                    'bg-red-50 border border-red-200': aiState.error,
-                    'bg-blue-50': !aiState.error
-                }
-            )}>
-                <div
-                    ref={contentRef}
-                    className="overflow-hidden"
-                    style={{
-                        maxHeight: contentHeight,
-                        transition: skipAnimation
-                            ? 'none'
-                            : 'max-height 500ms cubic-bezier(0.4, 0, 0.2, 1)'
-                    }}
-                >
-                    {aiState.result ? (
-                        <div className="space-y-2 md:space-y-3">
-                            <Paragraph>
-                                <Markdown>{aiState.result}</Markdown>
-                            </Paragraph>
-                            <Subhead className="opacity-60 select-none">
-                                <Trans i18nKey="answerGeneratedBy" components={{
-                                    highlight: <span className="ai__text_color" />
-                                }} />
-                            </Subhead>
-                        </div>
-                    ) : aiState.error ? (
-                        <Footnote caps>
-                            {t("errorRequestAi")}
-                        </Footnote>
-                    ) : (
-                        <div className="space-y-2">
-                            <Skeleton />
-                            <Skeleton />
-                            <Skeleton />
-                            <Skeleton />
-                            <Skeleton />
-                        </div>
-                    )}
-                </div>
-            </div>
-        </div>
-    );
-});
-AIBlock.displayName = "AIBlock";
 
 /**
  * Renders the main content of the post, including text, media, and poll.
