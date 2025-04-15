@@ -56,7 +56,7 @@ const VirtualizedListWrapper = <T extends WithId>({
     };
 
     return (
-        <Div className="px-0">
+        <Div className="px-0 pb-0">
             <TopSnack 
                 count={newPostsCount}
                 currentScrollTop={currentScrollTop}

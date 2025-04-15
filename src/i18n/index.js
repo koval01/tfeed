@@ -25,6 +25,9 @@ export const i18nStrings = {
             "buttonForCallAi": "Call a neuro-assistant",
             "unsatisfNumberSubs": "Unfortunately, this feature is not available for channels with less than 10 thousand subscribers.",
             "openPostInNewWindow": "Open this post in a new window",
+            "loadingMoreWait": "Loading more posts...",
+            "loadingMoreWaitMore": "Still loading...",
+            "feedTheEnd": "The end",
         }
     },
     "de": {
@@ -59,6 +62,9 @@ export const i18nStrings = {
             "buttonForCallAi": "Rufen Sie einen Neuro-Assistenten",
             "unsatisfNumberSubs": "Leider ist diese Funktion für Kanäle mit weniger als 10 Tausend Abonnenten nicht verfügbar.",
             "openPostInNewWindow": "Diesen Beitrag in einem neuen Fenster öffnen",
+            "loadingMoreWait": "Mehr Beiträge laden...",
+            "loadingMoreWaitMore": "Wird noch geladen...",
+            "feedTheEnd": "Das Ende",
         }
     },
     "ru": {
@@ -93,6 +99,9 @@ export const i18nStrings = {
             "buttonForCallAi": "Вызвать нейроассистента",
             "unsatisfNumberSubs": "К сожалению, эта функция недоступна для каналов с менее чем 10 тысячами подписчиков.",
             "openPostInNewWindow": "Открыть этот пост в новом окне",
+            "loadingMoreWait": "Загрузка других постов...",
+            "loadingMoreWaitMore": "Все еще загружается...",
+            "feedTheEnd": "Конец",
         }
     },
     "uk": {
@@ -127,6 +136,9 @@ export const i18nStrings = {
             "buttonForCallAi": "Викликати нейроасистента",
             "unsatisfNumberSubs": "На жаль, ця функція недоступна для каналів з кількістю підписників менше 10 тисяч.",
             "openPostInNewWindow": "Відкрити цей пост у новому вікні",
+            "loadingMoreWait": "Завантажуємо більше публікацій...",
+            "loadingMoreWaitMore": "Все ще завантажується...",
+            "feedTheEnd": "Кінець",
         }
     }
 }

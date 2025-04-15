@@ -1,13 +1,8 @@
 "use client";
 
-import { type JSX, useCallback, useRef } from "react";
-import { useSelector } from "react-redux";
-
-import { selectNoLoadMore } from '@/lib/store';
-import { t } from "i18next";
+import { type JSX, memo, useCallback, useRef } from "react";
 
 import type {
-    LoadingMoreProps,
     PostBodyProps,
     PostProps,
     PostsProps
@@ -22,10 +17,8 @@ import VirtualizedListWrapper from "@/components/feed/VirtualizedListWrapper";
 import {
     Group,
     PullToRefresh,
-    Separator,
     Spacing,
-    SplitCol,
-    Subhead
+    SplitCol
 } from "@vkontakte/vkui";
 
 import {
@@ -38,11 +31,10 @@ import { useAnalytics } from "@/hooks/services/useAnalytics";
 import { InView } from "react-intersection-observer";
 
 import { Forward } from "@/components/feed/post/Forward";
-import { Button } from "@/components/ui/Button";
-import { ThreeDot } from "react-loading-indicators";
 
 import { MediaProvider } from "@/contexts/MediaContext";
 import { PostAiProvider } from "@/contexts/PostAiContext";
+import { InfiniteFeedLoader } from "./Footer";
 
 /**
  * Displays the content of a single post, including forwarded content if applicable.
@@ -56,47 +48,6 @@ const PostBody = ({ channel, post }: PostBodyProps): JSX.Element => (
         <PostContent channel={channel} post={post} />
     )
 );
-
-/**
- * Button for loading more posts, with a loader when fetching.
- */
-const LoadingMoreButton = ({ isFetchingMore }: { isFetchingMore: boolean }): JSX.Element => (
-    <div className="flex justify-center">
-        <Button
-            size="s"
-            appearance="overlay"
-            loading={isFetchingMore}
-            loader={<ThreeDot variant="pulsate" color="#818c99" style={{ fontSize: "4px" }} />}
-            disabled={isFetchingMore}
-            className="w-24 h-[30px]"
-            aria-label={t("Load more button")}
-        >
-            <Subhead
-                weight="1"
-                className="text-xs text-neutral-600"
-                Component="h5"
-                useAccentWeight
-            >
-                {t("Load more")}
-            </Subhead>
-        </Button>
-    </div>
-);
-
-/**
- * Displays the loading state or button to load more posts.
- */
-const LoadingMore = ({ isFetchingMore }: LoadingMoreProps): JSX.Element => {
-    const noMorePosts = useSelector(selectNoLoadMore);
-
-    return (
-        <Group mode="plain" className="my-0.5 md:my-1 lg:my-1.5 pb-12 md:pb-24">
-            <div className="relative">
-                {!noMorePosts && <LoadingMoreButton isFetchingMore={isFetchingMore} />}
-            </div>
-        </Group>
-    );
-};
 
 /**
  * Displays an individual post with its metadata and content.
@@ -125,13 +76,12 @@ const Post = ({ item, channel, ...props }: PostProps & Record<string, any>): JSX
         </Group>
     );
 };
-
 Post.displayName = "Post";
 
 /**
  * Main Posts component that renders a list of posts with pull-to-refresh and load-more functionality.
  */
-export const Posts = ({ channel, posts, onRefresh, isFetching }: PostsProps): JSX.Element => {
+export const Posts = memo(({ channel, posts, onRefresh, isFetching, isFetchingMore }: PostsProps): JSX.Element => {
     const renderItem = useCallback((item: PostInterface) => {
         return (
             <Post key={`post__item_${item.id}`} item={item} channel={channel} />
@@ -151,6 +101,7 @@ export const Posts = ({ channel, posts, onRefresh, isFetching }: PostsProps): JS
                                     items={posts}
                                     parentRef={feedRef}
                                     renderItem={renderItem}
+                                    footer={<InfiniteFeedLoader isFetchingMore={isFetchingMore} />}
                                 />
                             </div>
                         </div>
@@ -159,4 +110,5 @@ export const Posts = ({ channel, posts, onRefresh, isFetching }: PostsProps): JS
             </PostAiProvider>
         </MediaProvider>
     );
-}
+});
+Posts.displayName = "Posts";
