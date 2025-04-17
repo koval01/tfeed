@@ -31,10 +31,11 @@ import { useAnalytics } from "@/hooks/services/useAnalytics";
 import { InView } from "react-intersection-observer";
 
 import { Forward } from "@/components/feed/post/Forward";
+import { InfiniteFeedLoader } from "@/components/feed/post/Footer";
+import { FeedProfile } from "@/components/feed/post/Header";
 
 import { MediaProvider } from "@/contexts/MediaContext";
 import { PostAiProvider } from "@/contexts/PostAiContext";
-import { InfiniteFeedLoader } from "./Footer";
 
 /**
  * Displays the content of a single post, including forwarded content if applicable.
@@ -101,6 +102,7 @@ export const Posts = memo(({ channel, posts, onRefresh, isFetching, isFetchingMo
                                     items={posts}
                                     parentRef={feedRef}
                                     renderItem={renderItem}
+                                    header={<FeedProfile channel={channel} />}
                                     footer={<InfiniteFeedLoader isFetchingMore={isFetchingMore} />}
                                 />
                             </div>

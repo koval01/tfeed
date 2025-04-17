@@ -1,4 +1,4 @@
-import React, { type RefObject, useRef, useState } from "react";
+import React, { type RefObject, useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { Div } from "@vkontakte/vkui";
@@ -10,16 +10,14 @@ import { selectNewPostsCount } from "@/lib/store";
 
 /**
  * Props interface for VirtualizedListWrapper component
- * @template T - Generic type for list items
- * @property {T[]} items - Array of items to be rendered in the virtual list
- * @property {function} renderItem - Function to render individual list items
- * @property {JSX.Element} footer - Footer component
  */
 type VirtualizedListWrapperProps<T> = {
     items: T[];
     renderItem: (item: T, index: number) => React.ReactNode;
     footer?: React.JSX.Element;
+    header?: React.JSX.Element;
     parentRef: RefObject<HTMLDivElement | null>;
+    onVisibleItemsChange?: (visibleItems: T[]) => void;
 };
 
 interface WithId {
@@ -44,9 +42,13 @@ const VirtualizedListWrapper = <T extends WithId>({
     parentRef,
     renderItem,
     footer,
+    header,
+    onVisibleItemsChange,
 }: VirtualizedListWrapperProps<T>) => {
     const virtuosoRef = useRef<VirtuosoHandle>(null);
+
     const [currentScrollTop, setCurrentScrollTop] = useState(0);
+    const [visibleItems, setVisibleItems] = useState<T[]>([]);
 
     const newPostsCount = useSelector(selectNewPostsCount);
 
@@ -55,8 +57,23 @@ const VirtualizedListWrapper = <T extends WithId>({
         ...{ ScrollSeekPlaceholder }
     };
 
+    const handleRangeChange = useCallback((range: { startIndex: number; endIndex: number }) => {
+        const visible = items.slice(range.startIndex, range.endIndex + 1);
+        setVisibleItems(visible);
+
+        if (onVisibleItemsChange) {
+            onVisibleItemsChange(visible);
+        }
+    }, [items, onVisibleItemsChange]);
+
+    useEffect(() => {
+        const visibleIds = visibleItems.map(item => item.id);
+        // console.log("Currently visible items IDs:", visibleIds);
+    }, [visibleItems]);
+
     return (
-        <Div className="px-0 pb-0">
+        <Div className="px-0 py-0 !pt-0">
+            {header} {/* This approach is used to avoid unnecessary re-renderings */}
             <TopSnack 
                 count={newPostsCount}
                 currentScrollTop={currentScrollTop}
@@ -74,6 +91,7 @@ const VirtualizedListWrapper = <T extends WithId>({
                 itemContent={(index, item) => renderItem(item, index)}
                 computeItemKey={(_, item) => `virt__post_${item.id}`}
                 itemsRendered={(v) => setCurrentScrollTop(v[0]?.offset || 0)}
+                rangeChanged={handleRangeChange}
                 scrollSeekConfiguration={{
                     // Enter scroll seek mode when scrolling faster than 2000px/s
                     enter: (velocity) => Math.abs(velocity) > 2e3,

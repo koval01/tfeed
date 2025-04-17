@@ -37,10 +37,10 @@ const config: Config = {
         'xl': '1280px',
         '2xl': '1536px',
         
-        'max-sm': { 'max': '639px' },
-        'max-md': { 'max': '767px' },
-        'max-lg': { 'max': '1023px' },
-        'max-xl': { 'max': '1279px' },
+        'max-sm': { 'max': '640px' },
+        'max-md': { 'max': '768px' },
+        'max-lg': { 'max': '1024px' },
+        'max-xl': { 'max': '1280px' },
         'max-2xl': { 'max': '1535px' },
 
         'sm-h': { 'raw': '(min-height: 480px)' },
@@ -49,11 +49,11 @@ const config: Config = {
         'xl-h': { 'raw': '(min-height: 1080px)' },
         '2xl-h': { 'raw': '(min-height: 1200px)' },
 
-        'max-sm-h': { 'raw': '(max-height: 479px)' },
-        'max-md-h': { 'raw': '(max-height: 719px)' },
-        'max-lg-h': { 'raw': '(max-height: 899px)' },
-        'max-xl-h': { 'raw': '(max-height: 1079px)' },
-        'max-2xl-h': { 'raw': '(max-height: 1199px)' },
+        'max-sm-h': { 'raw': '(max-height: 480px)' },
+        'max-md-h': { 'raw': '(max-height: 720px)' },
+        'max-lg-h': { 'raw': '(max-height: 900px)' },
+        'max-xl-h': { 'raw': '(max-height: 1080px)' },
+        'max-2xl-h': { 'raw': '(max-height: 1200px)' },
       }
     },
   },

@@ -3,7 +3,7 @@ import { memo, type FC } from 'react';
 
 import { PanelHeader } from "@vkontakte/vkui";
 
-import { ChannelNav, SubscribeButton } from "@/components/feed/header/Nav";
+import { ChannelNav } from "@/components/feed/header/Nav";
 import { ChannelNavSkeleton } from "@/components/feed/Skeleton";
 
 interface FeedHeaderProps {
@@ -17,8 +17,9 @@ export const FeedHeader: FC<FeedHeaderProps> = memo(({ channel, isLoading }) => 
             before={isLoading ? <ChannelNavSkeleton /> : <ChannelNav channel={channel} />}
             after={
                 !isLoading && (
-                    <div className="relative max-md:-top-1 inline-block items-center overflow-hidden lg:hidden">
-                        <SubscribeButton channel={channel} />
+                    <div className="relative max-md:-top-1 inline-block items-center overflow-hidden">
+                        {/* <SubscribeButton channel={channel} /> */}
+                        {/* TODO: Replace to search field */}
                     </div>
                 )
             }

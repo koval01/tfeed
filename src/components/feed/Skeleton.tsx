@@ -136,6 +136,7 @@ export const Posts: React.FC = () => (
         className="md:pt-0"
     >
         <div className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto px-0">
+            <FeedProfileSkeleton />
             {Array.from({ length: 10 }).map((_, index) => (
                 <Post key={`skeleton_post_${index}`} />
             ))}
@@ -165,3 +166,55 @@ export const ChannelNavSkeleton: React.FC = memo(() => (
     </div>
 ));
 ChannelNavSkeleton.displayName = "ChannelNavSkeleton";
+
+export const FeedProfileSkeleton = memo(() => (
+    <Group mode="plain" className="lg:hidden py-0 select-none">
+        <div className="w-full bg-white dark:bg-black border-b md:border-x dark:border-[#2f3336]">
+            {/* Cover Photo */}
+            <div className="h-48 bg-gray-200 dark:bg-gray-800 w-full">
+                <Skeleton width="100%" height="100%" />
+            </div>
+
+            <div className="relative px-4">
+                {/* Profile Picture */}
+                <div className="absolute -top-16 left-4 border-4 border-white dark:border-black rounded-full">
+                    <Skeleton width={128} height={128} className="rounded-full" />
+                </div>
+
+                {/* Follow Button */}
+                <div className="flex justify-end pt-3">
+                    <Skeleton width={110} height={36} className="rounded-full" />
+                </div>
+
+                <div className="mt-10">
+                    {/* Title with verified placeholder */}
+                    <div className="flex items-center">
+                        <Skeleton width={180} height={28} />
+                        <Skeleton width={20} height={20} className="ml-1 rounded-full" />
+                    </div>
+
+                    {/* Username */}
+                    <Skeleton width={100} height={16} className="mt-1" />
+
+                    <Spacing size={14} />
+
+                    {/* Description */}
+                    <div className="py-0.5 space-y-1">
+                        <Skeleton width="100%" height={14} />
+                        <Skeleton width="90%" height={14} />
+                        <Skeleton width="80%" height={14} />
+                    </div>
+
+                    {/* Stats */}
+                    <div className="flex flex-wrap gap-4 my-3">
+                        <Skeleton width={60} height={16} />
+                        <Skeleton width={60} height={16} />
+                        <Skeleton width={60} height={16} />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Group>
+));
+
+FeedProfileSkeleton.displayName = "FeedProfileSkeleton";
