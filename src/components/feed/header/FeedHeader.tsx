@@ -14,6 +14,7 @@ interface FeedHeaderProps {
 export const FeedHeader: FC<FeedHeaderProps> = memo(({ channel, isLoading }) => (
     <>
         <PanelHeader
+            className="h-12"
             before={isLoading ? <ChannelNavSkeleton /> : <ChannelNav channel={channel} />}
             after={
                 !isLoading && (
