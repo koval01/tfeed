@@ -48,6 +48,36 @@ export const usePosts = (
     const latestPollingOffset = useRef<Offset | null>(null);
     const shouldApplyCachedPosts = useRef(false);
 
+    const processNewPosts = useCallback((newPosts: Post[], currentPosts: Post[], currentOffset: Offset) => {
+        if (newPosts.length === 0) return { filteredPosts: [], updatedOffset: currentOffset };
+
+        const existingPostIds = new Set(currentPosts.map(post => post.id));
+        const filteredPosts = newPosts.filter(post => !existingPostIds.has(post.id));
+
+        // If all posts were duplicates, we need to adjust the offset
+        if (filteredPosts.length === 0 && newPosts.length > 0) {
+            // Find the highest ID in the duplicates (assuming IDs are sortable)
+            const highestDuplicateId = newPosts.reduce((maxId, post) =>
+                post.id > maxId ? post.id : maxId, newPosts[0].id);
+
+            return {
+                filteredPosts: [],
+                updatedOffset: {
+                    ...currentOffset,
+                    after: highestDuplicateId
+                }
+            };
+        }
+
+        return {
+            filteredPosts,
+            updatedOffset: {
+                ...currentOffset,
+                after: filteredPosts[0]?.id || currentOffset.after
+            }
+        };
+    }, []);
+
     const applyCachedPosts = useCallback(() => {
         if (cachedPosts.length === 0) return;
 
@@ -56,7 +86,6 @@ export const usePosts = (
         if (offset.latestPolledOffset) {
             const updatedOffset = { ...offset.latestPolledOffset };
             setOffset(updatedOffset);
-            // Update latestPollingOffset.current to match the applied offset
             latestPollingOffset.current = updatedOffset;
         }
 
@@ -112,18 +141,10 @@ export const usePosts = (
             );
 
             if (tempPosts.length > 0) {
-                // Ensure we're not adding duplicates to cachedPosts
-                const existingPostIds = new Set([...cachedPosts, ...posts].map(post => post.id));
-                const uniqueNewPosts = tempPosts.filter(post => !existingPostIds.has(post.id));
+                const { filteredPosts, updatedOffset } = processNewPosts(tempPosts, [...cachedPosts, ...posts], currentPollOffset);
 
-                if (uniqueNewPosts.length > 0) {
-                    setCachedPosts(prev => [...uniqueNewPosts, ...prev]);
-
-                    // Update the latest polling offset with the correct "after" value
-                    const updatedOffset = {
-                        ...tempOffset,
-                        after: uniqueNewPosts[0]?.id || tempOffset.after
-                    };
+                if (filteredPosts.length > 0) {
+                    setCachedPosts(prev => [...filteredPosts, ...prev]);
 
                     latestPollingOffset.current = updatedOffset;
                     setOffset(prevOffset => ({
@@ -132,7 +153,14 @@ export const usePosts = (
                     }));
 
                     setHasNewPosts(true);
-                    dispatch(addNewPostsCount(uniqueNewPosts.length));
+                    dispatch(addNewPostsCount(filteredPosts.length));
+                } else if (updatedOffset.after !== currentPollOffset.after) {
+                    // Only update the offset if it changed (we skipped duplicates)
+                    latestPollingOffset.current = updatedOffset;
+                    setOffset(prevOffset => ({
+                        ...prevOffset,
+                        latestPolledOffset: updatedOffset
+                    }));
                 }
             }
 
@@ -142,7 +170,7 @@ export const usePosts = (
         } finally {
             setIsPolling(false);
         }
-    }, [channelUsername, offset, isPolling, dispatch, cachedPosts, posts]);
+    }, [channelUsername, offset, isPolling, dispatch, cachedPosts, posts, processNewPosts]);
 
     useEffect(() => {
         if (!channelUsername) return;
@@ -194,25 +222,48 @@ export const usePosts = (
 
         if (!isAtTop || !channelUsername) return;
 
+        const tempPosts: Post[] = [];
+        const setTempPosts: Dispatch<SetStateAction<Post[]>> = (action) => {
+            const newPosts = typeof action === 'function'
+                ? action(tempPosts)
+                : action;
+            tempPosts.push(...newPosts);
+            return;
+        };
+
+        let tempOffset: ExtendedOffset = {};
+        const setTempOffset: Dispatch<SetStateAction<ExtendedOffset>> = (action) => {
+            tempOffset = typeof action === 'function'
+                ? action(tempOffset)
+                : action;
+            return;
+        };
+
         await onRefresh(
             channelUsername,
             latestPollingOffset.current || offset,
             setIsFetching,
-            setPosts,
-            (newOffset) => {
-                const updatedOffset = typeof newOffset === 'function'
-                    ? newOffset(offset)
-                    : newOffset;
-
-                setOffset(updatedOffset);
-                // Update latestPollingOffset.current when refreshing posts
-                latestPollingOffset.current = updatedOffset;
-            },
+            setTempPosts,
+            setTempOffset,
             showError ? showErrorSnackbar : undefined
         );
 
+        if (tempPosts.length > 0) {
+            const { filteredPosts, updatedOffset } = processNewPosts(tempPosts, posts, offset);
+
+            if (filteredPosts.length > 0) {
+                setPosts(prevPosts => [...filteredPosts, ...prevPosts]);
+                setOffset(updatedOffset);
+                latestPollingOffset.current = updatedOffset;
+            } else if (updatedOffset.after !== offset.after) {
+                // Only update the offset if it changed (we skipped duplicates)
+                setOffset(updatedOffset);
+                latestPollingOffset.current = updatedOffset;
+            }
+        }
+
         setHasNewPosts(false);
-    }, [channelUsername, offset, showErrorSnackbar, cachedPosts, applyCachedPosts]);
+    }, [channelUsername, offset, showErrorSnackbar, cachedPosts, applyCachedPosts, posts, processNewPosts]);
 
     const loadMorePosts = useCallback(async () => {
         if (isFetchingMore || isFetching || !channelUsername) return;
