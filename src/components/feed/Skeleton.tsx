@@ -190,7 +190,6 @@ export const FeedProfileSkeleton = memo(() => (
                     {/* Title with verified placeholder */}
                     <div className="flex items-center">
                         <Skeleton width={180} height={28} />
-                        <Skeleton width={20} height={20} className="ml-1 rounded-full" />
                     </div>
 
                     {/* Username */}
