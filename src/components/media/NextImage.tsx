@@ -1,11 +1,9 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState, memo } from 'react';
 
 import { Image, type ImageProps as VKImageProps } from "@vkontakte/vkui";
 import { Icon36PictureOutline } from '@vkontakte/icons';
 
 import { nextImage } from '@/helpers/nextImage';
-import { randomString } from '@/lib/utils/random';
-
 import { throttle } from 'lodash';
 
 interface ImageProps extends VKImageProps {
@@ -13,40 +11,55 @@ interface ImageProps extends VKImageProps {
     src: string;
     proxy?: boolean;
     alt?: string;
+    priority?: boolean;
 }
 
-interface WrappedImageProps extends React.ComponentProps<typeof Image> {
-    children?: React.ReactNode;
-    src?: string;
-    alt?: string;
-    loading: "eager" | "lazy";
-}
-
-const WrappedImage: React.FC<WrappedImageProps> = ({ children, src, ...props }) => {
-    const [imageKey, setImageKey] = useState(`image_${randomString()}`);
+const WrappedImageComponent: React.FC<ImageProps> = ({
+    src,
+    proxy = false,
+    alt = "",
+    priority = false,
+    children,
+    ...props
+}) => {
+    const [imageKey, setImageKey] = useState(`image_${Date.now()}`);
+    const [hasError, setHasError] = useState(false);
+    const modifiedSrc = useMemo(() =>
+        src ? (proxy ? nextImage(src, 512) : src) : undefined,
+        [src, proxy]
+    );
 
     const handleError = useCallback(() => {
-        setImageKey(`image_${randomString()}`);
-    }, []);
+        if (!hasError) {
+            setHasError(true);
+            setImageKey(`image_retry_${Date.now()}`);
+        }
+    }, [hasError]);
 
     const throttledHandleError = useMemo(
-        () => throttle(handleError, 1000),
+        () => throttle(handleError, 1000, { leading: true, trailing: false }),
         [handleError]
     );
 
     useEffect(() => {
-        return () => {
-            throttledHandleError.cancel();
-        };
+        return () => throttledHandleError.cancel();
     }, [throttledHandleError]);
 
+    // Reset error state when src changes
+    useEffect(() => {
+        setHasError(false);
+    }, [src]);
+
     return (
-        <Image 
-            {...props} 
+        <Image
+            {...props}
             key={imageKey}
-            src={src} 
-            alt={props?.alt} 
-            fallbackIcon={<Icon36PictureOutline />} 
+            src={modifiedSrc}
+            alt={alt}
+            loading={priority ? "eager" : "lazy"}
+            decoding={priority ? "sync" : "async"}
+            fetchPriority={priority ? "high" : "auto"}
+            fallbackIcon={<Icon36PictureOutline width={24} height={24} />}
             onError={throttledHandleError}
         >
             {children}
@@ -54,23 +67,11 @@ const WrappedImage: React.FC<WrappedImageProps> = ({ children, src, ...props }) 
     );
 };
 
-const MemoizedImage = React.memo(WrappedImage);
-
-/*
-* Custom realization Image component in next
-*/
-export const NextImage: React.FC<ImageProps> = ({ children, src, proxy = false, alt, ...props }) => {
-    const modifiedSrc = src ? nextImage(src, 512) : undefined;
-
+export const NextImage = memo(WrappedImageComponent, (prev, next) => {
     return (
-        <MemoizedImage
-            key={`image__item_${src}`}
-            src={proxy ? modifiedSrc : src}
-            alt={alt ?? ""}
-            loading="lazy"
-            {...props}
-        >
-            {children}
-        </MemoizedImage>
+        prev.src === next.src &&
+        prev.proxy === next.proxy &&
+        prev.alt === next.alt &&
+        prev.priority === next.priority
     );
-};
+});

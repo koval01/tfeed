@@ -40,7 +40,7 @@ import { PostAiProvider } from "@/contexts/PostAiContext";
 /**
  * Displays the content of a single post, including forwarded content if applicable.
  */
-const PostBody = ({ channel, post }: PostBodyProps): JSX.Element => (
+const PostBody = memo(({ channel, post }: PostBodyProps): JSX.Element => (
     post.forwarded ? (
         <Forward post={post}>
             <PostContent channel={channel} post={post} />
@@ -48,7 +48,8 @@ const PostBody = ({ channel, post }: PostBodyProps): JSX.Element => (
     ) : (
         <PostContent channel={channel} post={post} />
     )
-);
+));
+PostBody.displayName = "PostBody";
 
 /**
  * Displays an individual post with its metadata and content.

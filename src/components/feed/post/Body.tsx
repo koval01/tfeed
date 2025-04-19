@@ -1,13 +1,13 @@
 "use client";
 
-import React, { 
-    memo, 
-    useCallback, 
-    useContext, 
-    useEffect, 
-    useMemo, 
-    useState, 
-    type PropsWithChildren 
+import React, {
+    memo,
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+    type PropsWithChildren
 } from "react";
 
 import type { Channel, Footer, Post, TitleProps } from "@/types";
@@ -40,7 +40,6 @@ import {
     Flex,
     Footnote,
     Headline,
-    Image,
     Spacing,
     Subhead,
     Tappable,
@@ -49,6 +48,7 @@ import {
 } from "@vkontakte/vkui";
 
 import { Avatar } from "@/components/avatar/Avatar";
+import { NextImage } from "@/components/media/NextImage";
 import { VKMediaGrid } from "@/components/media/Media";
 
 import { AudioPost } from "@/components/feed/post/Audio";
@@ -65,9 +65,11 @@ import { Icons } from "@/components/ui/Icons";
 
 import { DEFAULT_AI_STATE, PostAiContext } from "@/contexts/PostAiContext";
 
-/**
- * Renders the title of a channel or post with optional verification status.
- */
+const usePostAiState = (postId: string) => {
+    const { states } = useContext(PostAiContext);
+    return useMemo(() => states[postId] || DEFAULT_AI_STATE, [states, postId]);
+};
+
 const Title = memo(({ children, verified, channelName }: TitleProps) => (
     <div className="inline-flex overflow-hidden text-ellipsis text-[13px] leading-4 font-medium">
         <Headline
@@ -89,9 +91,6 @@ const Title = memo(({ children, verified, channelName }: TitleProps) => (
 ));
 Title.displayName = "Title";
 
-/**
- * Displays the channel's title and verification status.
- */
 const ChannelTitle = memo(({ channel }: { channel: Channel }) => {
     const titleContent = useMemo(() => (
         <EllipsisText className="max-sm:max-w-40 max-md:max-w-72 lg:max-w-[380px] md:max-w-[45vw]">
@@ -99,9 +98,12 @@ const ChannelTitle = memo(({ channel }: { channel: Channel }) => {
         </EllipsisText>
     ), [channel.title.html]);
 
+    const isVerified = useMemo(() => channel?.labels?.includes("verified") ?? false,
+        [channel.labels]);
+
     return (
         <Title
-            verified={channel?.labels?.includes("verified") ?? false}
+            verified={isVerified}
             channelName={channel.title.string}
         >
             {titleContent}
@@ -110,14 +112,11 @@ const ChannelTitle = memo(({ channel }: { channel: Channel }) => {
 });
 ChannelTitle.displayName = "ChannelTitle";
 
-/**
- * Renders the profile header with channel title and post date.
- */
 const HeadProfile = ({ channel, post }: PostBodyProps) => {
     const formattedDate = useFormattedDate(post.footer.date.unix);
 
     return (
-        (<div className="flex flex-col mr-2.5 whitespace-nowrap min-w-0 flex-auto">
+        <div className="flex flex-col mr-2.5 whitespace-nowrap min-w-0 flex-auto">
             <div className="flex overflow-hidden text-ellipsis min-w-full items-center">
                 <div className="inline-flex min-w-full">
                     <ChannelTitle channel={channel} />
@@ -128,30 +127,30 @@ const HeadProfile = ({ channel, post }: PostBodyProps) => {
                 Component="h5">
                 {formattedDate}
             </Subhead>
-        </div>)
+        </div>
     );
 };
 
-/**
- * Renders top buttons on post component
- */
 const TopButtons = memo(({ channel, post }: PostBodyProps) => {
     const { fetchIntelligence, isLoading } = useIntelligence();
-    const { states, setAiState } = useContext(PostAiContext);
+    const { setAiState } = useContext(PostAiContext);
+    const currentAiState = usePostAiState(post.id.toString());
 
     const [postHasText, setPostHasText] = useState(false);
     const [subsEnough, setSubsEnough] = useState(false);
 
-    const currentAiState = states[post.id] || DEFAULT_AI_STATE;
-    const showAIButton = (postHasText && subsEnough) && (!currentAiState.result || currentAiState.error);
+    const showAIButton = useMemo(() =>
+        (postHasText && subsEnough) && (!currentAiState.result || currentAiState.error),
+        [postHasText, subsEnough, currentAiState.result, currentAiState.error]
+    );
 
     useEffect(() => {
         setPostHasText(!!post.content?.text?.string);
 
         const subscribers = parseAbbreviatedNumber(
-                channel.counters?.subscribers,
-                false
-            ) as number;
+            channel.counters?.subscribers,
+            false
+        ) as number;
         if (subscribers >= 1e4) {
             setSubsEnough(true);
         }
@@ -222,10 +221,7 @@ const TopButtons = memo(({ channel, post }: PostBodyProps) => {
 });
 TopButtons.displayName = "TopButtons";
 
-/**
- * Renders the post header with an avatar, profile information, and more button.
- */
-export const PostHeader = ({ channel, post }: PostBodyProps) => (
+export const PostHeader = memo(({ channel, post }: PostBodyProps) => (
     <Flex className="flex-row select-none">
         <div className="mr-3">
             <Avatar src={channel.avatar} size={40} name={channel.title.string} />
@@ -233,11 +229,9 @@ export const PostHeader = ({ channel, post }: PostBodyProps) => (
         <HeadProfile channel={channel} post={post} />
         <TopButtons channel={channel} post={post} />
     </Flex>
-);
+));
+PostHeader.displayName = "PostHeader";
 
-/**
- * Generic footer component for displaying icon and context text.
- */
 const FooterComponent = memo(({
     Icon,
     context,
@@ -260,17 +254,11 @@ const FooterComponent = memo(({
 ));
 FooterComponent.displayName = "FooterComponent";
 
-/**
- * Displays the view count in the post footer.
- */
 const PostViews = memo(({ views }: { views?: string }) =>
     views ? <FooterComponent Icon={Icon16View} iconSize={15} context={views} className="space-x-0.5 md:space-x-1" /> : null
 );
 PostViews.displayName = "PostViews";
 
-/**
- * Displays the author in the post footer.
- */
 const PostAuthor = memo(({ footer }: { footer?: Footer }) =>
     footer?.author ? (
         <FooterComponent
@@ -285,65 +273,92 @@ const PostAuthor = memo(({ footer }: { footer?: Footer }) =>
 );
 PostAuthor.displayName = "PostAuthor";
 
-/**
- * Renders the footer of the post with author and view count.
- */
-export const PostFooter = memo(({ post }: { post: Post }) => (
-    <div className="py-0 select-none">
-        <div className="flex items-center relative justify-between max-md:pt-0.5 pt-0 pb-0">
-            <PostAuthor footer={post.footer} />
-            <div className="inline-flex space-x-0.5 md:space-x-1">
-                {post.footer.edited ?
-                    <Caption level="2" className="text-neutral-600 !leading-6">{t("edited")}</Caption>
-                    : null}
-                <PostViews views={post.footer.views} />
+export const PostFooter = memo(({ post }: { post: Post }) => {
+    const memoizedAuthor = useMemo(() => (
+        <PostAuthor footer={post.footer} />
+    ), [post.footer]);
+
+    const memoizedViews = useMemo(() => (
+        <PostViews views={post.footer.views} />
+    ), [post.footer.views]);
+
+    return (
+        <div className="py-0 select-none">
+            <div className="flex items-center relative justify-between max-md:pt-0.5 pt-0 pb-0">
+                {memoizedAuthor}
+                <div className="inline-flex space-x-0.5 md:space-x-1">
+                    {post.footer.edited &&
+                        <Caption level="2" className="text-neutral-600 !leading-6">{t("edited")}</Caption>}
+                    {memoizedViews}
+                </div>
             </div>
         </div>
-    </div>
-));
+    );
+});
 PostFooter.displayName = "PostFooter";
 
-/**
- * Renders media content in the post.
- */
 const PostMedia = memo(({ post }: { post: Post }) => {
-    const mediaCollection = useMemo(() =>
-        post.content.media ? convertMediaArray(post.content.media) : null,
-        [post.content.media]
-    );
+    const mediaCollection = useMemo(() => {
+        if (!post.content.media) return null;
+        return convertMediaArray(post.content.media);
+    }, [post.content.media]);
 
     return mediaCollection ? <VKMediaGrid mediaCollection={mediaCollection} /> : null;
 });
 PostMedia.displayName = "PostMedia";
 
-/**
- * Renders the text content of the post.
- */
-const PostText = memo(({ post }: { post: Post }) => (
-    post.content.text?.html ? (
+const PostText = memo(({ post }: { post: Post }) => {
+    const text = post.content.text?.html;
+    if (!text) return null;
+
+    return (
         <div>
             <Footnote weight="2" className="whitespace-pre-line" useAccentWeight>
-                <TextComponent htmlString={post.content.text.html} />
+                <TextComponent htmlString={text} />
             </Footnote>
         </div>
-    ) : null
-));
+    );
+});
 PostText.displayName = "PostText";
 
-/**
- * Renders a poll in the post if it exists.
- */
 const PostPoll = memo(({ post }: { post: Post }) =>
     post.content.poll ? <Poll poll={post.content.poll} /> : null
 );
 PostPoll.displayName = "PostPoll";
 
-
-/**
- * The component that is responsible for replies to other posts
- */
 const PostReply = memo(({ channel, post }: { channel: Channel, post: Post }) => {
     const reply = post.content.reply;
+
+    const memoizedTitle = useMemo(() => {
+        if (!reply) return null;
+        return (
+            <Subhead
+                weight="2"
+                className="text-sm text-[--vkui--color_text_accent]"
+                Component="h5"
+                useAccentWeight>
+                <EllipsisText>
+                    <TextComponent htmlString={reply.name?.html} />
+                </EllipsisText>
+            </Subhead>
+        );
+    }, [reply]);
+
+    const memoizedSubtitle = useMemo(() => {
+        if (!reply) return null;
+        return (
+            <span className="text-[13px]">
+                <EllipsisText>
+                    {reply.text ?
+                        <TextComponent htmlString={reply.text.html} />
+                        :
+                        <span>{t("replyWithoutReply")}</span>
+                    }
+                </EllipsisText>
+            </span>
+        );
+    }, [reply]);
+
     if (!reply) return null;
 
     return (
@@ -359,35 +374,15 @@ const PostReply = memo(({ channel, post }: { channel: Channel, post: Post }) => 
                             height={26}
                             className="text-[--vkui--color_text_accent]"
                         />
-                        {reply.cover && <Image
+                        {reply.cover && <NextImage
                             size={44}
                             src={reply.cover}
                             alt={`Reply to ${reply.name}'s message`}
                         />}
                     </div>
                 }
-                title={
-                    <Subhead
-                        weight="2"
-                        className="text-sm text-[--vkui--color_text_accent]"
-                        Component="h5"
-                        useAccentWeight>
-                        <EllipsisText>
-                            <TextComponent htmlString={reply.name?.html} />
-                        </EllipsisText>
-                    </Subhead>
-                }
-                subtitle={
-                    <span className="text-[13px]">
-                        <EllipsisText>
-                            {reply.text ?
-                                <TextComponent htmlString={reply.text.html} />
-                                :
-                                <span>{t("replyWithoutReply")}</span>
-                            }
-                        </EllipsisText>
-                    </span>
-                }
+                title={memoizedTitle}
+                subtitle={memoizedSubtitle}
             />
             <Spacing />
         </>
@@ -395,9 +390,6 @@ const PostReply = memo(({ channel, post }: { channel: Channel, post: Post }) => 
 });
 PostReply.displayName = "PostReply";
 
-/**
- * This is a component that is a decorative cap for a post that is not supported
- */
 const PostNotSupported = memo(() => (
     <div>
         <Text className="text-lg font-bold TFeed__GradientText">
@@ -419,9 +411,6 @@ const PostNotSupported = memo(() => (
 ));
 PostNotSupported.displayName = "PostNotSupported";
 
-/**
- * This component is a wrapper that decides whether to display a message about unsupported content
- */
 const PostSupport = memo(({ children, post }: PropsWithChildren<{ post: Post }>) => {
     const isSupported = useMemo(() => {
         const content = post.content;
@@ -434,16 +423,23 @@ const PostSupport = memo(({ children, post }: PropsWithChildren<{ post: Post }>)
         );
     }, [post.content]);
 
-    return isSupported ? children : <PostNotSupported />
+    if (!isSupported) return <PostNotSupported />;
+    return children;
 });
 PostSupport.displayName = "PostSupport";
 
-/**
- * Renders the main content of the post, including text, media, and poll.
- */
+const AIBlockWrapper = memo(({ postId }: { postId: number }) => {
+    const aiState = usePostAiState(postId.toString());
+
+    if (!aiState.triggered || !aiState.result) return null;
+
+    return <AIBlock postId={postId} />;
+});
+AIBlockWrapper.displayName = "AIBlockWrapper";
+
 export const PostContent = memo(({ channel, post }: PostBodyProps) => (
     <PostSupport post={post}>
-        <AIBlock postId={post.id} />
+        <AIBlockWrapper postId={post.id} />
         <PostReply channel={channel} post={post} />
         <PostText post={post} />
         <PostMedia post={post} />

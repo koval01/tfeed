@@ -52,7 +52,7 @@ const VideoControl = ({ isPlaying, isVisible, isBuffering, onToggle }: VideoCont
 );
 
 const VideoPreview = ({ thumb, isLoaded }: { thumb?: string, isLoaded: boolean }) => (
-    !isLoaded  && <Image
+    (!isLoaded && thumb) && <Image
         src={thumb}
         alt={"Round video preview"}
         widthSize={"100%"}
