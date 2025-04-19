@@ -1,4 +1,5 @@
 import React, { memo } from "react";
+
 import {
     Group,
     Paragraph,
@@ -11,52 +12,58 @@ import {
     Footnote,
 } from "@vkontakte/vkui";
 
+import { useWindowSize } from "@/hooks/utils/useWindowSize";
+
 /**
  * **Profile Component**
  * A skeleton placeholder for the user profile sidebar.
  *
  * @returns The Profile skeleton component.
  */
-export const Profile: React.FC = () => (
-    <SplitCol
-        width={280}
-        maxWidth={280}
-        className="max-lg:hidden ScrollStickyWrapper pt-3"
-    >
-        <div className="fixed w-[345px]">
-            <Group className="select-none p-0">
-                <Placeholder
-                    icon={
-                        <Skeleton
-                            width={96}
-                            height={96}
-                            className="rounded-full"
-                        />
-                    }
-                    title={
-                        <Title Component="h1">
-                            <Skeleton width={250} />
-                        </Title>
-                    }
-                    action={
-                        <>
-                            <Spacing size={12} />
-                            <Paragraph>
-                                <Skeleton width={170} />
-                                <Skeleton width={200} />
-                                <Skeleton width={140} />
-                            </Paragraph>
-                            <Spacing size={16} />
-                            <Skeleton width={110} height={36} />
-                        </>
-                    }
-                >
-                    <Skeleton width={120} />
-                </Placeholder>
-            </Group>
-        </div>
-    </SplitCol>
-);
+export const Profile: React.FC = () => {
+    const { isXl } = useWindowSize();
+
+    return (
+        <SplitCol
+            width={280}
+            maxWidth={280}
+            className="max-lg:hidden ScrollStickyWrapper pt-3"
+        >
+            <div className="fixed w-[345px]">
+                <Group className="select-none p-0">
+                    <Placeholder
+                        icon={
+                            <Skeleton
+                                width={isXl ? 96 : 80}
+                                height={isXl ? 96 : 80}
+                                className="rounded-full"
+                            />
+                        }
+                        title={
+                            <Title Component="h1">
+                                <Skeleton width={250} />
+                            </Title>
+                        }
+                        action={
+                            <>
+                                <Spacing size={12} />
+                                <Paragraph>
+                                    <Skeleton width={170} />
+                                    <Skeleton width={200} />
+                                    <Skeleton width={140} />
+                                </Paragraph>
+                                <Spacing size={16} />
+                                <Skeleton width={110} height={36} />
+                            </>
+                        }
+                    >
+                        <Skeleton width={120} />
+                    </Placeholder>
+                </Group>
+            </div>
+        </SplitCol>
+    )
+};
 
 /**
  * **PostHeader Component**
@@ -167,53 +174,57 @@ export const ChannelNavSkeleton: React.FC = memo(() => (
 ));
 ChannelNavSkeleton.displayName = "ChannelNavSkeleton";
 
-export const FeedProfileSkeleton = memo(() => (
-    <Group mode="plain" className="lg:hidden py-0 select-none">
-        <div className="w-full bg-white dark:bg-black border-b md:border-x dark:border-[#2f3336]">
-            {/* Cover Photo */}
-            <div className="h-48 bg-gray-200 dark:bg-gray-800 w-full">
-                <Skeleton width="100%" height="100%" />
+export const FeedProfileSkeleton = memo(() => {
+    const { isSm } = useWindowSize();
+
+    return (
+        <Group mode="plain" className="lg:hidden py-0 select-none">
+            <div className="w-full bg-white dark:bg-black border-b md:border-x dark:border-[#2f3336]">
+                {/* Cover Photo */}
+                <div className="h-48 bg-gray-200 dark:bg-gray-800 w-full">
+                    <Skeleton width="100%" height="100%" />
+                </div>
+
+                <div className="relative px-4">
+                    {/* Profile Picture */}
+                    <div className="absolute -top-14 sm:-top-16 left-4 border-[3px] sm:border-4 border-white dark:border-black rounded-full">
+                        <Skeleton width={isSm ? 128 : 96} height={isSm ? 128 : 96} className="rounded-full" />
+                    </div>
+
+                    {/* Follow Button */}
+                    <div className="flex justify-end pt-3">
+                        <Skeleton width={110} height={36} className="rounded-full" />
+                    </div>
+
+                    <div className="mt-10">
+                        {/* Title with verified placeholder */}
+                        <div className="flex items-center">
+                            <Skeleton width={180} height={28} />
+                        </div>
+
+                        {/* Username */}
+                        <Skeleton width={100} height={16} className="mt-1" />
+
+                        <Spacing size={14} />
+
+                        {/* Description */}
+                        <div className="py-0.5 space-y-1">
+                            <Skeleton width="100%" height={14} />
+                            <Skeleton width="90%" height={14} />
+                            <Skeleton width="80%" height={14} />
+                        </div>
+
+                        {/* Stats */}
+                        <div className="flex flex-wrap gap-4 my-3">
+                            <Skeleton width={60} height={16} />
+                            <Skeleton width={60} height={16} />
+                            <Skeleton width={60} height={16} />
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div className="relative px-4">
-                {/* Profile Picture */}
-                <div className="absolute -top-16 left-4 border-4 border-white dark:border-black rounded-full">
-                    <Skeleton width={128} height={128} className="rounded-full" />
-                </div>
-
-                {/* Follow Button */}
-                <div className="flex justify-end pt-3">
-                    <Skeleton width={110} height={36} className="rounded-full" />
-                </div>
-
-                <div className="mt-10">
-                    {/* Title with verified placeholder */}
-                    <div className="flex items-center">
-                        <Skeleton width={180} height={28} />
-                    </div>
-
-                    {/* Username */}
-                    <Skeleton width={100} height={16} className="mt-1" />
-
-                    <Spacing size={14} />
-
-                    {/* Description */}
-                    <div className="py-0.5 space-y-1">
-                        <Skeleton width="100%" height={14} />
-                        <Skeleton width="90%" height={14} />
-                        <Skeleton width="80%" height={14} />
-                    </div>
-
-                    {/* Stats */}
-                    <div className="flex flex-wrap gap-4 my-3">
-                        <Skeleton width={60} height={16} />
-                        <Skeleton width={60} height={16} />
-                        <Skeleton width={60} height={16} />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </Group>
-));
+        </Group>
+    )
+});
 
 FeedProfileSkeleton.displayName = "FeedProfileSkeleton";

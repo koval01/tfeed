@@ -22,6 +22,8 @@ import {
 
 import { Icon20Verified } from "@vkontakte/icons";
 
+import { useWindowSize } from "@/hooks/utils/useWindowSize";
+
 import { Avatar } from "@/components/avatar/Avatar";
 import { Verified as VerifiedTT } from "@/components/feed/post/Verified";
 import { TextComponent } from "@/components/feed/TextComponent";
@@ -39,7 +41,7 @@ const Verified = ({ verified }: { verified: boolean }) => (
 
 const Title = ({ children, verified }: TitleProps) => (
     <div className="inline-flex items-center max-w-60">
-        <DisplayTitle className="!leading-8 w-full whitespace-nowrap text-lg lg-h:text-xl">
+        <DisplayTitle className="!leading-8 w-full whitespace-nowrap text-[16.5px] lg-h:text-lg xl:text-xl">
             <EllipsisText>{children}</EllipsisText>
         </DisplayTitle>
         <div className="inline ml-1">
@@ -121,21 +123,25 @@ const ChannelTitle = ({ channel }: { channel: Channel }) => (
     </div>
 )
 
-const Body = ({ channel }: { channel: Channel }) => (
-    <>
-        <Placeholder
-            className="pb-6"
-            icon={<Avatar size={96} src={channel.avatar} name={channel.title.string} />}
-            title={<ChannelTitle channel={channel} />}
-            action={<ActionBlock channel={channel} />}
-        >
-            <span className="text-sm lg-h:text-base">
-                @{channel.username}
-            </span>
-        </Placeholder>
-        <Footer />
-    </>
-)
+const Body = ({ channel }: { channel: Channel }) => {
+    const { isXl } = useWindowSize();
+
+    return (
+        <>
+            <Placeholder
+                className="pb-6"
+                icon={<Avatar size={isXl ? 96 : 80} src={channel.avatar} name={channel.title.string} />}
+                title={<ChannelTitle channel={channel} />}
+                action={<ActionBlock channel={channel} />}
+            >
+                <span className="text-sm lg-h:text-base">
+                    @{channel.username}
+                </span>
+            </Placeholder>
+            <Footer />
+        </>
+    );
+}
 
 export const Profile = React.memo(({ channel }: { channel: Channel }) => (
     <SplitCol className="max-lg:hidden pt-3 ScrollStickyWrapper" width={280} maxWidth={280}>

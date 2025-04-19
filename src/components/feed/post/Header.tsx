@@ -1,6 +1,8 @@
 import { memo } from "react";
 import type { Channel, Counters, TitleProps } from "@/types";
 
+import { useWindowSize } from "@/hooks/utils/useWindowSize";
+
 import { Icon20Verified } from "@vkontakte/icons";
 import { DisplayTitle, EllipsisText, Group, Paragraph, Spacing } from "@vkontakte/vkui";
 
@@ -59,18 +61,22 @@ const FollowButton = ({ username }: { username: string }) => (
     </button>
 );
 
-const ProfilePicture = ({ avatar, title }: { avatar: string | undefined; title: string }) => (
-    <div className="absolute -top-16 left-4 border-4 border-white dark:border-black rounded-full">
-        <div className="size-32 rounded-full bg-gray-300 dark:bg-gray-700">
-            <Avatar size={128} src={avatar ?? ""} name={title} />
+const ProfilePicture = ({ avatar, title }: { avatar: string | undefined; title: string }) => {
+    const { isSm } = useWindowSize();
+
+    return (
+        <div className="absolute -top-14 sm:-top-16 left-4 border-[3px] sm:border-4 border-white dark:border-black rounded-full">
+            <div className="size-24 sm:size-32 rounded-full bg-gray-300 dark:bg-gray-700">
+                <Avatar size={isSm ? 128 : 96} src={avatar ?? ""} name={title} />
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 const CoverPhoto = ({ avatar }: { avatar: string | undefined }) => (
     <div className="h-48 bg-gray-200 dark:bg-gray-800 w-full">
-        <div 
-            style={{ backgroundImage: `url("${avatar ?? ""}")` }} 
+        <div
+            style={{ backgroundImage: `url("${avatar ?? ""}")` }}
             className="relative block h-full w-full bg-[length:56px_56px] sm:bg-[length:72px_72px] bg-[center_top_1rem]"
         >
             <div className="relative w-full h-full backdrop-blur" />
