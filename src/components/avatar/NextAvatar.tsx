@@ -8,6 +8,6 @@ interface NextAvatar extends AvatarProps {
 }
 
 export const NextAvatar: React.FC<NextAvatar> = ({ src, size, proxy = false, ...props }) => {
-    const modifiedSrc = src ? nextImage(src, size as number) : undefined;
+    const modifiedSrc = src ? nextImage(src as string, size as number) : undefined;
     return <Avatar src={proxy ? modifiedSrc : src} size={size} {...props} />;
 };
