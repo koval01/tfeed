@@ -182,7 +182,7 @@ export const FeedProfileSkeleton = memo(() => {
             <div className="w-full bg-white dark:bg-black border-b md:border-x dark:border-[#2f3336]">
                 {/* Cover Photo */}
                 <div className="h-48 bg-gray-200 dark:bg-gray-800 w-full">
-                    <Skeleton width="100%" height="100%" />
+                    <Skeleton className="relative -top-1 rounded-none" width="100%" height="192px" />
                 </div>
 
                 <div className="relative px-4">
