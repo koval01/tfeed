@@ -159,7 +159,7 @@ export const Posts: React.FC = () => (
  */
 export const ChannelNavSkeleton: React.FC = memo(() => (
     <div
-        className="relative max-md:-top-1 block select-none items-center space-x-2 pl-2 overflow-hidden py-1"
+        className="relative max-md:-top-0.5 block select-none items-center space-x-2 py-1.5 pl-[5px] md:pt-3 overflow-hidden"
     >
         <div className="inline-block overflow-hidden float-left mr-2 relative">
             <Skeleton width={36} height={36} className="rounded-full" />
