@@ -11,7 +11,7 @@ export const cleanJsonOfPost = (json: InputJson, media_meta = false): Record<str
         return {};
     }
 
-    const keysToRemove = new Set(['meta', 'url', 'thumb', 'unix', 'cover', 'to_message', 'raw', 'waves', 'entities', 'avatar', 'view']);
+    const keysToRemove = new Set(['id', 'meta', 'url', 'thumb', 'unix', 'cover', 'to_message', 'raw', 'waves', 'entities', 'avatar', 'view']);
     const validMediaTypes = new Set(['image', 'video', 'roundvideo', 'gif', 'sticker']);
 
     const processNode = (node: unknown): unknown => {

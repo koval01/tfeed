@@ -1,9 +1,10 @@
 import { type NextRequest } from 'next/server';
+
 import {
     GoogleGenerativeAI, HarmBlockThreshold, HarmCategory
 } from "@google/generative-ai";
+
 import { cleanJsonOfPost } from "@/lib/utils/json";
-import { parseAbbreviatedNumber } from '@/lib/utils/string';
 import { i18nStrings } from "@/i18n";
 import { z } from 'zod';
 
@@ -20,7 +21,6 @@ const SECURITY_HEADERS = {
     'Pragma': 'no-cache'
 } as const;
 
-const MIN_SUBSCRIBERS = 1e4;
 const MAX_POST_ID = 1e6;
 const RECAPTCHA_TOKEN_LENGTH = { min: 1536, max: 2304 };
 
@@ -103,28 +103,13 @@ function buildApiUrl(host: string, channel: string, postId: string): string {
 }
 
 function validatePostData(data: any, lang: SupportedLanguage) {
-    if (!data?.content?.posts?.[0]) {
+    if (!data?.content) {
         throw new Error('Post content not found');
     }
 
-    if (!data.content.posts[0].content?.text) {
+    if (!data.content?.text) {
         return {
             ai: { text: i18nStrings[lang].translation.unsupportedPostAi }
-        };
-    }
-
-    if (!data.channel) {
-        throw new Error('Invalid channel data');
-    }
-
-    const subscribers = parseAbbreviatedNumber(
-        data.channel.counters?.subscribers,
-        false
-    ) as number;
-
-    if (subscribers < MIN_SUBSCRIBERS) {
-        return {
-            ai: { text: i18nStrings[lang].translation.unsatisfNumberSubs }
         };
     }
 

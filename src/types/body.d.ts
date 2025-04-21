@@ -98,11 +98,12 @@ export interface Poll {
 }
 
 export interface Media {
-    url: string;
-    thumb: string;
-    waves: string;
+    url?: string;
+    thumb?: string;
+    waves?: string;
     duration: Duration;
     type: string;
+    available?: boolean;
 }
 
 interface Duration {

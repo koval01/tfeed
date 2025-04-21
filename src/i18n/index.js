@@ -28,6 +28,8 @@ export const i18nStrings = {
             "loadingMoreWait": "Loading more posts...",
             "loadingMoreWaitMore": "Still loading...",
             "feedTheEnd": "The end",
+            "viewInTelegram": "View in Telegram",
+            "mediaNotAvailable": "Media is not available in the preview",
         }
     },
     "de": {
@@ -65,6 +67,8 @@ export const i18nStrings = {
             "loadingMoreWait": "Mehr Beiträge laden...",
             "loadingMoreWaitMore": "Wird noch geladen...",
             "feedTheEnd": "Das Ende",
+            "viewInTelegram": "Ansicht im Telegram",
+            "mediaNotAvailable": "Medien sind in der Vorschau nicht verfügbar",
         }
     },
     "ru": {
@@ -102,6 +106,8 @@ export const i18nStrings = {
             "loadingMoreWait": "Загрузка других постов...",
             "loadingMoreWaitMore": "Все еще загружается...",
             "feedTheEnd": "Конец",
+            "viewInTelegram": "Посмотреть в Telegram",
+            "mediaNotAvailable": "Медиа недоступно в предварительном просмотре",
         }
     },
     "uk": {
@@ -139,6 +145,8 @@ export const i18nStrings = {
             "loadingMoreWait": "Завантажуємо більше публікацій...",
             "loadingMoreWaitMore": "Все ще завантажується...",
             "feedTheEnd": "Кінець",
+            "viewInTelegram": "Переглянути в Telegram",
+            "mediaNotAvailable": "Медіа не доступне в попередньому перегляді",
         }
     }
 }

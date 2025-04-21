@@ -8,76 +8,102 @@ import { Slider } from "@vkontakte/vkui";
 
 import { cn } from "@/lib/utils/clsx";
 import { clamp } from "lodash";
+
 import ReactPlayer from "react-player";
+
+type SpectrogramBarsProps = {
+    data: number[];
+    className?: string;
+    style?: React.CSSProperties;
+    barClassName?: string;
+};
+
+const SpectrogramBars = memo<SpectrogramBarsProps>(({ data, className, style, barClassName }) => (
+    <div className={cn("absolute h-3.5 leading-[14px] whitespace-nowrap", className)} style={style}>
+        {data.map((value, index) => (
+            <s
+                key={`spectrogram-${index}`}
+                className={cn(
+                    "inline-block max-lg:w-[3.5px] max-sm:w-0.5 lg:w-[2.5px]",
+                    "pt-1 -mt-1 mr-0.5 rounded-sm align-bottom box-border",
+                    barClassName
+                )}
+                style={{ height: `${value * 3}%` }}
+            />
+        ))}
+    </div>
+));
+
+SpectrogramBars.displayName = "SpectrogramBars";
 
 type AudioSpectrogramProps = {
     data: number[];
     playedFraction: number;
-    onMouseDown: (event: React.MouseEvent) => void;
-    onMouseMove: (event: React.MouseEvent) => void;
-    onTouchStart: (event: React.TouchEvent) => void;
-    onTouchMove: (event: React.TouchEvent) => void;
+    onInteractionStart: (event: React.MouseEvent | React.TouchEvent) => void;
+    onInteractionMove: (event: React.MouseEvent | React.TouchEvent) => void;
     spectrogramRef: React.RefObject<HTMLDivElement | null>;
 };
 
 const AudioSpectrogram = memo<AudioSpectrogramProps>(
-    ({ data, playedFraction, onMouseDown, onMouseMove, onTouchStart, onTouchMove, spectrogramRef }) => (
-        <div
-            ref={spectrogramRef}
-            className="relative pt-0 mt-0 h-4 overflow-hidden select-none max-sm:hidden cursor-pointer w-full"
-            onMouseDown={onMouseDown}
-            onMouseMove={onMouseMove}
-            onTouchStart={onTouchStart}
-            onTouchMove={onTouchMove}
-        >
-            <div className="block">
-                <div className="absolute h-3.5 leading-[14px] whitespace-nowrap">
-                    {data.map((value, index) => (
-                        <s
-                            key={`spectrogram-bg-${index}`}
-                            className={cn(
-                                "inline-block max-lg:w-[3.5px] max-sm:w-0.5 lg:w-[2.5px]",
-                                "pt-1 -mt-1 mr-0.5 rounded-sm align-bottom box-border",
-                                "bg-neutral-300 dark:bg-neutral-600"
-                            )}
-                            style={{ height: `${value * 3}%` }}
-                        />
-                    ))}
-                </div>
-            </div>
+    ({ data, playedFraction, onInteractionStart, onInteractionMove, spectrogramRef }) => {
+        const handleMouseDown = useCallback(
+            (e: React.MouseEvent) => onInteractionStart(e),
+            [onInteractionStart]
+        );
+
+        const handleTouchStart = useCallback(
+            (e: React.TouchEvent) => onInteractionStart(e),
+            [onInteractionStart]
+        );
+
+        const handleMouseMove = useCallback(
+            (e: React.MouseEvent) => onInteractionMove(e),
+            [onInteractionMove]
+        );
+
+        const handleTouchMove = useCallback(
+            (e: React.TouchEvent) => onInteractionMove(e),
+            [onInteractionMove]
+        );
+
+        return (
             <div
-                className="relative h-[18px] -mt-1 pt-1 overflow-hidden w-0"
-                style={{ width: `${playedFraction * 100}%` }}
+                ref={spectrogramRef}
+                className="relative pt-0 mt-0 h-4 overflow-hidden select-none max-sm:hidden cursor-pointer w-full"
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
             >
-                <div className="absolute h-3.5 leading-[14px] whitespace-nowrap">
-                    {data.map((value, index) => (
-                        <s
-                            key={`spectrogram-fg-${index}`}
-                            className={cn(
-                                "inline-block max-lg:w-[3.5px] max-sm:w-0.5 lg:w-[2.5px]",
-                                "mr-0.5 pt-1 -mt-1 rounded-sm align-bottom box-border",
-                                "bg-[--vkui--color_background_accent]"
-                            )}
-                            style={{ height: `${value * 3}%` }}
-                        />
-                    ))}
+                <SpectrogramBars
+                    data={data}
+                    barClassName="bg-neutral-300 dark:bg-neutral-600"
+                />
+                <div
+                    className="relative h-[18px] -mt-1 pt-1 overflow-hidden w-0"
+                    style={{ width: `${playedFraction * 100}%` }}
+                >
+                    <SpectrogramBars
+                        data={data}
+                        barClassName="bg-[--vkui--color_background_accent]"
+                    />
                 </div>
             </div>
-        </div>
-    )
+        );
+    }
 );
 
 AudioSpectrogram.displayName = "AudioSpectrogram";
 
-type AudioControlsProps = {
+type PlayPauseButtonProps = {
     playing: boolean;
-    setPlaying: React.Dispatch<React.SetStateAction<boolean>>;
+    onClick: () => void;
 };
 
-const AudioControls = memo<AudioControlsProps>(({ playing, setPlaying }) => (
+const PlayPauseButton = memo<PlayPauseButtonProps>(({ playing, onClick }) => (
     <button
         className="inline-block float-left size-12 rounded-full bg-[--vkui--color_background_accent]"
-        onClick={() => setPlaying((prev) => !prev)}
+        onClick={onClick}
     >
         <div className="flex justify-center m-auto text-[--vkui--color_text_contrast]">
             {!playing ? <Icon28Play /> : <Icon28Pause />}
@@ -85,7 +111,53 @@ const AudioControls = memo<AudioControlsProps>(({ playing, setPlaying }) => (
     </button>
 ));
 
-AudioControls.displayName = "AudioControls";
+PlayPauseButton.displayName = "PlayPauseButton";
+
+type TimeDisplayProps = {
+    time: string;
+    className?: string;
+};
+
+const TimeDisplay = memo<TimeDisplayProps>(({ time, className }) => (
+    <time className={cn(
+        "inline-block text-sm leading-[19px] mt-[5px] mb-0.5 text-neutral-600",
+        className
+    )}>
+        {time}
+    </time>
+));
+
+TimeDisplay.displayName = "TimeDisplay";
+
+type AudioControlsContainerProps = {
+    children: React.ReactNode;
+};
+
+const AudioControlsContainer = memo<AudioControlsContainerProps>(({ children }) => (
+    <div className={cn(
+        "ml-[60px] pt-1",
+        "max-md:w-full max-md:max-w-[550px]",
+        "md:max-lg:w-[calc(100%-80px)]",
+        "lg:w-[calc(100%-64px)]"
+    )}>
+        {children}
+    </div>
+));
+
+AudioControlsContainer.displayName = "AudioControlsContainer";
+
+type MobileSliderProps = {
+    value: number;
+    onChange: (value: number) => void;
+};
+
+const MobileSlider = memo<MobileSliderProps>(({ value, onChange }) => (
+    <div className="sm:hidden w-full pr-16">
+        <Slider value={value} aria-labelledby="basic" onChange={onChange} />
+    </div>
+));
+
+MobileSlider.displayName = "MobileSlider";
 
 export const AudioPost = memo(({ post }: { post: Post }) => {
     const [playing, setPlaying] = useState(false);
@@ -131,7 +203,7 @@ export const AudioPost = memo(({ post }: { post: Post }) => {
         [updateFraction]
     );
 
-    const handleTouchStart = useCallback((event: React.TouchEvent | React.MouseEvent) => {
+    const handleInteractionStart = useCallback((event: React.TouchEvent | React.MouseEvent) => {
         setIsDragging(true);
         handleInteraction(event);
     }, [handleInteraction]);
@@ -191,31 +263,27 @@ export const AudioPost = memo(({ post }: { post: Post }) => {
 
     return (
         <div className="block mt-3 mb-0 select-none">
-            <AudioControls playing={playing} setPlaying={handlePlayPause} />
-            <div
-                className={cn(
-                    "ml-[60px] pt-1",
-                    "max-md:w-full max-md:max-w-[550px]",
-                    "md:max-lg:w-[calc(100%-80px)]",
-                    "lg:w-[calc(100%-64px)]"
-                )}
-            >
+            <PlayPauseButton playing={playing} onClick={handlePlayPause} />
+
+            <AudioControlsContainer>
                 <AudioSpectrogram
                     data={spectrogramData}
                     playedFraction={playedFraction}
-                    onMouseDown={handleTouchStart}
-                    onMouseMove={(e) => isDragging && handleInteraction(e)}
-                    onTouchStart={handleTouchStart}
-                    onTouchMove={(e) => isDragging && handleInteraction(e)}
+                    onInteractionStart={handleInteractionStart}
+                    onInteractionMove={handleInteraction}
                     spectrogramRef={spectrogramRef}
                 />
-                <div className="sm:hidden w-full pr-16">
-                    <Slider value={playedFraction * 100} aria-labelledby="basic" onChange={updateFraction} />
-                </div>
-                <time className="inline-block text-sm leading-[19px] mt-[5px] mb-0.5 text-neutral-600">
-                    {!playedFraction ? media.duration.formatted : remainingTime}
-                </time>
-            </div>
+
+                <MobileSlider
+                    value={playedFraction * 100}
+                    onChange={updateFraction}
+                />
+
+                <TimeDisplay
+                    time={!playedFraction ? media.duration.formatted : remainingTime}
+                />
+            </AudioControlsContainer>
+
             <ReactPlayer
                 ref={playerRef}
                 url={media.url}

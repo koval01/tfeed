@@ -1,7 +1,9 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import type { Post } from "@/types";
 
 import { useMediaPlayback } from '@/hooks/services/useMediaPlayback';
+import { useIntersectionObserver } from '@/hooks/utils/useIntersectionObserver';
+import { useDeviceType } from '@/hooks/utils/useDeviceType';
 
 import { LazyImage as Image } from "@/components/media/LazyImage";
 import { Icon28Play, Icon28Pause } from "@vkontakte/icons";
@@ -10,9 +12,6 @@ import { Spinner } from "@vkontakte/vkui";
 import { cn } from "@/lib/utils/clsx";
 import { t } from "i18next";
 
-/**
- * Types for video control props
- */
 interface VideoControlProps {
     isPlaying: boolean;
     isVisible: boolean;
@@ -20,16 +19,12 @@ interface VideoControlProps {
     onToggle: (e: React.MouseEvent) => void;
 }
 
-/**
- * Video control button component that shows play/pause
- */
-const VideoControl = ({ isPlaying, isVisible, isBuffering, onToggle }: VideoControlProps) => (
+const VideoControl = React.memo(({ isPlaying, isVisible, isBuffering, onToggle }: VideoControlProps) => (
     <button
         className={cn(
             "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
             "flex items-center justify-center rounded-full aspect-square",
             "bg-black/50 backdrop-blur-md hover:bg-black/60 transition-opacity duration-300",
-            // Show if either isBuffering is true OR isVisible is true
             isBuffering || isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
         )}
         style={{
@@ -49,21 +44,36 @@ const VideoControl = ({ isPlaying, isVisible, isBuffering, onToggle }: VideoCont
             )}
         </div>
     </button>
-);
+));
 
-const VideoPreview = ({ thumb, isLoaded }: { thumb?: string, isLoaded: boolean }) => (
-    (!isLoaded && thumb) && <Image
-        src={thumb}
-        alt={"Round video preview"}
-        widthSize={"100%"}
-        heightSize={"100%"}
-        noBorder
-        keepAspectRatio
-        className="absolute z-5 top-0 w-full h-full object-cover aspect-square rounded-none"
-    />
-);
+VideoControl.displayName = "VideoControl";
 
-const VideoTime = ({ videoRef }: { videoRef: React.RefObject<HTMLVideoElement | null> }) => {
+interface VideoPreviewProps {
+    thumb?: string;
+    isLoaded: boolean;
+}
+
+const VideoPreview = React.memo(({ thumb, isLoaded }: VideoPreviewProps) => (
+    (!isLoaded && thumb) ? (
+        <Image
+            src={thumb}
+            alt={"Round video preview"}
+            widthSize={"100%"}
+            heightSize={"100%"}
+            noBorder
+            keepAspectRatio
+            className="absolute z-5 top-0 w-full h-full object-cover aspect-square rounded-none"
+        />
+    ) : null
+));
+
+VideoPreview.displayName = "VideoPreview";
+
+interface VideoTimeProps {
+    videoRef: React.RefObject<HTMLVideoElement | null>;
+}
+
+const VideoTime = React.memo(({ videoRef }: VideoTimeProps) => {
     const [timeDisplay, setTimeDisplay] = useState("0:00");
 
     const formatTime = useCallback((seconds: number) => {
@@ -91,14 +101,20 @@ const VideoTime = ({ videoRef }: { videoRef: React.RefObject<HTMLVideoElement | 
         const video = videoRef.current;
         if (!video) return;
 
-        video.addEventListener('timeupdate', updateTime);
-        video.addEventListener('loadedmetadata', handleLoadedMetadata);
-        video.addEventListener('ended', handleLoadedMetadata);
+        const events = [
+            { name: 'timeupdate', handler: updateTime },
+            { name: 'loadedmetadata', handler: handleLoadedMetadata },
+            { name: 'ended', handler: handleLoadedMetadata }
+        ];
+
+        events.forEach(({ name, handler }) => {
+            video.addEventListener(name, handler);
+        });
 
         return () => {
-            video.removeEventListener('timeupdate', updateTime);
-            video.removeEventListener('loadedmetadata', handleLoadedMetadata);
-            video.removeEventListener('ended', handleLoadedMetadata);
+            events.forEach(({ name, handler }) => {
+                video.removeEventListener(name, handler);
+            });
         };
     }, [videoRef, updateTime, handleLoadedMetadata]);
 
@@ -109,98 +125,138 @@ const VideoTime = ({ videoRef }: { videoRef: React.RefObject<HTMLVideoElement | 
                 transform: "translate(-50%, -50%)"
             }}
         >
-            <div className="text-center text-white bg-black/30 rounded-lg backdrop-blur-md px-2 py-0">
+            <div className="text-center text-white bg-black/30 rounded-lg backdrop-blur-md px-2 py-0 text-sm md:text-base">
                 {timeDisplay}
             </div>
         </div>
     );
-};
+});
 
-/**
- * Main round video component that displays circular video with play/pause controls
- */
-export const RoundVideo = React.memo(({ post }: { post: Post }) => {
-    const [isPlaying, setIsPlaying] = useState<boolean>(false);
-    const [isBuffering, setIsBuffering] = useState<boolean>(false);
-    const [isLoaded, setIsLoaded] = useState<boolean>(false);
-    const [isVideoLoaded, setIsVideoLoaded] = useState<boolean>(false);
-    const [isButtonVisible, setIsButtonVisible] = useState<boolean>(true);
-    const [isVisible, setIsVisible] = useState<boolean>(false);
+VideoTime.displayName = "VideoTime";
+
+interface RoundVideoProps {
+    post: Post;
+}
+
+export const RoundVideo = React.memo(({ post }: RoundVideoProps) => {
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [isBuffering, setIsBuffering] = useState(false);
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+    const [isButtonVisible, setIsButtonVisible] = useState(true);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
+    const hideButtonTimeoutRef = useRef<NodeJS.Timeout>(null);
+
+    const { isMobile } = useDeviceType();
+    const isVisible = useIntersectionObserver(containerRef, { threshold: 0.1 });
+
+    const videoMedia = post.content.media?.[0];
+    const isRoundVideo = videoMedia?.type === "roundvideo";
 
     useMediaPlayback(videoRef);
 
-    const isMobile = window.innerWidth <= 768;
-    const videoMedia = post.content.media?.[0];
-    const isRoundVideo = videoMedia && videoMedia.type === "roundvideo";
-
-    // Intersection Observer setup
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    const isIntersecting = entry.isIntersecting;
-                    setIsVisible(isIntersecting);
-
-                    if (!isIntersecting) {
-                        setIsLoaded(false);
-
-                        if (videoRef.current) {
-                            videoRef.current.pause();
-                            setIsPlaying(false);
-                        }
-                    }
-                });
-            },
-            { threshold: 0.1 }
-        );
-
-        if (containerRef.current) {
-            observer.observe(containerRef.current);
-        }
-
-        return () => {
-            observer.disconnect();
-        };
-    }, [videoRef]);
-
-    // Handle loading state based on both video loaded and visibility
-    useEffect(() => {
-        if (isVideoLoaded && isVisible) {
-            // wait after isVisible changed
-            const timer = setTimeout(() => setIsLoaded(true), 5e2);
-            return () => clearTimeout(timer);
-        }
-    }, [isVideoLoaded, isVisible]);
-
-    useEffect(() => {
-        if (isPlaying && (isMobile || !isBuffering)) {
-            const timeout = setTimeout(() => {
-                // Only hide the button if we're not buffering
-                if (!isBuffering) {
-                    setIsButtonVisible(false);
-                }
-            }, 1e3);
-            return () => clearTimeout(timeout);
-        }
-    }, [isPlaying, isMobile, isBuffering]);
-
-    const togglePlay = useCallback(() => {
+    const togglePlay = useCallback((e?: React.MouseEvent) => {
+        e?.stopPropagation();
         const video = videoRef.current;
         if (!video) return;
 
         if (video.paused) {
-            video.play();
+            video.play().catch(error => {
+                console.error("Error playing video:", error);
+                setIsPlaying(false);
+            });
             setIsPlaying(true);
-            isMobile && setIsButtonVisible(false);
+            if (isMobile) {
+                setIsButtonVisible(false);
+            }
         } else {
             video.pause();
             setIsPlaying(false);
             setIsButtonVisible(true);
         }
     }, [isMobile]);
+
+    // Handle visibility changes
+    useEffect(() => {
+        if (!isVisible) {
+            setIsLoaded(false);
+            if (videoRef.current) {
+                videoRef.current.pause();
+                setIsPlaying(false);
+            }
+        }
+    }, [isVisible]);
+
+    // Handle loading state
+    useEffect(() => {
+        if (isVideoLoaded && isVisible) {
+            const timer = setTimeout(() => setIsLoaded(true), 500);
+            return () => clearTimeout(timer);
+        }
+    }, [isVideoLoaded, isVisible]);
+
+    // Handle button visibility timeout
+    useEffect(() => {
+        if (isPlaying && (isMobile || !isBuffering)) {
+            hideButtonTimeoutRef.current = setTimeout(() => {
+                if (!isBuffering) {
+                    setIsButtonVisible(false);
+                }
+            }, 1000);
+        }
+
+        return () => {
+            if (hideButtonTimeoutRef.current) {
+                clearTimeout(hideButtonTimeoutRef.current);
+            }
+        };
+    }, [isPlaying, isMobile, isBuffering]);
+
+    const handleMouseEnter = useCallback(() => {
+        if (!isMobile) {
+            setIsButtonVisible(true);
+        }
+    }, [isMobile]);
+
+    const handleMouseLeave = useCallback(() => {
+        if (isPlaying && !isBuffering) {
+            setIsButtonVisible(false);
+        }
+    }, [isPlaying, isBuffering]);
+
+    const handleTouchStart = useCallback(() => {
+        if (isMobile) {
+            setIsButtonVisible(true);
+        }
+    }, [isMobile]);
+
+    const handleTouchEnd = useCallback(() => {
+        if (isMobile && !isBuffering) {
+            setIsButtonVisible(false);
+        }
+    }, [isMobile, isBuffering]);
+
+    const videoEventHandlers = useMemo(() => ({
+        onPlay: () => {
+            setIsPlaying(true);
+            if (isMobile) {
+                setIsButtonVisible(false);
+            }
+        },
+        onPause: () => {
+            setIsPlaying(false);
+            if (isMobile) {
+                setIsButtonVisible(true);
+            }
+        },
+        onEnded: () => setIsButtonVisible(true),
+        onWaiting: () => setIsBuffering(true),
+        onCanPlay: () => setIsBuffering(false),
+        onLoadedData: () => setIsVideoLoaded(true),
+        onClick: togglePlay
+    }), [isMobile, togglePlay]);
 
     if (!isRoundVideo) {
         return null;
@@ -213,10 +269,10 @@ export const RoundVideo = React.memo(({ post }: { post: Post }) => {
                 "relative size-full max-lg:max-w-96 rounded-full overflow-hidden",
                 "shadow-lg border-2 border-[--vkui--color_image_border_alpha] aspect-square"
             )}
-            onMouseEnter={() => !isMobile && setIsButtonVisible(true)}
-            onMouseLeave={() => isPlaying && !isBuffering && setIsButtonVisible(false)}
-            onTouchStart={() => isMobile && setIsButtonVisible(true)}
-            onTouchEnd={() => isMobile && !isBuffering && setIsButtonVisible(false)}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
         >
             <video
                 ref={videoRef}
@@ -225,19 +281,7 @@ export const RoundVideo = React.memo(({ post }: { post: Post }) => {
                 className={cn("w-full h-full object-cover aspect-square", !isLoaded && "invisible")}
                 controls={false}
                 loop={false}
-                onLoadedData={() => setIsVideoLoaded(true)}
-                onClick={togglePlay}
-                onPlay={() => {
-                    setIsPlaying(true);
-                    isMobile && setIsButtonVisible(false);
-                }}
-                onPause={() => {
-                    setIsPlaying(false);
-                    isMobile && setIsButtonVisible(true);
-                }}
-                onEnded={() => setIsButtonVisible(true)}
-                onWaiting={() => setIsBuffering(true)}
-                onCanPlay={() => setIsBuffering(false)}
+                {...videoEventHandlers}
             />
 
             <VideoTime videoRef={videoRef} />
@@ -247,10 +291,7 @@ export const RoundVideo = React.memo(({ post }: { post: Post }) => {
                 isPlaying={isPlaying}
                 isVisible={isButtonVisible}
                 isBuffering={isBuffering}
-                onToggle={(e) => {
-                    e.stopPropagation();
-                    togglePlay();
-                }}
+                onToggle={togglePlay}
             />
         </div>
     );

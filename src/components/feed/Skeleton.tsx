@@ -30,35 +30,38 @@ export const Profile: React.FC = () => {
             className="max-lg:hidden ScrollStickyWrapper pt-3"
         >
             <div className="fixed w-[345px]">
-                <Group className="select-none p-0">
-                    <Placeholder
-                        icon={
-                            <Skeleton
-                                width={isXl ? 96 : 80}
-                                height={isXl ? 96 : 80}
-                                className="rounded-full"
-                            />
-                        }
-                        title={
-                            <Title Component="h1">
-                                <Skeleton width={250} />
-                            </Title>
-                        }
-                        action={
-                            <>
-                                <Spacing size={12} />
-                                <Paragraph>
-                                    <Skeleton width={170} />
-                                    <Skeleton width={200} />
-                                    <Skeleton width={140} />
-                                </Paragraph>
-                                <Spacing size={16} />
-                                <Skeleton width={110} height={36} />
-                            </>
-                        }
-                    >
-                        <Skeleton width={120} />
-                    </Placeholder>
+                <Group className="select-none p-0" mode="plain">
+                    <div className="relative block border dark:border-[#2f3336] rounded-2xl">
+                        <Placeholder
+                            className="pb-6 pt-10 sm:pt-8"
+                            icon={
+                                <Skeleton
+                                    width={isXl ? 96 : 80}
+                                    height={isXl ? 96 : 80}
+                                    className="rounded-full"
+                                />
+                            }
+                            title={
+                                <Title Component="h1">
+                                    <Skeleton width={250} />
+                                </Title>
+                            }
+                            action={
+                                <>
+                                    <Spacing size={12} />
+                                    <Paragraph>
+                                        <Skeleton width={170} />
+                                        <Skeleton width={200} />
+                                        <Skeleton width={140} />
+                                    </Paragraph>
+                                    <Spacing size={16} />
+                                    <Skeleton width={110} height={36} />
+                                </>
+                            }
+                        >
+                            <Skeleton width={120} />
+                        </Placeholder>
+                    </div>
                 </Group>
             </div>
         </SplitCol>
@@ -193,7 +196,7 @@ export const FeedProfileSkeleton = memo(() => {
 
                     {/* Follow Button */}
                     <div className="flex justify-end pt-3">
-                        <Skeleton width={110} height={36} className="rounded-full" />
+                        <Skeleton width={isSm ? 102 : 98} height={isSm ? 36 : 32} className="rounded-full" />
                     </div>
 
                     <div className="mt-10">

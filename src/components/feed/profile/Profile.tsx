@@ -129,7 +129,7 @@ const Body = ({ channel }: { channel: Channel }) => {
     return (
         <>
             <Placeholder
-                className="pb-6"
+                className="pb-6 pt-10 sm:pt-8"
                 icon={<Avatar size={isXl ? 96 : 80} src={channel.avatar} name={channel.title.string} />}
                 title={<ChannelTitle channel={channel} />}
                 action={<ActionBlock channel={channel} />}

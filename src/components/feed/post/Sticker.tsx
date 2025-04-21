@@ -35,10 +35,10 @@ const ImageSticker = ({ url }: { url: string }) => (
 
 const StickerComponent = ({ post }: { post: Post }) => {
     const media = post.content.media[0];
-    const url = media.url;
+    const url = media?.url;
     const thumb = media.thumb;
 
-    if (/\.webm(\?|$)/i.test(url)) {
+    if (/\.webm(\?|$)/i.test(url || "")) {
         return (<video
             className="max-h-72 w-auto !rounded-none"
             src={url}
@@ -52,8 +52,8 @@ const StickerComponent = ({ post }: { post: Post }) => {
         />)
     }
 
-    if (/\.(webp|png)(\?|$)/i.test(url)) {
-        return <ImageSticker url={url} />;
+    if (/\.(webp|png)(\?|$)/i.test(url || "")) {
+        return <ImageSticker url={url as string} />;
     }
 
     return (
@@ -70,7 +70,7 @@ export const Sticker = React.memo(({ post }: { post: Post }) => {
     }
 
     return (
-        <div className="block">
+        <div className="relative block min-h-72">
             {post.content.text && <Spacing size={12} />}
             <StickerComponent post={post} />
         </div>

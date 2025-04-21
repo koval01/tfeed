@@ -4,7 +4,7 @@ import type { Channel, Counters, TitleProps } from "@/types";
 import { useWindowSize } from "@/hooks/utils/useWindowSize";
 
 import { Icon20Verified } from "@vkontakte/icons";
-import { DisplayTitle, EllipsisText, Group, Paragraph, Spacing } from "@vkontakte/vkui";
+import { Button, DisplayTitle, EllipsisText, Group, Paragraph, Spacing } from "@vkontakte/vkui";
 
 import { Verified as VerifiedTT } from "@/components/feed/post/Verified";
 import { TextComponent } from "@/components/feed/TextComponent";
@@ -47,19 +47,21 @@ const Stats = ({ counters }: { counters: Counters }) => (
     </div>
 );
 
-const FollowButton = ({ username }: { username: string }) => (
-    <button
-        className={cn(
-            "px-3 sm:px-4 py-1.5 sm:py-2 max-sm:text-sm",
-            "bg-black dark:bg-white text-white dark:text-black transition",
-            "hover:bg-gray-800 dark:hover:bg-gray-200",
-            "font-bold rounded-full"
-        )}
-        onClick={() => window.open(`https://t.me/${username}`, "_blank")}
-    >
-        Subscribe
-    </button>
-);
+const FollowButton = ({ username }: { username: string }) => {
+    const { isSm } = useWindowSize();
+
+    return (
+        <Button
+            rounded
+            size={isSm ? "m" : "s"}
+            align="center"
+            mode="primary"
+            onClick={() => window.open(`https://t.me/${username}`, "_blank")}
+        >
+            <Trans i18nKey="Subscribe" />
+        </Button>
+    )
+};
 
 const ProfilePicture = ({ avatar, title }: { avatar: string | undefined; title: string }) => {
     const { isSm } = useWindowSize();
