@@ -266,7 +266,7 @@ export const RoundVideo = React.memo(({ post }: RoundVideoProps) => {
         <div
             ref={containerRef}
             className={cn(
-                "relative size-full max-lg:max-w-96 rounded-full overflow-hidden",
+                "relative size-full max-lg:max-w-96 rounded-full select-none overflow-hidden",
                 "shadow-lg border-2 border-[--vkui--color_image_border_alpha] aspect-square"
             )}
             onMouseEnter={handleMouseEnter}
