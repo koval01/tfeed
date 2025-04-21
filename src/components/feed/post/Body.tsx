@@ -362,7 +362,7 @@ const UnavailableMedia = memo(({ channel, post, media }: { channel: Channel, pos
 
     return (
         <div className="block py-1 md:px-1.5">
-            <div className="relative block w-full h-full overflow-hidden mt-3 md:mt-4.5 rounded-2xl">
+            <div className="relative block w-full h-full select-none overflow-hidden mt-3 md:mt-4.5 rounded-2xl">
                 <Image 
                     className="absolute block blur-lg"
                     src={media?.thumb} 
