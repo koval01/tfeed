@@ -81,8 +81,9 @@ const usePostMediaCollection = (post: Post) => {
             media?.url === undefined && media?.available === false
         );
 
-        const filteredMedia = post.content.media.filter((media): media is Media & { url: string } =>
-            media?.url !== undefined
+        const filteredMedia = post.content.media.filter(
+            (media): media is Media & { url: string; type: "video" | "image" } =>
+                media?.url !== undefined && (media.type === "video" || media.type === "image")
         );
 
         return {

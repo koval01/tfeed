@@ -1,9 +1,11 @@
 import type { Media } from "@/types/media";
+import type { Duration } from "@/types/body";
 
 type MediaInput = {
     url: string;
     thumb?: string;
-    type: string;
+    type: "image" | "video";
+    duration?: Duration;
 };
 
 /**
@@ -22,6 +24,7 @@ export const convertMediaArray = (mediaArray: MediaInput[]): Media[] => {
             type: media.type as "image" | "video",
             url: media.type === 'image' ? media.url : media.thumb || '',
             video_url: media.type === 'video' ? media.url : void 0,
+            duration: media.type === 'video' ? media.duration : void 0,
         }))
         .filter(media => media.url);
 };
