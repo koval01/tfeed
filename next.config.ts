@@ -30,7 +30,6 @@ const nextConfig: NextConfig = {
             'react-redux',
             'react-player',
             'react-virtuoso',
-            'react-loading-indicators',
             'react-intersection-observer',
         ],
     },
