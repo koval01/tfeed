@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { load } from 'recaptcha-v3';
+import axios from 'axios';
 
 export const useIntelligence = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -16,28 +18,30 @@ export const useIntelligence = () => {
             const recaptcha = await load(process.env.NEXT_PUBLIC_RECAPTCHA_TOKEN as string);
             const token = await recaptcha.execute('submit');
 
-            const url = new URL('/api/v1/llm', window.location.origin);
-            url.searchParams.append('channel', channelUsername);
-            url.searchParams.append('post_id', postId.toString());
-            url.searchParams.append('lang', i18n.language);
-            url.searchParams.append('token', token);
+            const url = new URL('/v1/ai/generate', process.env.NEXT_PUBLIC_API_HOST).toString();
 
-            const response = await fetch(url.toString(), {
-                method: 'GET',
+            const response = await axios.post(url, {
+                channel: channelUsername,
+                identifier: postId,
+                lang: i18n.language
+            }, {
                 headers: {
+                    'Accept': 'application/json',
                     'Content-Type': 'application/json',
-                },
+                    'X-Recaptcha-Token': token
+                }
             });
 
-            if (!response.ok) {
-                throw new Error(`Request failed with status ${response.status}`);
-            }
-
-            const responseData = await response.json();
-            setData(responseData);
-            return responseData;
+            setData(response.data);
+            return response.data;
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Unknown error occurred');
+            const errorMessage = axios.isAxiosError(err)
+                ? err.response?.data?.message || err.message
+                : err instanceof Error
+                    ? err.message
+                    : 'Unknown error occurred';
+
+            setError(errorMessage);
             throw err;
         } finally {
             setIsLoading(false);

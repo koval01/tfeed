@@ -2,6 +2,7 @@ import { createContext, useState } from "react";
 
 type AiState = {
     triggered: boolean;
+    loading: boolean;
     error: boolean;
     result: string | null;
     cachedHeight?: string;
@@ -15,6 +16,7 @@ type PostAiContextType = {
 
 export const DEFAULT_AI_STATE: AiState = {
     triggered: false,
+    loading: false,
     error: false,
     result: null,
     cachedHeight: void 0,

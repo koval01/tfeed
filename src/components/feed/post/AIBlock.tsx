@@ -35,14 +35,14 @@ export const AIBlock = memo(({ postId }: AIBlockProps) => {
         }
 
         const newHeight = aiState.triggered
-            ? (aiState.result || aiState.error
+            ? (aiState.result || aiState.error || aiState.loading
                 ? `${contentRef.current.scrollHeight}px`
                 : '150px')
             : '0';
 
         setContentHeight(newHeight);
 
-        if (aiState.triggered && aiState.result && !aiState.cachedHeight) {
+        if (aiState.triggered && (aiState.result || aiState.error) && !aiState.cachedHeight) {
             const timer = setTimeout(() => {
                 setAiState(postId, {
                     ...aiState,
@@ -68,13 +68,13 @@ export const AIBlock = memo(({ postId }: AIBlockProps) => {
                             : 'max-height 500ms cubic-bezier(0.4, 0, 0.2, 1)'
                     }}
                 >
-                    {aiState.result ? (
+                    {aiState.loading ? (
+                        <AILoadingContent />
+                    ) : aiState.result ? (
                         <AISuccessContent result={aiState.result} />
                     ) : aiState.error ? (
                         <AIErrorContent />
-                    ) : (
-                        <AILoadingContent />
-                    )}
+                    ) : null}
                 </div>
             </AIResultWrapper>
         </AIContainer>
@@ -161,7 +161,7 @@ const AILoadingContent = () => (
  * Displays error message when AI generation fails
  */
 const AIErrorContent = () => (
-    <Footnote caps>
+    <Footnote caps className="select-none">
         {t("errorRequestAi")}
     </Footnote>
 );

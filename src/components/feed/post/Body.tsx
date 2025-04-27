@@ -109,28 +109,35 @@ const usePostAvailability = (post: Post) => {
 
 const useAIButtonVisibility = (post: Post, channel: Channel) => {
     const { fetchIntelligence, isLoading } = useIntelligence();
-    const { setAiState } = useContext(PostAiContext);
+    const { setAiState, states } = useContext(PostAiContext);
     const currentAiState = usePostAiState(post.id.toString());
 
-    const [postHasText, setPostHasText] = useState(false);
+    const [postSupported, setPostSupported] = useState(false);
 
     const showAIButton = useMemo(() =>
-        postHasText && (!currentAiState.result || currentAiState.error),
-        [postHasText, currentAiState.result, currentAiState.error]
+        postSupported && (!currentAiState.result || currentAiState.error),
+        [postSupported, currentAiState.result, currentAiState.error]
     );
 
     useEffect(() => {
-        setPostHasText(!!post.content?.text?.string);
+        const hasText = post.content?.text?.string?.length > 0;
+        const hasPoll = post.content?.poll !== undefined;
+        const hasSupportedMedia = post.content?.media?.some(media =>
+            ['image', 'gif', 'video', 'voice', 'roundvideo'].includes(media.type)
+        );
+        setPostSupported(hasText || hasPoll || hasSupportedMedia);
     }, [post.content, channel.counters]);
 
     const handleAIClick = useCallback(async () => {
         if (!showAIButton || isLoading) return;
 
         setAiState(post.id, {
+            ...states[post.id],
             triggered: true,
+            loading: true,
             result: null,
             error: false,
-            cachedHeight: void 0
+            cachedHeight: undefined
         });
 
         try {
@@ -138,18 +145,21 @@ const useAIButtonVisibility = (post: Post, channel: Channel) => {
             const text = response?.ai?.text;
             setAiState(post.id, {
                 triggered: true,
+                loading: false,
                 result: text || null,
-                error: false
+                error: false,
+                cachedHeight: undefined
             });
         } catch (err) {
             setAiState(post.id, {
                 triggered: true,
+                loading: false,
                 error: true,
                 result: null
             });
             console.error("Error generating AI response.");
         }
-    }, [channel.username, post.id, fetchIntelligence, setAiState, showAIButton, isLoading]);
+    }, [channel.username, post.id, fetchIntelligence, setAiState, showAIButton, isLoading, states]);
 
     return { showAIButton, isLoading, handleAIClick };
 };
@@ -484,7 +494,7 @@ const PostReply = memo(({ channel, post }: { channel: Channel, post: Post }) => 
                             height={26}
                             className="text-[--vkui--color_text_accent]"
                         />
-                        {reply.cover && <NextImage
+                        {(reply.cover && !reply.cover.startsWith("data:image")) && <NextImage
                             size={44}
                             src={reply.cover}
                             alt={`Reply to ${reply.name}'s message`}
@@ -530,7 +540,7 @@ PostSupport.displayName = "PostSupport";
 
 const AIBlockWrapper = memo(({ postId }: { postId: number }) => {
     const aiState = usePostAiState(postId.toString());
-    if (!aiState.triggered || !aiState.result) return null;
+    if (!aiState.triggered) return null;
     return <AIBlock postId={postId} />;
 });
 AIBlockWrapper.displayName = "AIBlockWrapper";

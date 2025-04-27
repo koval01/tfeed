@@ -167,16 +167,10 @@ export const RoundVideo = React.memo(({ post }: RoundVideoProps) => {
                 console.error("Error playing video:", error);
                 setIsPlaying(false);
             });
-            setIsPlaying(true);
-            if (isMobile) {
-                setIsButtonVisible(false);
-            }
         } else {
             video.pause();
-            setIsPlaying(false);
-            setIsButtonVisible(true);
         }
-    }, [isMobile]);
+    }, []);
 
     // Handle visibility changes
     useEffect(() => {
@@ -233,10 +227,10 @@ export const RoundVideo = React.memo(({ post }: RoundVideoProps) => {
     }, [isMobile]);
 
     const handleTouchEnd = useCallback(() => {
-        if (isMobile && !isBuffering) {
+        if (isMobile && isPlaying && !isBuffering) {
             setIsButtonVisible(false);
         }
-    }, [isMobile, isBuffering]);
+    }, [isMobile, isPlaying, isBuffering]);
 
     const videoEventHandlers = useMemo(() => ({
         onPlay: () => {
@@ -247,9 +241,7 @@ export const RoundVideo = React.memo(({ post }: RoundVideoProps) => {
         },
         onPause: () => {
             setIsPlaying(false);
-            if (isMobile) {
-                setIsButtonVisible(true);
-            }
+            setIsButtonVisible(true);
         },
         onEnded: () => setIsButtonVisible(true),
         onWaiting: () => setIsBuffering(true),

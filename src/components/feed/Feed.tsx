@@ -18,7 +18,7 @@ import {
 import ErrorSnackbar from "@/components/error/ErrorSnackbar";
 import { FeedHeader } from "@/components/feed/header/FeedHeader";
 import { Posts } from "@/components/feed/post/Post";
-import { Profile } from "@/components/feed/profile/Profile";
+import { Profile as DesktopProfile } from "@/components/feed/profile/Desktop";
 
 interface FeedProps {
     /**
@@ -107,7 +107,7 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
                             isFetching={isFetching}
                             isFetchingMore={isFetchingMore}
                         />
-                        <Profile channel={data.channel} />
+                        <DesktopProfile channel={data.channel} />
                     </>)
                 )}
             </SplitLayout>

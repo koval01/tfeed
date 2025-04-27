@@ -1,9 +1,13 @@
-import clsx from "clsx";
-import { t } from "i18next";
-import { useEffect, useState, useRef, useCallback, useMemo } from "react";
-import { throttle } from "lodash";
 import type { RefObject, FC } from "react";
 import type { VirtuosoHandle } from "react-virtuoso";
+
+import { useEffect, useState, useRef, useCallback, useMemo } from "react";
+
+import clsx from "clsx";
+import { t } from "i18next";
+import { throttle } from "lodash";
+
+import { Button } from "@vkontakte/vkui";
 
 interface Position {
     top: number;
@@ -239,18 +243,10 @@ const TopSnackView: FC<TopSnackViewProps> = ({
         role="status"
         onTransitionEnd={() => setIsAnimating(false)}
     >
-        <button
-            ref={buttonRef}
-            className={clsx(
-                "relative block m-auto h-10 px-6 rounded-full",
-                "bg-[--vkui--color_background_accent]",
-                "hover:bg-[--vkui--color_text_accent--hover]",
-                "shadow-lg hover:shadow-md",
-                "transition-all duration-200 ease-out",
-                "focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50",
-                "active:scale-95 active:shadow-inner",
-                "flex items-center justify-center"
-            )}
+        <Button
+            rounded
+            size="l"
+            getRootRef={buttonRef}
             onClick={handleClick}
             onTransitionEnd={(e) => {
                 if (e.propertyName === "transform") {
@@ -258,10 +254,11 @@ const TopSnackView: FC<TopSnackViewProps> = ({
                 }
             }}
             aria-label={t("new_posts", { count })}
+            className={"relative block m-auto"}
         >
             <span className="text-white font-medium whitespace-nowrap">
                 {t("new_posts", { count })}
             </span>
-        </button>
+        </Button>
     </div>
 );

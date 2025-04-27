@@ -46,8 +46,13 @@ type AudioSpectrogramProps = {
 
 const AudioSpectrogram = memo<AudioSpectrogramProps>(
     ({ data, playedFraction, onInteractionStart, onInteractionMove, spectrogramRef }) => {
+        const [isMouseDown, setIsMouseDown] = useState(false);
+
         const handleMouseDown = useCallback(
-            (e: React.MouseEvent) => onInteractionStart(e),
+            (e: React.MouseEvent) => {
+                setIsMouseDown(true);
+                onInteractionStart(e);
+            },
             [onInteractionStart]
         );
 
@@ -57,14 +62,32 @@ const AudioSpectrogram = memo<AudioSpectrogramProps>(
         );
 
         const handleMouseMove = useCallback(
-            (e: React.MouseEvent) => onInteractionMove(e),
-            [onInteractionMove]
+            (e: React.MouseEvent) => {
+                if (isMouseDown) {
+                    onInteractionMove(e);
+                }
+            },
+            [isMouseDown, onInteractionMove]
         );
 
         const handleTouchMove = useCallback(
             (e: React.TouchEvent) => onInteractionMove(e),
             [onInteractionMove]
         );
+
+        const handleMouseUp = useCallback(() => {
+            setIsMouseDown(false);
+        }, []);
+
+        useEffect(() => {
+            const element = spectrogramRef.current;
+            if (element) {
+                element.addEventListener('mouseup', handleMouseUp);
+                return () => {
+                    element.removeEventListener('mouseup', handleMouseUp);
+                };
+            }
+        }, [handleMouseUp, spectrogramRef]);
 
         return (
             <div

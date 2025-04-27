@@ -32,7 +32,7 @@ import { InView } from "react-intersection-observer";
 
 import { Forward } from "@/components/feed/post/Forward";
 import { InfiniteFeedLoader } from "@/components/feed/post/Footer";
-import { FeedProfile } from "@/components/feed/post/Header";
+import { Header } from "@/components/feed/post/Header";
 
 import { MediaProvider } from "@/contexts/MediaContext";
 import { PostAiProvider } from "@/contexts/PostAiContext";
@@ -103,7 +103,7 @@ export const Posts = memo(({ channel, posts, onRefresh, isFetching, isFetchingMo
                                     items={posts}
                                     parentRef={feedRef}
                                     renderItem={renderItem}
-                                    header={<FeedProfile channel={channel} />}
+                                    header={<Header channel={channel} />}
                                     footer={<InfiniteFeedLoader isFetchingMore={isFetchingMore} />}
                                 />
                             </div>
