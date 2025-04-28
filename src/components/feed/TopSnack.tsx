@@ -184,7 +184,7 @@ export const TopSnack: FC<TopSnackProps> = ({
                 align: "end",
                 behavior: "smooth",
             });
-        }, 300);
+        }, 100);
     },
         [isVisible, isAnimating, onClick, virtuosoRef, setIsAnimating, setIsVisible]
     );
