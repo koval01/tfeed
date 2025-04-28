@@ -42,6 +42,7 @@ import {
     Footnote,
     Headline,
     Spacing,
+    Spinner,
     Subhead,
     Tappable,
     Text,
@@ -264,8 +265,12 @@ const AIButton = memo(({ showAIButton, isLoading, onClick }: {
                     aria-label="Generate AI summary"
                 >
                     <Icons.aiIcon className={cn(
-                        "transition-opacity duration-300 delay-75 ease-out size-6",
-                        isLoading ? "opacity-40" : "opacity-100"
+                        "relative transition-all duration-500 delay-75 ease-out",
+                        isLoading ? "opacity-40 size-5 p-0.5" : "opacity-100 size-6",
+                    )} />
+                    <Spinner size="l" noColor className={cn(
+                        "absolute top-0 text-[#6b7acb]", 
+                        { "hidden": !isLoading }
                     )} />
                 </Tappable>
             </Tooltip>
