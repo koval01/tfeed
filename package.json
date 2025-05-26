@@ -24,7 +24,7 @@
     "axios": "^1.8.4",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
-    "html-react-parser": "^5.2.3",
+    "html-react-parser": "^5.2.5",
     "i18next": "^25.2.0",
     "lodash": "^4.17.21",
     "lucide-react": "^0.511.0",
