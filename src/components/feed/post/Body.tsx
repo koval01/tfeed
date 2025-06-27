@@ -116,7 +116,8 @@ const useAIButtonVisibility = (post: Post, channel: Channel) => {
     const [postSupported, setPostSupported] = useState(false);
 
     const showAIButton = useMemo(() =>
-        postSupported && (!currentAiState.result || currentAiState.error),
+        !!process.env.NEXT_PUBLIC_RECAPTCHA_TOKEN && !!process.env.NEXT_PUBLIC_AI_ENABLED
+        && postSupported && (!currentAiState.result || currentAiState.error),
         [postSupported, currentAiState.result, currentAiState.error]
     );
 
@@ -269,7 +270,7 @@ const AIButton = memo(({ showAIButton, isLoading, onClick }: {
                         isLoading ? "opacity-40 size-5 p-0.5" : "opacity-100 size-6",
                     )} />
                     <Spinner size="l" noColor className={cn(
-                        "absolute top-0 text-[#6b7acb]", 
+                        "absolute top-0 text-[#6b7acb]",
                         { "hidden": !isLoading }
                     )} />
                 </Tappable>
@@ -300,11 +301,13 @@ const TopButtons = memo(({ channel, post }: PostBodyProps) => {
     return (
         <div className="relative flex" style={{ flex: "0 0 auto" }}>
             <div className="flex items-center space-x-1">
-                <AIButton
-                    showAIButton={showAIButton}
-                    isLoading={isLoading}
-                    onClick={handleAIClick}
-                />
+                {!!process.env.NEXT_PUBLIC_AI_ENABLED && (
+                    <AIButton
+                        showAIButton={showAIButton}
+                        isLoading={isLoading}
+                        onClick={handleAIClick}
+                    />
+                )}
                 <ShareButton channel={channel} post={post} />
             </div>
         </div>
@@ -379,9 +382,9 @@ const UnavailableMedia = memo(({ channel, post, media }: { channel: Channel, pos
     return (
         <div className="block py-1 md:px-1.5">
             <div className="relative block w-full h-full select-none overflow-hidden mt-3 md:mt-4.5 rounded-2xl">
-                <Image 
+                <Image
                     className="absolute block blur-lg"
-                    src={media?.thumb} 
+                    src={media?.thumb}
                     alt={"Round video preview"}
                     widthSize={"100%"}
                     heightSize={"100%"}
