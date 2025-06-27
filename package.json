@@ -14,7 +14,7 @@
     "deploy": "pnpm run pages:build && wrangler pages deploy"
   },
   "dependencies": {
-    "@google/generative-ai": "^0.24.0",
+    "@google/generative-ai": "^0.24.1",
     "@next/third-parties": "^15.3.0",
     "@reduxjs/toolkit": "^2.8.2",
     "@sentry/nextjs": "^9.12.0",
