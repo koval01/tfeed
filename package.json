@@ -48,7 +48,7 @@
     "@cloudflare/next-on-pages": "^1.13.12",
     "@emotion/react": "^11.14.0",
     "@types/lodash": "^4.17.16",
-    "@types/node": "^22.15.19",
+    "@types/node": "^24.0.4",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.2",
     "eslint": "^9.29.0",
