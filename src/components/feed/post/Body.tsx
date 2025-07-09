@@ -14,7 +14,6 @@ import type { Channel, Footer, Media, Post, TitleProps } from "@/types";
 import type { FooterComponentProps, PostBodyProps } from "@/types/feed/post";
 
 import { useFormattedDate } from "@/hooks/utils/useFormattedDate";
-import { useIntelligence } from "@/hooks/services/useIntelligence";
 import { useWindowSize } from "@/hooks/utils/useWindowSize";
 
 import { cn } from "@/lib/utils/clsx";
@@ -63,16 +62,8 @@ import { RoundVideo } from "@/components/feed/post/RoundVideo";
 import { Sticker } from "@/components/feed/post/Sticker";
 import { Verified } from "@/components/feed/post/Verified";
 import { TextComponent } from "@/components/feed/TextComponent";
-import { AIBlock } from "@/components/feed/post/AIBlock";
 
 import { Icons } from "@/components/ui/Icons";
-
-import { DEFAULT_AI_STATE, PostAiContext } from "@/contexts/PostAiContext";
-
-const usePostAiState = (postId: string) => {
-    const { states } = useContext(PostAiContext);
-    return useMemo(() => states[postId] || DEFAULT_AI_STATE, [states, postId]);
-};
 
 const usePostMediaCollection = (post: Post) => {
     return useMemo(() => {
@@ -106,64 +97,6 @@ const usePostAvailability = (post: Post) => {
             ].includes(media.type))
         );
     }, [post.content]);
-};
-
-const useAIButtonVisibility = (post: Post, channel: Channel) => {
-    const { fetchIntelligence, isLoading } = useIntelligence();
-    const { setAiState, states } = useContext(PostAiContext);
-    const currentAiState = usePostAiState(post.id.toString());
-
-    const [postSupported, setPostSupported] = useState(false);
-
-    const showAIButton = useMemo(() =>
-        !!process.env.NEXT_PUBLIC_RECAPTCHA_TOKEN && !!process.env.NEXT_PUBLIC_AI_ENABLED
-        && postSupported && (!currentAiState.result || currentAiState.error),
-        [postSupported, currentAiState.result, currentAiState.error]
-    );
-
-    useEffect(() => {
-        const hasText = post.content?.text?.string?.length > 0;
-        const hasPoll = post.content?.poll !== undefined;
-        const hasSupportedMedia = post.content?.media?.some(media =>
-            ['image', 'gif', 'video', 'voice', 'roundvideo'].includes(media.type)
-        );
-        setPostSupported(hasText || hasPoll || hasSupportedMedia);
-    }, [post.content, channel.counters]);
-
-    const handleAIClick = useCallback(async () => {
-        if (!showAIButton || isLoading) return;
-
-        setAiState(post.id, {
-            ...states[post.id],
-            triggered: true,
-            loading: true,
-            result: null,
-            error: false,
-            cachedHeight: undefined
-        });
-
-        try {
-            const response = await fetchIntelligence(channel.username, post.id);
-            const text = response?.ai?.text;
-            setAiState(post.id, {
-                triggered: true,
-                loading: false,
-                result: text || null,
-                error: false,
-                cachedHeight: undefined
-            });
-        } catch (err) {
-            setAiState(post.id, {
-                triggered: true,
-                loading: false,
-                error: true,
-                result: null
-            });
-            console.error("Error generating AI response.");
-        }
-    }, [channel.username, post.id, fetchIntelligence, setAiState, showAIButton, isLoading, states]);
-
-    return { showAIButton, isLoading, handleAIClick };
 };
 
 const FooterComponent = memo(({
@@ -249,37 +182,6 @@ const HeadProfile = ({ channel, post }: PostBodyProps) => {
     );
 };
 
-const AIButton = memo(({ showAIButton, isLoading, onClick }: {
-    showAIButton: boolean,
-    isLoading: boolean,
-    onClick: () => void
-}) => {
-    if (!showAIButton) return null;
-
-    return (
-        <div className="relative">
-            <Tooltip title={t("buttonForCallAi")}>
-                <Tappable
-                    onClick={onClick}
-                    className="rounded-md"
-                    disabled={isLoading}
-                    aria-label="Generate AI summary"
-                >
-                    <Icons.aiIcon className={cn(
-                        "relative transition-all duration-500 delay-75 ease-out",
-                        isLoading ? "opacity-40 size-5 p-0.5" : "opacity-100 size-6",
-                    )} />
-                    <Spinner size="l" noColor className={cn(
-                        "absolute top-0 text-[#6b7acb]",
-                        { "hidden": !isLoading }
-                    )} />
-                </Tappable>
-            </Tooltip>
-        </div>
-    );
-});
-AIButton.displayName = "AIButton";
-
 const ShareButton = memo(({ channel, post }: { channel: Channel, post: Post }) => (
     <div className="relative">
         <Tooltip title={t("openPostInNewWindow")}>
@@ -295,25 +197,13 @@ const ShareButton = memo(({ channel, post }: { channel: Channel, post: Post }) =
 ));
 ShareButton.displayName = "ShareButton";
 
-const TopButtons = memo(({ channel, post }: PostBodyProps) => {
-    const { showAIButton, isLoading, handleAIClick } = useAIButtonVisibility(post, channel);
-
-    return (
-        <div className="relative flex" style={{ flex: "0 0 auto" }}>
-            <div className="flex items-center space-x-1">
-                {!!process.env.NEXT_PUBLIC_AI_ENABLED && (
-                    <AIButton
-                        showAIButton={showAIButton}
-                        isLoading={isLoading}
-                        onClick={handleAIClick}
-                    />
-                )}
-                <ShareButton channel={channel} post={post} />
-            </div>
+const TopButtons = ({ channel, post }: PostBodyProps) => (
+    <div className="relative flex" style={{ flex: "0 0 auto" }}>
+        <div className="flex items-center space-x-1">
+            <ShareButton channel={channel} post={post} />
         </div>
-    );
-});
-TopButtons.displayName = "TopButtons";
+    </div>
+);
 
 export const PostHeader = memo(({ channel, post }: PostBodyProps) => (
     <Flex className="flex-row select-none">
@@ -546,16 +436,8 @@ const PostSupport = memo(({ children, post }: PropsWithChildren<{ post: Post }>)
 });
 PostSupport.displayName = "PostSupport";
 
-const AIBlockWrapper = memo(({ postId }: { postId: number }) => {
-    const aiState = usePostAiState(postId.toString());
-    if (!aiState.triggered) return null;
-    return <AIBlock postId={postId} />;
-});
-AIBlockWrapper.displayName = "AIBlockWrapper";
-
 const PostContentItems = memo(({ channel, post }: PostBodyProps) => (
     <>
-        <AIBlockWrapper postId={post.id} />
         <PostReply channel={channel} post={post} />
         <PostText post={post} />
         <PostMedia channel={channel} post={post} />

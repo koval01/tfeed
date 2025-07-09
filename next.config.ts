@@ -34,7 +34,6 @@ const nextConfig: NextConfig = {
             'react-player',
             'react-redux',
             'react-virtuoso',
-            'recaptcha-v3',
             'spoiled',
             'swr',
         ],

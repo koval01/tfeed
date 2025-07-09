@@ -14,7 +14,6 @@
     "deploy": "pnpm run pages:build && wrangler pages deploy"
   },
   "dependencies": {
-    "@google/generative-ai": "^0.24.1",
     "@next/third-parties": "^15.3.0",
     "@reduxjs/toolkit": "^2.8.2",
     "@sentry/nextjs": "^9.12.0",
@@ -38,7 +37,6 @@
     "react-player": "^2.16.0",
     "react-redux": "^9.2.0",
     "react-virtuoso": "^4.13.0",
-    "recaptcha-v3": "^1.11.3",
     "spoiled": "^0.4.0",
     "swr": "^2.3.3",
     "tailwind-merge": "^3.3.1",

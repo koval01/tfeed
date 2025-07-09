@@ -35,7 +35,6 @@ import { InfiniteFeedLoader } from "@/components/feed/post/Footer";
 import { Header } from "@/components/feed/post/Header";
 
 import { MediaProvider } from "@/contexts/MediaContext";
-import { PostAiProvider } from "@/contexts/PostAiContext";
 
 /**
  * Displays the content of a single post, including forwarded content if applicable.
@@ -94,23 +93,21 @@ export const Posts = memo(({ channel, posts, onRefresh, isFetching, isFetchingMo
 
     return (
         <MediaProvider>
-            <PostAiProvider>
-                <SplitCol width="100%" maxWidth="600px" stretchedOnMobile autoSpaced>
-                    <PullToRefresh onRefresh={onRefresh} isFetching={isFetching}>
-                        <div ref={feedRef} className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto w-full">
-                            <div className="relative block">
-                                <VirtualizedListWrapper
-                                    items={posts}
-                                    parentRef={feedRef}
-                                    renderItem={renderItem}
-                                    header={<Header channel={channel} />}
-                                    footer={<InfiniteFeedLoader isFetchingMore={isFetchingMore} />}
-                                />
-                            </div>
+            <SplitCol width="100%" maxWidth="600px" stretchedOnMobile autoSpaced>
+                <PullToRefresh onRefresh={onRefresh} isFetching={isFetching}>
+                    <div ref={feedRef} className="md:max-w-[680px] max-md:mx-0 max-lg:mx-auto w-full">
+                        <div className="relative block">
+                            <VirtualizedListWrapper
+                                items={posts}
+                                parentRef={feedRef}
+                                renderItem={renderItem}
+                                header={<Header channel={channel} />}
+                                footer={<InfiniteFeedLoader isFetchingMore={isFetchingMore} />}
+                            />
                         </div>
-                    </PullToRefresh>
-                </SplitCol>
-            </PostAiProvider>
+                    </div>
+                </PullToRefresh>
+            </SplitCol>
         </MediaProvider>
     );
 });

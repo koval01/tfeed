@@ -1,22 +1,9 @@
-body {
-    --ai-color-brand-text-gradient-stop-1: #4285f4;
-    --ai-color-brand-text-gradient-stop-2: #9b72cb;
-    --ai-color-brand-text-gradient-stop-3: #d96570;
-    --gem-sys-color--surface: #fff;
-    
-}
-
 .TFeed__GradientText {
     background: #24a1de;
     background: linear-gradient(25deg, rgba(103,192,237,1) 0%, rgba(36,161,222,1) 50%, rgba(17,149,213,1) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
-}
-
-.TFeed__AIGradient {
-    background: rgb(156 105 232);
-    background: linear-gradient(25deg, rgb(112 155 255) 0%, rgb(197 82 241) 36%, rgb(156 105 232) 64%, rgb(239 36 25) 100%);
 }
 
 .vkui--vkBase--light, .vkui--vkIOS--light, :root {
@@ -43,22 +30,6 @@ body {
 
 .vkuiDiv__host {
     padding-top: 0;
-}
-
-.ai__background_color {
-    background: -webkit-linear-gradient(26.72deg,rgba(66,133,244,.1) 16.87%,rgba(155,114,203,.1) 61.56%,rgba(217,101,112,.1) 99.37%);
-    background: linear-gradient(63.28deg,rgba(66,133,244,.1) 16.87%,rgba(155,114,203,.1) 61.56%,rgba(217,101,112,.1) 99.37%);
-}
-
-.ai__text_color {
-    display: inline-block;
-    color: transparent;
-    background: -webkit-linear-gradient(16deg,var(--ai-color-brand-text-gradient-stop-1) 0,var(--ai-color-brand-text-gradient-stop-2) 9%,var(--ai-color-brand-text-gradient-stop-3) 20%,var(--ai-color-brand-text-gradient-stop-3) 24%,var(--ai-color-brand-text-gradient-stop-2) 35%,var(--ai-color-brand-text-gradient-stop-1) 44%,var(--ai-color-brand-text-gradient-stop-2) 50%,var(--ai-color-brand-text-gradient-stop-3) 56%,var(--gem-sys-color--surface) 75%,var(--gem-sys-color--surface) 100%);
-    background: linear-gradient(74deg,var(--ai-color-brand-text-gradient-stop-1) 0,var(--ai-color-brand-text-gradient-stop-2) 9%,var(--ai-color-brand-text-gradient-stop-3) 20%,var(--ai-color-brand-text-gradient-stop-3) 24%,var(--ai-color-brand-text-gradient-stop-2) 35%,var(--ai-color-brand-text-gradient-stop-1) 44%,var(--ai-color-brand-text-gradient-stop-2) 50%,var(--ai-color-brand-text-gradient-stop-3) 56%,var(--gem-sys-color--surface) 75%,var(--gem-sys-color--surface) 100%);
-    background-size: 400% 100%;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
 @media not all and (min-width: 768px) {
