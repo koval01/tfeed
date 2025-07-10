@@ -1,4 +1,3 @@
-import React from "react";
 import type { AvatarProps as VKAvatarProps } from "@vkontakte/vkui";
 
 import { getInitials, stringToHash } from "@/helpers/string";
@@ -11,7 +10,7 @@ interface AvatarProps extends VKAvatarProps {
     proxy?: boolean
 }
 
-export const Avatar = React.memo(({ size = 48, src, name, proxy = false }: AvatarProps) => {
+export const Avatar = ({ size = 48, src, name, proxy = false }: AvatarProps) => {
     const color = Math.abs(stringToHash(name || "Nothing") % 6) + 1 as 1 | 2 | 3 | 4 | 5 | 6;
     return (
         <NextAvatar
@@ -22,6 +21,4 @@ export const Avatar = React.memo(({ size = 48, src, name, proxy = false }: Avata
             alt={name ? `${name}'s avatar` : "Avatar"}
             gradientColor={color} />
     )
-});
-
-Avatar.displayName = "Avatar";
+};

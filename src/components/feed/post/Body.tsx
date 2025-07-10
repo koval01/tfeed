@@ -1,14 +1,6 @@
 "use client";
 
-import React, {
-    memo,
-    useCallback,
-    useContext,
-    useEffect,
-    useMemo,
-    useState,
-    type PropsWithChildren
-} from "react";
+import React, { useMemo, type PropsWithChildren } from "react";
 
 import type { Channel, Footer, Media, Post, TitleProps } from "@/types";
 import type { FooterComponentProps, PostBodyProps } from "@/types/feed/post";
@@ -41,7 +33,6 @@ import {
     Footnote,
     Headline,
     Spacing,
-    Spinner,
     Subhead,
     Tappable,
     Text,
@@ -62,8 +53,6 @@ import { RoundVideo } from "@/components/feed/post/RoundVideo";
 import { Sticker } from "@/components/feed/post/Sticker";
 import { Verified } from "@/components/feed/post/Verified";
 import { TextComponent } from "@/components/feed/TextComponent";
-
-import { Icons } from "@/components/ui/Icons";
 
 const usePostMediaCollection = (post: Post) => {
     return useMemo(() => {
@@ -99,7 +88,7 @@ const usePostAvailability = (post: Post) => {
     }, [post.content]);
 };
 
-const FooterComponent = memo(({
+const FooterComponent = ({
     Icon,
     context,
     iconSize = 14,
@@ -118,10 +107,9 @@ const FooterComponent = memo(({
             {context}
         </Caption>
     </div>
-));
-FooterComponent.displayName = "FooterComponent";
+);
 
-const Title = memo(({ children, verified, channelName }: TitleProps) => (
+const Title = ({ children, verified, channelName }: TitleProps) => (
     <div className="inline-flex overflow-hidden text-ellipsis text-[13px] leading-4 font-medium">
         <Headline
             level="2"
@@ -139,10 +127,9 @@ const Title = memo(({ children, verified, channelName }: TitleProps) => (
             </div>
         )}
     </div>
-));
-Title.displayName = "Title";
+);
 
-const ChannelTitle = memo(({ channel }: { channel: Channel }) => {
+const ChannelTitle = ({ channel }: { channel: Channel }) => {
     const titleContent = useMemo(() => (
         <EllipsisText className="max-sm:max-w-40 max-md:max-w-72 lg:max-w-[380px] md:max-w-[45vw]">
             <TextComponent htmlString={channel.title.html} />
@@ -160,8 +147,7 @@ const ChannelTitle = memo(({ channel }: { channel: Channel }) => {
             {titleContent}
         </Title>
     );
-});
-ChannelTitle.displayName = "ChannelTitle";
+};
 
 const HeadProfile = ({ channel, post }: PostBodyProps) => {
     const formattedDate = useFormattedDate(post.footer.date.unix);
@@ -182,7 +168,7 @@ const HeadProfile = ({ channel, post }: PostBodyProps) => {
     );
 };
 
-const ShareButton = memo(({ channel, post }: { channel: Channel, post: Post }) => (
+const ShareButton = ({ channel, post }: { channel: Channel, post: Post }) => (
     <div className="relative">
         <Tooltip title={t("openPostInNewWindow")}>
             <Tappable
@@ -194,8 +180,7 @@ const ShareButton = memo(({ channel, post }: { channel: Channel, post: Post }) =
             </Tappable>
         </Tooltip>
     </div>
-));
-ShareButton.displayName = "ShareButton";
+);
 
 const TopButtons = ({ channel, post }: PostBodyProps) => (
     <div className="relative flex" style={{ flex: "0 0 auto" }}>
@@ -205,7 +190,7 @@ const TopButtons = ({ channel, post }: PostBodyProps) => (
     </div>
 );
 
-export const PostHeader = memo(({ channel, post }: PostBodyProps) => (
+export const PostHeader = ({ channel, post }: PostBodyProps) => (
     <Flex className="flex-row select-none">
         <div className="mr-3">
             <Avatar src={channel.avatar} size={40} name={channel.title.string} />
@@ -213,10 +198,9 @@ export const PostHeader = memo(({ channel, post }: PostBodyProps) => (
         <HeadProfile channel={channel} post={post} />
         <TopButtons channel={channel} post={post} />
     </Flex>
-));
-PostHeader.displayName = "PostHeader";
+);
 
-const PostViews = memo(({ views }: { views?: string }) =>
+const PostViews = ({ views }: { views?: string }) => (
     views ? (
         <FooterComponent
             Icon={Icon16View}
@@ -226,9 +210,8 @@ const PostViews = memo(({ views }: { views?: string }) =>
         />
     ) : null
 );
-PostViews.displayName = "PostViews";
 
-const PostAuthor = memo(({ footer }: { footer?: Footer }) =>
+const PostAuthor = ({ footer }: { footer?: Footer }) => (
     footer?.author ? (
         <FooterComponent
             Icon={Icon20SignatureOutline}
@@ -240,9 +223,8 @@ const PostAuthor = memo(({ footer }: { footer?: Footer }) =>
         <div />
     )
 );
-PostAuthor.displayName = "PostAuthor";
 
-export const PostFooter = memo(({ post }: { post: Post }) => {
+export const PostFooter = ({ post }: { post: Post }) => {
     const memoizedAuthor = useMemo(() => (
         <PostAuthor footer={post.footer} />
     ), [post.footer]);
@@ -263,10 +245,9 @@ export const PostFooter = memo(({ post }: { post: Post }) => {
             </div>
         </div>
     );
-});
-PostFooter.displayName = "PostFooter";
+};
 
-const UnavailableMedia = memo(({ channel, post, media }: { channel: Channel, post: Post, media: Media | undefined }) => {
+const UnavailableMedia = ({ channel, post, media }: { channel: Channel, post: Post, media: Media | undefined }) => {
     const { isSm, isMd } = useWindowSize();
 
     return (
@@ -317,10 +298,9 @@ const UnavailableMedia = memo(({ channel, post, media }: { channel: Channel, pos
             </div>
         </div>
     );
-});
-UnavailableMedia.displayName = "UnavailableMedia";
+};
 
-const PostMedia = memo(({ channel, post }: { channel: Channel, post: Post }) => {
+const PostMedia = ({ channel, post }: { channel: Channel, post: Post }) => {
     const { mediaCollection, hasUnavailableMedia, unavailableMedia } = usePostMediaCollection(post);
 
     if (hasUnavailableMedia) {
@@ -328,10 +308,9 @@ const PostMedia = memo(({ channel, post }: { channel: Channel, post: Post }) => 
     }
 
     return mediaCollection ? <VKMediaGrid mediaCollection={mediaCollection} /> : null;
-});
-PostMedia.displayName = "PostMedia";
+};
 
-const PostText = memo(({ post }: { post: Post }) => {
+const PostText = ({ post }: { post: Post }) => {
     const text = post.content.text?.html;
     if (!text) return null;
 
@@ -342,15 +321,13 @@ const PostText = memo(({ post }: { post: Post }) => {
             </Footnote>
         </div>
     );
-});
-PostText.displayName = "PostText";
+};
 
-const PostPoll = memo(({ post }: { post: Post }) =>
+const PostPoll = ({ post }: { post: Post }) => (
     post.content.poll ? <Poll poll={post.content.poll} /> : null
 );
-PostPoll.displayName = "PostPoll";
 
-const PostReply = memo(({ channel, post }: { channel: Channel, post: Post }) => {
+const PostReply = ({ channel, post }: { channel: Channel, post: Post }) => {
     const reply = post.content.reply;
 
     const memoizedTitle = useMemo(() => (
@@ -405,10 +382,9 @@ const PostReply = memo(({ channel, post }: { channel: Channel, post: Post }) => 
             <Spacing />
         </>
     );
-});
-PostReply.displayName = "PostReply";
+};
 
-const PostNotSupported = memo(() => (
+const PostNotSupported = () => (
     <div>
         <Text className="text-lg font-bold TFeed__GradientText">
             <Trans i18nKey="thisPostNotSupported" />
@@ -426,17 +402,15 @@ const PostNotSupported = memo(() => (
             />
         </Caption>
     </div>
-));
-PostNotSupported.displayName = "PostNotSupported";
+);
 
-const PostSupport = memo(({ children, post }: PropsWithChildren<{ post: Post }>) => {
+const PostSupport = ({ children, post }: PropsWithChildren<{ post: Post }>) => {
     const isSupported = usePostAvailability(post);
     if (!isSupported) return <PostNotSupported />;
     return children;
-});
-PostSupport.displayName = "PostSupport";
+};
 
-const PostContentItems = memo(({ channel, post }: PostBodyProps) => (
+const PostContentItems = ({ channel, post }: PostBodyProps) => (
     <>
         <PostReply channel={channel} post={post} />
         <PostText post={post} />
@@ -448,12 +422,10 @@ const PostContentItems = memo(({ channel, post }: PostBodyProps) => (
         <AudioPost post={post} />
         <PreviewLink post={post} />
     </>
-));
-PostContentItems.displayName = "PostContentItems";
+);
 
-export const PostContent = memo(({ channel, post }: PostBodyProps) => (
+export const PostContent = ({ channel, post }: PostBodyProps) => (
     <PostSupport post={post}>
         <PostContentItems channel={channel} post={post} />
     </PostSupport>
-));
-PostContent.displayName = "PostContent";
+);

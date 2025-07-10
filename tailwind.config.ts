@@ -19,6 +19,10 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      colors: {
+        "color-accent": "#2688eb",
+        "color-premium": "#ffbd2e"
+      },
       keyframes: {
         pulse: {
           '0%, 100%': { opacity: '0.9' },

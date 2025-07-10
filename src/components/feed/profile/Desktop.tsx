@@ -1,4 +1,4 @@
-import React from "react";
+import { memo } from "react";
 
 import type {
     Channel,
@@ -143,7 +143,7 @@ const Body = ({ channel }: { channel: Channel }) => {
     );
 }
 
-export const Profile = React.memo(({ channel }: { channel: Channel }) => (
+export const Profile = memo(({ channel }: { channel: Channel }) => (
     <SplitCol className="max-lg:hidden pt-3 ScrollStickyWrapper" width={280} maxWidth={280}>
         <div className="fixed w-[345px]">
             <Group className="select-none p-0" mode="plain">

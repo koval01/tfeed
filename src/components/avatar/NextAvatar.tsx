@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { Avatar, type AvatarProps } from "@vkontakte/vkui";
 import { nextImage } from '@/helpers/nextImage';
@@ -7,7 +7,7 @@ interface NextAvatar extends AvatarProps {
     proxy?: boolean;
 }
 
-export const NextAvatar = memo(({
+export const NextAvatar = ({
     src,
     size,
     proxy = false,
@@ -18,5 +18,4 @@ export const NextAvatar = memo(({
     }, [src, size]);
 
     return <Avatar src={proxy ? modifiedSrc : src} size={size} {...props} />;
-});
-NextAvatar.displayName = 'NextAvatar';
+};

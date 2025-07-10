@@ -24,12 +24,13 @@ interface UsePostsReturn {
     newPostCount: number;
     showNewPosts: () => void;
     hasNewPosts: boolean;
+    isRefreshing: boolean;
 }
 
 export const usePosts = (
     channelUsername: string | undefined,
     showErrorSnackbar: (message: string, subtext?: string) => void,
-    pollingInterval = 1e4 // 10 seconds
+    pollingInterval = 4e3 // 4 seconds
 ): UsePostsReturn => {
     const dispatch = useDispatch();
 
@@ -44,6 +45,7 @@ export const usePosts = (
     const [isFetchingMore, setIsFetchingMore] = useState(false);
     const [isPolling, setIsPolling] = useState(false);
     const [hasNewPosts, setHasNewPosts] = useState(false);
+    const [isRefreshing, setIsRefreshing] = useState(false);
 
     const latestPollingOffset = useRef<Offset | null>(null);
     const shouldApplyCachedPosts = useRef(false);
@@ -56,7 +58,6 @@ export const usePosts = (
 
         // If all posts were duplicates, we need to adjust the offset
         if (filteredPosts.length === 0 && newPosts.length > 0) {
-            // Find the highest ID in the duplicates (assuming IDs are sortable)
             const highestDuplicateId = newPosts.reduce((maxId, post) =>
                 post.id > maxId ? post.id : maxId, newPosts[0].id);
 
@@ -81,18 +82,25 @@ export const usePosts = (
     const applyCachedPosts = useCallback(() => {
         if (cachedPosts.length === 0) return;
 
-        setPosts(prevPosts => [...cachedPosts, ...prevPosts]);
+        setPosts(prevPosts => {
+            const combinedPosts = [...cachedPosts, ...prevPosts];
 
-        if (offset.latestPolledOffset) {
-            const updatedOffset = { ...offset.latestPolledOffset };
+            const updatedOffset = {
+                ...offset,
+                after: combinedPosts[0]?.id || offset.after,
+                latestPolledOffset: offset.latestPolledOffset
+            };
+
             setOffset(updatedOffset);
             latestPollingOffset.current = updatedOffset;
-        }
+
+            return combinedPosts;
+        });
 
         setCachedPosts([]);
         setHasNewPosts(false);
         dispatch(resetNewPostsCount());
-    }, [cachedPosts, offset.latestPolledOffset, dispatch]);
+    }, [cachedPosts, offset, dispatch]);
 
     const initializePosts = useCallback((data: Body) => {
         const newPosts = data?.content?.posts?.slice().reverse() || [];
@@ -213,57 +221,62 @@ export const usePosts = (
     }, [cachedPosts, applyCachedPosts]);
 
     const refreshPosts = useCallback(async (showError = true) => {
-        const isAtTop = document.documentElement.scrollTop === 0;
+        if (isRefreshing) return;
+        const isAtTop = document.documentElement.scrollTop <= window.innerHeight / 2;
 
-        if (cachedPosts.length > 0 && isAtTop) {
-            applyCachedPosts();
-            return;
-        }
-
-        if (!isAtTop || !channelUsername) return;
-
-        const tempPosts: Post[] = [];
-        const setTempPosts: Dispatch<SetStateAction<Post[]>> = (action) => {
-            const newPosts = typeof action === 'function'
-                ? action(tempPosts)
-                : action;
-            tempPosts.push(...newPosts);
-            return;
-        };
-
-        let tempOffset: ExtendedOffset = {};
-        const setTempOffset: Dispatch<SetStateAction<ExtendedOffset>> = (action) => {
-            tempOffset = typeof action === 'function'
-                ? action(tempOffset)
-                : action;
-            return;
-        };
-
-        await onRefresh(
-            channelUsername,
-            latestPollingOffset.current || offset,
-            setIsFetching,
-            setTempPosts,
-            setTempOffset,
-            showError ? showErrorSnackbar : undefined
-        );
-
-        if (tempPosts.length > 0) {
-            const { filteredPosts, updatedOffset } = processNewPosts(tempPosts, posts, offset);
-
-            if (filteredPosts.length > 0) {
-                setPosts(prevPosts => [...filteredPosts, ...prevPosts]);
-                setOffset(updatedOffset);
-                latestPollingOffset.current = updatedOffset;
-            } else if (updatedOffset.after !== offset.after) {
-                // Only update the offset if it changed (we skipped duplicates)
-                setOffset(updatedOffset);
-                latestPollingOffset.current = updatedOffset;
+        setIsRefreshing(true);
+        try {
+            if (cachedPosts.length > 0 && isAtTop) {
+                applyCachedPosts();
+                return;
             }
-        }
 
-        setHasNewPosts(false);
-    }, [channelUsername, offset, showErrorSnackbar, cachedPosts, applyCachedPosts, posts, processNewPosts]);
+            if (!isAtTop || !channelUsername) return;
+
+            const tempPosts: Post[] = [];
+            const setTempPosts: Dispatch<SetStateAction<Post[]>> = (action) => {
+                const newPosts = typeof action === 'function'
+                    ? action(tempPosts)
+                    : action;
+                tempPosts.push(...newPosts);
+                return;
+            };
+
+            let tempOffset: ExtendedOffset = {};
+            const setTempOffset: Dispatch<SetStateAction<ExtendedOffset>> = (action) => {
+                tempOffset = typeof action === 'function'
+                    ? action(tempOffset)
+                    : action;
+                return;
+            };
+
+            await onRefresh(
+                channelUsername,
+                latestPollingOffset.current || offset,
+                setIsFetching,
+                setTempPosts,
+                setTempOffset,
+                showError ? showErrorSnackbar : undefined
+            );
+
+            if (tempPosts.length > 0) {
+                const { filteredPosts, updatedOffset } = processNewPosts(tempPosts, posts, offset);
+
+                if (filteredPosts.length > 0) {
+                    setPosts(prevPosts => [...filteredPosts, ...prevPosts]);
+                    setOffset(updatedOffset);
+                    latestPollingOffset.current = updatedOffset;
+                } else if (updatedOffset.after !== offset.after) {
+                    // Only update the offset if it changed (we skipped duplicates)
+                    setOffset(updatedOffset);
+                    latestPollingOffset.current = updatedOffset;
+                }
+            }
+        } finally {
+            setIsRefreshing(false);
+            setHasNewPosts(false);
+        }
+    }, [channelUsername, offset, showErrorSnackbar, cachedPosts, applyCachedPosts, posts, processNewPosts, isRefreshing]);
 
     const loadMorePosts = useCallback(async () => {
         if (isFetchingMore || isFetching || !channelUsername) return;
@@ -305,6 +318,7 @@ export const usePosts = (
         initializePosts,
         newPostCount: cachedPosts.length,
         showNewPosts,
-        hasNewPosts
+        hasNewPosts,
+        isRefreshing
     };
 };

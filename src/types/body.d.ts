@@ -78,6 +78,15 @@ interface ContentPost {
     inline: Inline;
     reply: Reply;
     preview_link: PreviewLink;
+    reacts?: React[];
+}
+
+interface React {
+    count: string;
+    type: "telegram_stars" | "emoji" | "custom_emoji";
+    emoji?: string;
+    emoji_id?: string;
+    emoji_image?: string;
 }
 
 interface Inline {

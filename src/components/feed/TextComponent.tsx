@@ -1,4 +1,4 @@
-import React, { type JSX } from "react";
+import React, { type JSX, NamedExoticComponent, memo } from "react";
 
 import { EllipsisText, Link } from '@vkontakte/vkui';
 import { Spoiler } from 'spoiled';
@@ -143,7 +143,7 @@ const getParserOptions = (): HTMLReactParserOptions => ({
  * @param props.htmlString - The HTML string to parse and render.
  * @returns Parsed JSX elements or null if no HTML string is provided.
  */
-export const TextComponent: React.NamedExoticComponent<{ htmlString?: string }> = React.memo(({ htmlString }) => {
+export const TextComponent: NamedExoticComponent<{ htmlString?: string }> = memo(({ htmlString }) => {
     if (!htmlString) return null; // No HTML string, return null.
 
     const parserOptions = getParserOptions();

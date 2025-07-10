@@ -1,4 +1,3 @@
-import React from "react";
 import type { Post } from "@/types";
 
 import { Icon28StickerSmileOutline } from "@vkontakte/icons";
@@ -63,7 +62,7 @@ const StickerComponent = ({ post }: { post: Post }) => {
     );
 }
 
-export const Sticker = React.memo(({ post }: { post: Post }) => {
+export const Sticker = ({ post }: { post: Post }) => {
     // Only render if media is round video
     if (!post.content.media?.[0] || post.content.media[0].type !== "sticker") {
         return null;
@@ -75,6 +74,4 @@ export const Sticker = React.memo(({ post }: { post: Post }) => {
             <StickerComponent post={post} />
         </div>
     );
-});
-
-Sticker.displayName = "Sticker";
+};

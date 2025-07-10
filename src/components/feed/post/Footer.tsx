@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import type {
@@ -78,7 +78,7 @@ const useLoadingMessage = (isFetchingMore: boolean) => {
 /**
  * Main infinite feed loader component
  */
-export const InfiniteFeedLoader = memo(({ isFetchingMore }: LoadingMoreProps) => {
+export const InfiniteFeedLoader = ({ isFetchingMore }: LoadingMoreProps) => {
     const noMorePosts = useSelector(selectNoLoadMore);
     const loadingMessage = useLoadingMessage(isFetchingMore);
 
@@ -102,6 +102,4 @@ export const InfiniteFeedLoader = memo(({ isFetchingMore }: LoadingMoreProps) =>
             </div>
         </Group>
     );
-});
-
-InfiniteFeedLoader.displayName = "InfiniteFeedLoader";
+};

@@ -67,6 +67,7 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
         refreshPosts,
         loadMorePosts,
         initializePosts,
+        isRefreshing
     } = usePosts(channelUsername, showErrorSnackbar);
 
     // Infinite scroll setup
@@ -83,7 +84,11 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
         }
     }, [data, initializePosts]);
 
-    useInterval(() => refreshPosts(false), 3e3);
+    useInterval(() => {
+        if (!isRefreshing) {
+            refreshPosts(false);
+        }
+    }, 1e3);
 
     return (
         (<Panel>

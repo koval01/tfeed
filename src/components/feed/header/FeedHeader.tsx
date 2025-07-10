@@ -1,5 +1,5 @@
 import type { Channel } from '@/types';
-import { memo, type FC } from 'react';
+import { type FC } from 'react';
 
 import { PanelHeader } from "@vkontakte/vkui";
 
@@ -11,7 +11,7 @@ interface FeedHeaderProps {
     isLoading: boolean;
 }
 
-export const FeedHeader: FC<FeedHeaderProps> = memo(({ channel, isLoading }) => (
+export const FeedHeader: FC<FeedHeaderProps> = ({ channel, isLoading }) => (
     <>
         <PanelHeader
             className="h-12"
@@ -25,7 +25,6 @@ export const FeedHeader: FC<FeedHeaderProps> = memo(({ channel, isLoading }) => 
                 )
             }
             delimiter='none'
-            shadow={false}
             transparent
         />
         <div className="fixed z-[5] bg-white/70 dark:bg-black/70 h-12 w-screen">
@@ -34,5 +33,4 @@ export const FeedHeader: FC<FeedHeaderProps> = memo(({ channel, isLoading }) => 
             </div>
         </div>
     </>
-));
-FeedHeader.displayName = "FeedHeader";
+);

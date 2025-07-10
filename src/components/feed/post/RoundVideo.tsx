@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo, memo } from "react";
 import type { Post } from "@/types";
 
 import { useMediaPlayback } from '@/hooks/services/useMediaPlayback';
@@ -19,7 +19,7 @@ interface VideoControlProps {
     onToggle: (e: React.MouseEvent) => void;
 }
 
-const VideoControl = React.memo(({ isPlaying, isVisible, isBuffering, onToggle }: VideoControlProps) => (
+const VideoControl = memo(({ isPlaying, isVisible, isBuffering, onToggle }: VideoControlProps) => (
     <button
         className={cn(
             "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
@@ -53,7 +53,7 @@ interface VideoPreviewProps {
     isLoaded: boolean;
 }
 
-const VideoPreview = React.memo(({ thumb, isLoaded }: VideoPreviewProps) => (
+const VideoPreview = ({ thumb, isLoaded }: VideoPreviewProps) => (
     (!isLoaded && thumb) ? (
         <Image
             src={thumb}
@@ -65,7 +65,7 @@ const VideoPreview = React.memo(({ thumb, isLoaded }: VideoPreviewProps) => (
             className="absolute z-5 top-0 w-full h-full object-cover aspect-square rounded-none"
         />
     ) : null
-));
+);
 
 VideoPreview.displayName = "VideoPreview";
 
@@ -73,7 +73,7 @@ interface VideoTimeProps {
     videoRef: React.RefObject<HTMLVideoElement | null>;
 }
 
-const VideoTime = React.memo(({ videoRef }: VideoTimeProps) => {
+const VideoTime = memo(({ videoRef }: VideoTimeProps) => {
     const [timeDisplay, setTimeDisplay] = useState("0:00");
 
     const formatTime = useCallback((seconds: number) => {
@@ -138,7 +138,7 @@ interface RoundVideoProps {
     post: Post;
 }
 
-export const RoundVideo = React.memo(({ post }: RoundVideoProps) => {
+export const RoundVideo = memo(({ post }: RoundVideoProps) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [isBuffering, setIsBuffering] = useState(false);
     const [isLoaded, setIsLoaded] = useState(false);

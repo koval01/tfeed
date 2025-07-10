@@ -1,6 +1,6 @@
 "use client";
 
-import { type JSX, memo, useCallback, useRef } from "react";
+import { type JSX, useCallback, useRef } from "react";
 
 import type {
     PostBodyProps,
@@ -39,7 +39,7 @@ import { MediaProvider } from "@/contexts/MediaContext";
 /**
  * Displays the content of a single post, including forwarded content if applicable.
  */
-const PostBody = memo(({ channel, post }: PostBodyProps): JSX.Element => (
+const PostBody = ({ channel, post }: PostBodyProps): JSX.Element => (
     post.forwarded ? (
         <Forward post={post}>
             <PostContent channel={channel} post={post} />
@@ -47,8 +47,7 @@ const PostBody = memo(({ channel, post }: PostBodyProps): JSX.Element => (
     ) : (
         <PostContent channel={channel} post={post} />
     )
-));
-PostBody.displayName = "PostBody";
+);
 
 /**
  * Displays an individual post with its metadata and content.
@@ -77,12 +76,11 @@ const Post = ({ item, channel, ...props }: PostProps & Record<string, any>): JSX
         </Group>
     );
 };
-Post.displayName = "Post";
 
 /**
  * Main Posts component that renders a list of posts with pull-to-refresh and load-more functionality.
  */
-export const Posts = memo(({ channel, posts, onRefresh, isFetching, isFetchingMore }: PostsProps): JSX.Element => {
+export const Posts = ({ channel, posts, onRefresh, isFetching, isFetchingMore }: PostsProps): JSX.Element => {
     const renderItem = useCallback((item: PostInterface) => {
         return (
             <Post key={`post__item_${item.id}`} item={item} channel={channel} />
@@ -110,5 +108,4 @@ export const Posts = memo(({ channel, posts, onRefresh, isFetching, isFetchingMo
             </SplitCol>
         </MediaProvider>
     );
-});
-Posts.displayName = "Posts";
+};

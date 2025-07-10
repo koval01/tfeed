@@ -160,7 +160,7 @@ export const Posts: React.FC = () => (
  *
  * @returns The ChannelNavSkeleton component.
  */
-export const ChannelNavSkeleton: React.FC = memo(() => (
+export const ChannelNavSkeleton: React.FC = () => (
     <div
         className="relative max-md:-top-0.5 block select-none items-center space-x-2 py-1.5 pl-[5px] md:pt-3 overflow-hidden"
     >
@@ -174,10 +174,9 @@ export const ChannelNavSkeleton: React.FC = memo(() => (
             <Skeleton width={100} height={10} />
         </div>
     </div>
-));
-ChannelNavSkeleton.displayName = "ChannelNavSkeleton";
+);
 
-export const FeedProfileSkeleton = memo(() => {
+export const FeedProfileSkeleton = () => {
     const { isSm } = useWindowSize();
 
     return (
@@ -228,6 +227,4 @@ export const FeedProfileSkeleton = memo(() => {
             </div>
         </Group>
     )
-});
-
-FeedProfileSkeleton.displayName = "FeedProfileSkeleton";
+};

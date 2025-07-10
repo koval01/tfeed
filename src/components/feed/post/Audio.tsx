@@ -186,7 +186,6 @@ export const AudioPost = memo(({ post }: { post: Post }) => {
     const [playing, setPlaying] = useState(false);
     const [playedFraction, setPlayedFraction] = useState(0);
     const [remainingTime, setRemainingTime] = useState<string>("0:00");
-    const [isDragging, setIsDragging] = useState(false);
 
     const playerRef = useRef<ReactPlayer | null>(null);
     const spectrogramRef = useRef<HTMLDivElement>(null);
@@ -227,13 +226,8 @@ export const AudioPost = memo(({ post }: { post: Post }) => {
     );
 
     const handleInteractionStart = useCallback((event: React.TouchEvent | React.MouseEvent) => {
-        setIsDragging(true);
         handleInteraction(event);
     }, [handleInteraction]);
-
-    const handleMouseUpOrTouchEnd = useCallback(() => {
-        setIsDragging(false);
-    }, []);
 
     const handlePlay = useCallback(() => {
         setPlaying(true);
@@ -264,16 +258,6 @@ export const AudioPost = memo(({ post }: { post: Post }) => {
 
         return () => clearInterval(intervalId);
     }, [playing, formatTime]);
-
-    useEffect(() => {
-        document.addEventListener("mouseup", handleMouseUpOrTouchEnd);
-        document.addEventListener("touchend", handleMouseUpOrTouchEnd);
-
-        return () => {
-            document.removeEventListener("mouseup", handleMouseUpOrTouchEnd);
-            document.removeEventListener("touchend", handleMouseUpOrTouchEnd);
-        };
-    }, [handleMouseUpOrTouchEnd]);
 
     if (!post.content.media?.[0] || !["voice", "audio"].includes(post.content.media[0].type)) {
         return null;
