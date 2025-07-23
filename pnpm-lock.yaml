@@ -24,8 +24,8 @@ importers:
         specifier: ^2.170.0
         version: 2.170.0(react@19.1.0)
       '@vkontakte/vkui':
-        specifier: ^7.4.2
-        version: 7.4.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: ^7.5.1
+        version: 7.5.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       axios:
         specifier: ^1.10.0
         version: 1.10.0
@@ -1713,8 +1713,8 @@ packages:
     peerDependencies:
       react: ^16.9.34 || ^17 || ^18
 
-  '@vkontakte/icons@3.12.0':
-    resolution: {integrity: sha512-tasqbOSb3pCVAwfJ3v96qUWmw1mLS43j8G9gzXopkMm7xgyCY65I06JCCLXjEP8VNB+dfsDOOqZrWe4CbNeGHg==}
+  '@vkontakte/icons@3.13.0':
+    resolution: {integrity: sha512-+C76A0QduX33NOocitXSyJwMaRwKKX32mvKqn8nqsPH6YkvReFqjGrtLC5FfRQRBQL0X70zt5DZBWA/Ar1jwQA==}
     peerDependencies:
       react: ^18 || ^19
 
@@ -1730,8 +1730,8 @@ packages:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
 
-  '@vkontakte/vkui@7.4.2':
-    resolution: {integrity: sha512-HCJEQ23k0Y2scvK8zVfaCj81MfzoIPV6hPT3v6bCjaw2DHNfDAOLCLCZpR6JG5b8APj+nXgJMxAoQLRJML9JpA==}
+  '@vkontakte/vkui@7.5.1':
+    resolution: {integrity: sha512-0GVq8dG+x/5YXPC2qGw/Nh8GaA4BIeXPu730Xh0yLIUx2MgfMgOSUUWMq61RkZrBzImm4JxUsD/vr/wquDCj+A==}
     peerDependencies:
       react: ^18.2.0 || ^19.0.0
       react-dom: ^18.2.0 || ^19.0.0
@@ -6461,7 +6461,7 @@ snapshots:
       '@vkontakte/icons-sprite': 2.3.1(react@19.1.0)
       react: 19.1.0
 
-  '@vkontakte/icons@3.12.0(react@19.1.0)':
+  '@vkontakte/icons@3.13.0(react@19.1.0)':
     dependencies:
       '@swc/helpers': 0.5.17
       '@vkontakte/icons-sprite': 3.1.0(react@19.1.0)
@@ -6481,10 +6481,10 @@ snapshots:
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
 
-  '@vkontakte/vkui@7.4.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@vkontakte/vkui@7.5.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@swc/helpers': 0.5.17
-      '@vkontakte/icons': 3.12.0(react@19.1.0)
+      '@vkontakte/icons': 3.13.0(react@19.1.0)
       '@vkontakte/vkjs': 2.0.1
       '@vkontakte/vkui-date-fns-tz': 0.0.4
       '@vkontakte/vkui-floating-ui': 0.2.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
