@@ -46,6 +46,7 @@ import { NextImage } from "@/components/media/NextImage";
 import { VKMediaGrid } from "@/components/media/Media";
 
 import { AudioPost } from "@/components/feed/post/Audio";
+import { PostReacts } from "@/components/feed/post/Reacts";
 import { GifPost } from "@/components/feed/post/GifPost";
 import { Poll } from "@/components/feed/post/Poll";
 import { PreviewLink } from "@/components/feed/post/PreviewLink";
@@ -421,6 +422,7 @@ const PostContentItems = ({ channel, post }: PostBodyProps) => (
         <GifPost post={post} />
         <AudioPost post={post} />
         <PreviewLink post={post} />
+        <PostReacts post={post} />
     </>
 );
 
