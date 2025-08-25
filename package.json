@@ -43,7 +43,7 @@
     "zod": "^4.0.14"
   },
   "devDependencies": {
-    "@cloudflare/next-on-pages": "^1.13.13",
+    "@cloudflare/next-on-pages": "^1.13.14",
     "@emotion/react": "^11.14.0",
     "@types/lodash": "^4.17.20",
     "@types/node": "^24.1.0",
