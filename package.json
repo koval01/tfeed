@@ -14,7 +14,7 @@
     "deploy": "pnpm run pages:build && wrangler pages deploy"
   },
   "dependencies": {
-    "@next/third-parties": "^15.4.4",
+    "@next/third-parties": "^15.5.2",
     "@reduxjs/toolkit": "^2.8.2",
     "@sentry/nextjs": "^9.46.0",
     "@vercel/speed-insights": "^1.2.0",
