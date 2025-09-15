@@ -20,7 +20,7 @@
     "@vercel/speed-insights": "^1.2.0",
     "@vkontakte/icons": "^2.170.0",
     "@vkontakte/vkui": "^7.6.0",
-    "axios": "^1.11.0",
+    "axios": "^1.12.2",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "html-react-parser": "^5.2.6",
