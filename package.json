@@ -31,7 +31,7 @@
     "normalize.css": "^8.0.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-i18next": "^15.6.1",
+    "react-i18next": "^16.0.0",
     "react-intersection-observer": "^9.16.0",
     "react-markdown": "^10.1.0",
     "react-player": "^2.16.1",
