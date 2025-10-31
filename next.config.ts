@@ -29,7 +29,6 @@ const nextConfig: NextConfig = {
             'lucide-react',
             'react',
             'react-dom',
-            'react-intersection-observer',
             'react-markdown',
             'react-player',
             'react-redux',

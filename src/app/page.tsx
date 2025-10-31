@@ -2,35 +2,35 @@
 
 import React from "react";
 
-import { FixedCenter } from "@/components/services/FixedCenter";
+import { useBody } from "@/hooks/services/useBody";
 
-import {
-    DisplayTitle,
-    Headline,
-    Placeholder,
-    SplitCol,
-    SplitLayout
-} from "@vkontakte/vkui";
+import { Error } from "@/components/error/Error";
+import { Feed } from "@/components/feed/Feed";
 
-import { t } from "i18next";
-import { Trans } from "react-i18next";
+import { PanelHeader, SplitCol, SplitLayout } from "@vkontakte/vkui";
 
-const Home: React.FC = () => (
-  <SplitLayout>
-    <SplitCol autoSpaced>
-      <FixedCenter>
-        <Placeholder>
-          {/* Accessible title */}
-          <DisplayTitle className="select-none" aria-label={t("Nothing")}>
-            <Trans i18nKey="Nothing" />
-          </DisplayTitle>
-        </Placeholder>
-        <Headline className="text-center" Component="h4">
-          <Trans i18nKey="MainSubText" />
-        </Headline>
-      </FixedCenter>
-    </SplitCol>
-  </SplitLayout>
-);
+const FeedPage: React.FC = () => {
+    const key = "TF_channels";
+    if (!window.localStorage.getItem(key)) {
+        window.localStorage.setItem(key, JSON.stringify(["durov", "telegram", "lafaelka"]))
+    }
+    const channels = JSON.parse(window.localStorage.getItem(key) || "");
+    const { data, error, isLoading } = useBody(channels);
 
-export default Home;
+    return (
+        <SplitLayout
+            header={!error ? <PanelHeader delimiter="none" /> : null}
+            className={isLoading ? "fixed" : ""}
+        >
+            <SplitCol>
+                {!error ? (
+                    <Feed data={data} isLoading={isLoading} />
+                ) : (
+                    <Error error={error} />
+                )}
+            </SplitCol>
+        </SplitLayout>
+    );
+};
+
+export default FeedPage;

@@ -1,26 +1,22 @@
-import type { Channel } from '@/types';
 import { type FC } from 'react';
 
 import { PanelHeader } from "@vkontakte/vkui";
 
-import { ChannelNav } from "@/components/feed/header/Nav";
-import { ChannelNavSkeleton } from "@/components/feed/Skeleton";
+import { AppNav } from "@/components/feed/header/Nav";
 
 interface FeedHeaderProps {
-    channel: Channel;
     isLoading: boolean;
 }
 
-export const FeedHeader: FC<FeedHeaderProps> = ({ channel, isLoading }) => (
+export const FeedHeader: FC<FeedHeaderProps> = ({ isLoading }) => (
     <>
         <PanelHeader
             className="h-12"
-            before={isLoading ? <ChannelNavSkeleton /> : <ChannelNav channel={channel} />}
+            before={<AppNav />}
             after={
                 !isLoading && (
                     <div className="relative max-md:-top-1 inline-block items-center overflow-hidden">
-                        {/* <SubscribeButton channel={channel} /> */}
-                        {/* TODO: Replace to search field */}
+                        <div />
                     </div>
                 )
             }

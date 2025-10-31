@@ -2,7 +2,6 @@
 
 import { type FC, useCallback, useEffect, useState } from "react";
 
-import { useInfiniteScroll } from "@/hooks/services/useInfiniteScroll";
 import { usePosts } from "@/hooks/services/usePosts";
 import { useInterval } from "@/hooks/utils/useInterval";
 
@@ -33,15 +32,13 @@ interface FeedProps {
 }
 
 /**
- * The Feed component displays a feed of posts with infinite scroll and error handling.
+ * The Feed component displays a feed of posts.
  *
  * @param props - Component props.
  */
 export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
-    const [channelUsername, setChannelUsername] = useState<string | undefined>(undefined);
     const [snackbar, setSnackbar] = useState<React.ReactElement | null>(null);
 
-    // Function to show error notifications
     const showErrorSnackbar = useCallback(
         (message: string, subtext?: string, Icon?: FC, iconColor?: string) => {
             if (!snackbar) {
@@ -59,30 +56,19 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
         [snackbar]
     );
 
-    // Custom hook to manage posts
     const {
         posts,
         isFetching,
-        isFetchingMore,
         refreshPosts,
-        loadMorePosts,
         initializePosts,
         isRefreshing
-    } = usePosts(channelUsername, showErrorSnackbar);
+    } = usePosts(showErrorSnackbar);
 
-    // Infinite scroll setup
-    useInfiniteScroll({
-        onLoadMore: loadMorePosts,
-        isLoading: isFetchingMore,
-    });
-
-    // Initialize posts and set the channel username on data change
     useEffect(() => {
         if (data) {
             initializePosts(data);
-            setChannelUsername(data.channel?.username);
         }
-    }, [data, initializePosts]);
+    }, [data, initializePosts, isLoading]);
 
     useInterval(() => {
         if (!isRefreshing) {
@@ -92,31 +78,24 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
 
     return (
         (<Panel>
-            {/* Header */}
-            <FeedHeader channel={data?.channel} isLoading={isLoading} />
-            {/* Main layout */}
+            <FeedHeader isLoading={isLoading} />
             <SplitLayout center className="relative lg:right-8">
                 {isLoading ? (
-                    // Show skeletons during loading
                     (<>
                         <PostsSkeleton />
                         <ProfileSkeleton />
                     </>)
                 ) : (
-                    // Show posts and profile when data is ready
                     (<>
                         <Posts
-                            channel={data.channel}
                             posts={posts}
                             onRefresh={refreshPosts}
                             isFetching={isFetching}
-                            isFetchingMore={isFetchingMore}
                         />
-                        <DesktopProfile channel={data.channel} />
+                        <DesktopProfile />
                     </>)
                 )}
             </SplitLayout>
-            {/* Snackbar */}
             {snackbar}
         </Panel>)
     );

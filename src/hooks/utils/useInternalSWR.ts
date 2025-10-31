@@ -1,14 +1,15 @@
 import axios from "axios";
 import useSWR, { type SWRResponse } from "swr";
 
-const fetcher = (url: string): Promise<any> => axios.get(url).then(res => res.data);
+const fetcher = ([url, body]: [string, any]): Promise<any> =>
+    axios.post(url, body).then(res => res.data);
 
 export const useInternalSWR = <Data = any, Error = any>(
-    url: string
+    url: string, body: any
 ): SWRResponse<Data, Error> => {
-    return useSWR<Data, Error>(url, fetcher, {
-        revalidateIfStale: false,
-        revalidateOnFocus: false,
-        revalidateOnReconnect: false,
+    return useSWR<Data, Error>([url, body], fetcher, {
+        revalidateIfStale: true,
+        revalidateOnFocus: true,
+        revalidateOnReconnect: true,
     });
 };

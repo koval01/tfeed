@@ -16,7 +16,12 @@ const TELEGRAM_CDN_DOMAINS = [
     'cdn2.cdn-telegram.org',
     'cdn3.cdn-telegram.org',
     'cdn4.cdn-telegram.org',
-    'cdn5.cdn-telegram.org'
+    'cdn5.cdn-telegram.org',
+    'cdn1.telesco.pe',
+    'cdn2.telesco.pe',
+    'cdn3.telesco.pe',
+    'cdn4.telesco.pe',
+    'cdn5.telesco.pe',
 ];
 
 const EmojiResponseSchema = z.object({
@@ -50,7 +55,7 @@ export async function GET(
             signal: controller.signal,
             headers: {
                 'Accept': 'application/json',
-                'User-Agent': 'Mozilla/5.0 (compatible; YourBot/1.0)'
+                'User-Agent': 'Mozilla/5.0 (compatible; TFeedBot/1.0)'
             }
         }).finally(() => clearTimeout(timeout));
 
