@@ -1,7 +1,5 @@
 export interface Body {
-    channel: Channel;
-    content: Content;
-    meta: Meta;
+    result: Post[];
 }
 
 interface ParsedAndRaw {
@@ -16,10 +14,6 @@ export interface Channel {
     avatar: string | undefined;
     counters: Counters;
     labels?: string[];
-}
-
-interface Content {
-    posts: Post[];
 }
 
 export interface Meta {
@@ -37,6 +31,8 @@ export interface Post {
     footer: Footer;
     forwarded: Forwarded;
     view: string;
+    channel: Channel;
+    _score: number;
 }
 
 export interface Forwarded {

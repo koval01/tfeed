@@ -67,7 +67,7 @@ export const viewport: Viewport = {
 
 const RootLayout = ({ children }: PropsWithChildren) => {
   return (
-    <html lang='en'>
+    <html lang='en' className='bg-white dark:bg-black'>
       <body className="antialiased bg-white dark:bg-black">
         <Root>
           {children}
