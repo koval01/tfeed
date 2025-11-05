@@ -1,4 +1,3 @@
-import { about } from "@/i18n/about";
 import { date } from "@/i18n/date";
 import { error } from "@/i18n/error";
 import { snack } from "@/i18n/snack";
@@ -7,7 +6,6 @@ import { profile } from "@/i18n/profile";
 export const i18nStrings = {
     "en": {
         "translation": {
-            ...about["en"],
             ...date["en"],
             ...error["en"],
             ...snack["en"],
@@ -28,7 +26,6 @@ export const i18nStrings = {
     },
     "de": {
         "translation": {
-            ...about["de"],
             ...date["de"],
             ...error["de"],
             ...snack["de"],
@@ -43,6 +40,8 @@ export const i18nStrings = {
             "forwarded message": "weitergeleitete Nachricht",
             "Anonymous Poll": "Anonyme Umfrage",
             "votes": "Stimmen",
+            "Channels": "Kanäle",
+            "Edit": "Bearbeiten",
             "thisPostNotSupported": "Um diesen Beitrag zu sehen, gehen Sie zu Telegram",
             "openPostInTelegramHint": "Um diesen Beitrag in Telegram zu öffnen, verwenden Sie das <div />-Symbol in der oberen rechten Ecke des Beitrags.",
             "Subscribe button": "Schaltfläche Abonnieren",
@@ -57,11 +56,19 @@ export const i18nStrings = {
             "feedTheEnd": "Das Ende",
             "viewInTelegram": "Ansicht im Telegram",
             "mediaNotAvailable": "Medien sind in der Vorschau nicht verfügbar",
+            "Searching...": "Suche...",
+            "Loading channels...": "Kanäle werden geladen...",
+            "No channels added": "Keine Kanäle hinzugefügt",
+            "Add": "Hinzufügen",
+            "Remove": "Entfernen",
+            "Channel username": "Kanal-Benutzername",
+            "My channels": "Meine Kanäle",
+            "Channel already exists": "Kanal existiert bereits",
+            "Invalid username format": "Ungültiges Benutzernamenformat",
         }
     },
     "ru": {
         "translation": {
-            ...about["ru"],
             ...date["ru"],
             ...error["ru"],
             ...snack["ru"],
@@ -76,6 +83,8 @@ export const i18nStrings = {
             "forwarded message": "пересланное сообщение",
             "Anonymous Poll": "Анонимный опрос",
             "votes": "голосов",
+            "Channels": "Каналов",
+            "Edit": "Редактировать",
             "thisPostNotSupported": "Для просмотра этого поста перейдите в Telegram",
             "openPostInTelegramHint": "Чтобы открыть этот пост в Telegram, используйте символ <div /> в верхнем правом углу поста.",
             "Subscribe button": "Кнопка подписки",
@@ -90,11 +99,19 @@ export const i18nStrings = {
             "feedTheEnd": "Конец",
             "viewInTelegram": "Посмотреть в Telegram",
             "mediaNotAvailable": "Медиа недоступно в предварительном просмотре",
+            "Searching...": "Поиск...",
+            "Loading channels...": "Загружаем каналы...",
+            "No channels added": "Каналы не добавлены",
+            "Add": "Добавить",
+            "Remove": "Удалить",
+            "Channel username": "Юзернейм канала",
+            "My channels": "Мои каналы",
+            "Channel already exists": "Канал уже добавлен",
+            "Invalid username format": "Ошибка формата юзернейма",
         }
     },
     "uk": {
         "translation": {
-            ...about["uk"],
             ...date["uk"],
             ...error["uk"],
             ...snack["uk"],
@@ -109,6 +126,8 @@ export const i18nStrings = {
             "forwarded message": "переслане повідомлення",
             "Anonymous Poll": "Анонімне опитування",
             "votes": "голосів",
+            "Channels": "Каналів",
+            "Edit": "Редагувати",
             "thisPostNotSupported": "Для перегляду цього поста перейдіть у Telegram",
             "openPostInTelegramHint": "Щоб відкрити цей пост у Telegram, використовуйте символ <div /> у верхньому правому куті поста.",
             "Subscribe button": "Кнопка підписки",
@@ -123,6 +142,15 @@ export const i18nStrings = {
             "feedTheEnd": "Кінець",
             "viewInTelegram": "Переглянути в Telegram",
             "mediaNotAvailable": "Медіа не доступне в попередньому перегляді",
+            "Searching...": "Пошук...",
+            "Loading channels...": "Завантажуємо канали...",
+            "No channels added": "Канали не додані",
+            "Add": "Додати",
+            "Remove": "Видалити",
+            "Channel username": "Юзернейм каналу",
+            "My channels": "Мої канали",
+            "Channel already exists": "Канал вже додано",
+            "Invalid username format": "Помилка формату юзернейму",
         }
     }
 }

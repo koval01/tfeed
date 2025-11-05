@@ -127,7 +127,7 @@ export const VKMediaGrid = React.memo<VKMediaGridProps>(({ mediaCollection }) =>
                                 )}
                             </Image>
                             {media.type === "video" &&(<div
-                                className="absolute z-[5] bottom-0 -right-2"
+                                className="absolute z-[2] bottom-0 -right-2"
                                 style={{
                                     transform: "translate(-50%, -50%)"
                                 }}

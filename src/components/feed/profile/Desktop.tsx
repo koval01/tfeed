@@ -1,158 +1,65 @@
 import { memo } from "react";
 
-import type {
-    Channel,
-    Counters as CountersProps,
-    TitleProps
-} from "@/types";
-
 import {
     Button,
-    Card,
-    DisplayTitle,
+    ButtonGroup,
+    CustomScrollView,
     EllipsisText,
-    Footnote,
     Group,
-    Paragraph,
-    Placeholder,
-    Spacing,
-    SplitCol,
-    Title as TitleVK
+    SimpleCell,
+    SplitCol
 } from "@vkontakte/vkui";
 
-import { Icon20Verified } from "@vkontakte/icons";
-
-import { useWindowSize } from "@/hooks/utils/useWindowSize";
-
 import { Avatar } from "@/components/avatar/Avatar";
-import { Verified as VerifiedTT } from "@/components/feed/post/Verified";
-import { TextComponent } from "@/components/feed/TextComponent";
-
-import Link from "next/link";
-
 import { t } from "i18next";
-import { Trans } from "react-i18next";
+import { useModal } from "@/contexts/ModalContext";
+import { useChannelsStorage } from "@/hooks/utils/useChannelStorage";
 
-const Verified = ({ verified }: { verified: boolean }) => (
-    verified && <VerifiedTT
-        className="align-baseline inline-block text-[--vkui--color_icon_accent]"
-        Icon={Icon20Verified} />
-)
-
-const Title = ({ children, verified }: TitleProps) => (
-    <div className="inline-flex items-center max-w-60">
-        <DisplayTitle className="!leading-8 w-full whitespace-nowrap text-[16.5px] lg-h:text-lg xl:text-xl">
-            <EllipsisText>{children}</EllipsisText>
-        </DisplayTitle>
-        <div className="inline ml-1">
-            <Verified verified={verified} />
-        </div>
-    </div>
-)
-
-const Counters = ({ counters }: { counters: CountersProps }) => (
-    <Card>
-        <div className="grid grid-cols-3 gap-2 lg-h:gap-3 p-1 lg-h:p-2 justify-items-center">
-            {Object.entries(counters).map(([key, value], index) => (
-                <div key={`counter__item_${index}`} className="text-center w-full">
-                    <TitleVK className="block w-full text-center text-base lg-h:!text-lg" Component="h3">
-                        {value}
-                    </TitleVK>
-                    <Footnote className="text-neutral-600 inline-block capitalize align-top mt-0.5 lg-h:mt-1 text-xs lg-h:text-sm">
-                        <Trans i18nKey={key} />
-                    </Footnote>
-                </div>
-            ))}
-        </div>
-    </Card>
-);
-
-const Footer = () => {
-    const footerLinks = [
-        { "name": "About", "href": "/page/about" },
-        { "name": "Blog", "href": "//telegram.org/blog" },
-        { "name": "Apps", "href": "//telegram.org/apps" },
-        { "name": "Platform", "href": "//core.telegram.org" }
-    ];
+const Body = () => {
+    const {channels, isLoading: isChannelsLoading} = useChannelsStorage();
 
     return (
-        <div className="text-center pt-0 pb-2">
-            {footerLinks.map((item, index) => (
-                <div key={`footer__l_item_${index}`} className="inline-block align-top px-2">
-                    <Footnote className="text-neutral-600 text-[10px]">
-                        <Link href={item.href}>
-                            <Trans i18nKey={item.name} />
-                        </Link>
-                    </Footnote>
-                </div>
-            ))}
-        </div>
-    )
-}
-
-const Description = ({ channel }: { channel: Channel }) => (
-    <Paragraph className="select-text text-xs md-h:text-sm lg-h:text-base">
-        {!!channel.description && <TextComponent htmlString={channel.description.html} />}
-    </Paragraph>
-)
-
-const ActionBlock = ({ channel }: { channel: Channel }) => (
-    <div>
-        <Counters counters={channel.counters} />
-        <Spacing size={12} />
-        {/* */}
-        <Description channel={channel} />
-        <Spacing size={16} />
-        {/* */}
-        <Button
-            size="m"
-            mode="primary"
-            aria-label={t("Subscribe button")}
-            onClick={() => { window.open(`https://t.me/${channel.username}`, "_blank") }}
-        >
-            <Trans i18nKey="Subscribe" />
-        </Button>
-    </div>
-);
-
-const ChannelTitle = ({ channel }: { channel: Channel }) => (
-    <div className="block w-full">
-        <Title verified={channel?.labels?.includes("verified") ?? false}>
-            <TextComponent htmlString={channel.title.html} />
-        </Title>
-    </div>
-)
-
-const Body = ({ channel }: { channel: Channel }) => {
-    const { isXl } = useWindowSize();
-
-    return (
-        <>
-            <Placeholder
-                className="pb-6 pt-10 sm:pt-8"
-                icon={<Avatar size={isXl ? 96 : 80} src={channel.avatar} name={channel.title.string} />}
-                title={<ChannelTitle channel={channel} />}
-                action={<ActionBlock channel={channel} />}
-            >
-                <span className="text-sm lg-h:text-base">
-                    @{channel.username}
-                </span>
-            </Placeholder>
-            <Footer />
-        </>
+        <CustomScrollView className="h-96">
+            {isChannelsLoading ? (
+                <p></p>
+            ) : (
+                    channels &&
+                    Object.values(channels).map((channel, index) => (
+                    <SimpleCell
+                        key={`feed_d_ch_${index}`}
+                        before={<Avatar size={48} src={channel.avatar} />}
+                        subtitle={<EllipsisText>{channel.description}</EllipsisText>}
+                        className="py-1.5"
+                    >
+                        <EllipsisText>{channel.title}</EllipsisText>
+                    </SimpleCell>
+                ))
+            )}
+        </CustomScrollView>
     );
 }
 
-export const Profile = memo(({ channel }: { channel: Channel }) => (
-    <SplitCol className="max-lg:hidden pt-3 ScrollStickyWrapper" width={280} maxWidth={280}>
-        <div className="fixed w-[345px]">
-            <Group className="select-none p-0" mode="plain">
-                <div className="relative block border dark:border-[#2f3336] rounded-2xl">
-                    <Body channel={channel} />
+export const Profile = memo(() => {
+    const { openModal } = useModal();
+
+    return (
+        <SplitCol className="max-lg:hidden pt-3 ScrollStickyWrapper" width={280} maxWidth={280}>
+            <div className="fixed w-[345px]">
+                <Group className="select-none p-0" mode="plain">
+                    <div className="relative block border dark:border-[#2f3336] rounded-2xl">
+                        <Body />
+                    </div>
+                </Group>
+                <div className="block pt-4 m-auto">
+                    <ButtonGroup mode="vertical" gap="m" className="min-w-48 block">
+                        <Button onClick={openModal} size="l" appearance="accent" stretched>
+                            {t("Edit")}
+                        </Button>
+                    </ButtonGroup>
                 </div>
-            </Group>
-        </div>
-    </SplitCol>
-));
+            </div>
+        </SplitCol>
+    )
+});
 
 Profile.displayName = "Profile";

@@ -10,6 +10,8 @@ import {
   ConfigProvider
 } from '@vkontakte/vkui';
 
+import { ModalProvider } from '@/contexts/ModalContext';
+
 import MediaViewer from '@/components/media/Viewer';
 import StoreProvider from '@/components/services/StoreProvider';
 
@@ -24,7 +26,6 @@ import { ErrorPage } from '@/components/error/ErrorPage';
 import { useDidMount } from '@/hooks/utils/useDidMount';
 
 import { GoogleAnalytics } from '@next/third-parties/google';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 
 // global application styles
 import '@/styles/global.css';
@@ -66,7 +67,9 @@ const App = (props: PropsWithChildren) => {
     <ConfigProvider>
       <AdaptivityProvider>
         <AppRoot>
-          {props.children}
+          <ModalProvider>
+            {props.children}
+          </ModalProvider>
         </AppRoot>
       </AdaptivityProvider>
     </ConfigProvider>
@@ -81,7 +84,6 @@ const RootInner = ({ children }: PropsWithChildren) => (
       {process.env.NEXT_PUBLIC_ANALYTICS_ID ? 
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_ANALYTICS_ID} />
       : null}
-      <SpeedInsights />
     </App>
   </StoreProvider>
 );
