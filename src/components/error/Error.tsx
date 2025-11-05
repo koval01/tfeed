@@ -8,15 +8,19 @@ import { Icons } from "@/components/ui/Icons";
 
 import { t } from "i18next";
 import { useRouter } from "next/navigation";
+import { useWindowSize } from "@/hooks/utils/useWindowSize";
 
 
-const ErrorBody = ({ header, description, actions }: ErrorProps) => (
+const ErrorBody = ({ header, description, actions }: ErrorProps) => {
+    const { isXl, isMd } = useWindowSize();
+    
+    return(
     <div className="max-md:w-screen">
         <Placeholder
             icon={<Icons.logo className="size-16 md:size-24 lg:size-32 xl:size-40" />}
             title={header}
             action={!!actions ? (
-                <Button type="primary" size="l" onClick={actions.click} aria-label={t("Error action button")}>
+                <Button type="primary" size={isXl ? "l" : isMd ? "m" : "s"} onClick={actions.click} aria-label={t("Error action button")}>
                     {actions.name}
                 </Button>
             ) : null}
@@ -27,21 +31,19 @@ const ErrorBody = ({ header, description, actions }: ErrorProps) => (
             </Paragraph>
         </Placeholder>
     </div>
-);
+)
+};
 
 export const Error = ({ header, description, actions, error }: ErrorProps) => {
     const router = useRouter();
 
     if (error instanceof AxiosError) {
-        const errorData: ServerError = error.response?.data || {};
-
-        const statusCodeMatch = error.message.match(/status code (\d+)/);
-        const statusCode = statusCodeMatch ? statusCodeMatch[1] : "400";
+        const statusCode = error.code ? error.code : "Unknown";
 
         return (
             <FixedCenter>
                 <ErrorBody
-                    header={t(errorData?.detail || "")}
+                    header={t(error.message || "")}
                     description={t('error_message', { statusCode })}
                     actions={{
                         click: () => router.push("/"), name: t("Go to home")

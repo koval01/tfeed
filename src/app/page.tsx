@@ -2,35 +2,39 @@
 
 import React from "react";
 
-import { FixedCenter } from "@/components/services/FixedCenter";
+import { useBody } from "@/hooks/services/useBody";
+import { Error } from "@/components/error/Error";
+import { Feed } from "@/components/feed/Feed";
+import { PanelHeader, SplitCol, SplitLayout } from "@vkontakte/vkui";
+import { useChannelsStorage } from "@/hooks/utils/useChannelStorage";
 
-import {
-    DisplayTitle,
-    Headline,
-    Placeholder,
-    SplitCol,
-    SplitLayout
-} from "@vkontakte/vkui";
+const FeedPage: React.FC = () => {
+    const {
+        channelsUsernames,
+        isLoading
+    } = useChannelsStorage();
 
-import { t } from "i18next";
-import { Trans } from "react-i18next";
+    const { data, error, isLoading: isBodyLoading } = useBody(channelsUsernames);
 
-const Home: React.FC = () => (
-  <SplitLayout>
-    <SplitCol autoSpaced>
-      <FixedCenter>
-        <Placeholder>
-          {/* Accessible title */}
-          <DisplayTitle className="select-none" aria-label={t("Nothing")}>
-            <Trans i18nKey="Nothing" />
-          </DisplayTitle>
-        </Placeholder>
-        <Headline className="text-center" Component="h4">
-          <Trans i18nKey="MainSubText" />
-        </Headline>
-      </FixedCenter>
-    </SplitCol>
-  </SplitLayout>
-);
+    const isPageLoading = isLoading || isBodyLoading;
 
-export default Home;
+    return (
+        <SplitLayout
+            header={!error ? <PanelHeader delimiter="none" /> : null}
+            className={isPageLoading ? "fixed" : ""}
+        >
+            <SplitCol>
+                {!error ? (
+                    <Feed
+                        data={data}
+                        isLoading={isPageLoading}
+                    />
+                ) : (
+                    <Error error={error} />
+                )}
+            </SplitCol>
+        </SplitLayout>
+    );
+};
+
+export default FeedPage;

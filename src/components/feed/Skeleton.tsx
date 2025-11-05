@@ -2,14 +2,20 @@ import React, { memo } from "react";
 
 import {
     Group,
-    Paragraph,
-    Placeholder,
     Spacing,
     SplitCol,
     Title,
     Skeleton,
     Flex,
     Footnote,
+    HorizontalScroll,
+    Header,
+    HorizontalCell,
+    ButtonGroup,
+    Button,
+    CustomScrollView,
+    SimpleCell,
+    EllipsisText,
 } from "@vkontakte/vkui";
 
 import { useWindowSize } from "@/hooks/utils/useWindowSize";
@@ -24,47 +30,35 @@ export const Profile: React.FC = () => {
     const { isXl } = useWindowSize();
 
     return (
-        <SplitCol
-            width={280}
-            maxWidth={280}
-            className="max-lg:hidden ScrollStickyWrapper pt-3"
-        >
-            <div className="fixed w-[345px]">
-                <Group className="select-none p-0" mode="plain">
-                    <div className="relative block border dark:border-[#2f3336] rounded-2xl">
-                        <Placeholder
-                            className="pb-6 pt-10 sm:pt-8"
-                            icon={
-                                <Skeleton
-                                    width={isXl ? 96 : 80}
-                                    height={isXl ? 96 : 80}
-                                    className="rounded-full"
-                                />
-                            }
-                            title={
-                                <Title Component="h1">
-                                    <Skeleton width={250} />
-                                </Title>
-                            }
-                            action={
-                                <>
-                                    <Spacing size={12} />
-                                    <Paragraph>
-                                        <Skeleton width={170} />
-                                        <Skeleton width={200} />
-                                        <Skeleton width={140} />
-                                    </Paragraph>
-                                    <Spacing size={16} />
-                                    <Skeleton width={110} height={36} />
-                                </>
-                            }
-                        >
-                            <Skeleton width={120} />
-                        </Placeholder>
+        <SplitCol className="max-lg:hidden pt-3 ScrollStickyWrapper" width={280} maxWidth={280}>
+                <div className="fixed w-[345px]">
+                    <Group className="select-none p-0" mode="plain">
+                        <div className="relative block border dark:border-[#2f3336] rounded-2xl pt-2">
+                            <CustomScrollView className="h-96">
+                            {Array.from({ length: 5 }).map((_, index) => (
+                                <SimpleCell
+                                    key={`ske_feed_d_ch_${index}`}
+                                    before={<Skeleton width={48} height={48} className="rounded-full" />}
+                                    subtitle={
+                                    <EllipsisText>
+                                            <Skeleton width={64} height={12} />
+                                    </EllipsisText>}
+                                >
+                                    <EllipsisText>
+                                        <Skeleton width={150} height={16} />
+                                    </EllipsisText>
+                                </SimpleCell>
+                            ))}
+                            </CustomScrollView>
+                        </div>
+                    </Group>
+                    <div className="block pt-2 m-auto">
+                        <ButtonGroup mode="vertical" gap="m" className="min-w-48 block">
+                        <Skeleton width={"100%"} height={36} />
+                        </ButtonGroup>
                     </div>
-                </Group>
-            </div>
-        </SplitCol>
+                </div>
+            </SplitCol>
     )
 };
 
@@ -154,77 +148,24 @@ export const Posts: React.FC = () => (
     </SplitCol>
 );
 
-/**
- * **ChannelNavSkeleton Component**
- * A skeleton placeholder for a channel navigation bar.
- *
- * @returns The ChannelNavSkeleton component.
- */
-export const ChannelNavSkeleton: React.FC = () => (
-    <div
-        className="relative max-md:-top-0.5 block select-none items-center space-x-2 py-1.5 pl-[5px] md:pt-3 overflow-hidden"
-    >
-        <div className="inline-block overflow-hidden float-left mr-2 relative">
-            <Skeleton width={36} height={36} className="rounded-full" />
+export const FeedProfileItem = () => (
+    <>
+        {Array.from({ length: 5 }).map((_, index) => (
+            <HorizontalCell hasHover={false} key={`skeleton_av_feed_${index}`} size="s" title={<Skeleton width={36} height={10} />}>
+                <Skeleton height={56} width={56} className="rounded-full" />
+            </HorizontalCell>
+        ))}
+    </>
+)
+
+export const FeedProfileSkeleton = () => (
+    <Group mode="plain" className="lg:hidden py-0 select-none">
+        <div className="w-full bg-white dark:bg-black border-b md:border-x dark:border-[#2f3336]">
+            <Group header={<Header><Skeleton width={64} height={16} /></Header>} mode="plain">
+                <HorizontalScroll arrowSize="s" showArrows={false} >
+                    <FeedProfileItem />
+                </HorizontalScroll>
+            </Group>
         </div>
-        <div className="flex pt-2">
-            <Skeleton width={120} height={13} />
-        </div>
-        <div className="mb-0.5 mt-px">
-            <Skeleton width={100} height={10} />
-        </div>
-    </div>
+    </Group>
 );
-
-export const FeedProfileSkeleton = () => {
-    const { isSm } = useWindowSize();
-
-    return (
-        <Group mode="plain" className="lg:hidden py-0 select-none">
-            <div className="w-full bg-white dark:bg-black border-b md:border-x dark:border-[#2f3336]">
-                {/* Cover Photo */}
-                <div className="h-48 bg-gray-200 dark:bg-gray-800 w-full">
-                    <Skeleton className="relative -top-1 rounded-none" width="100%" height="192px" />
-                </div>
-
-                <div className="relative px-4">
-                    {/* Profile Picture */}
-                    <div className="absolute -top-14 sm:-top-16 left-4 border-[3px] sm:border-4 border-white dark:border-black rounded-full">
-                        <Skeleton width={isSm ? 128 : 96} height={isSm ? 128 : 96} className="rounded-full" />
-                    </div>
-
-                    {/* Follow Button */}
-                    <div className="flex justify-end pt-3">
-                        <Skeleton width={isSm ? 102 : 98} height={isSm ? 36 : 32} className="rounded-full" />
-                    </div>
-
-                    <div className="mt-10">
-                        {/* Title with verified placeholder */}
-                        <div className="flex items-center">
-                            <Skeleton width={180} height={28} />
-                        </div>
-
-                        {/* Username */}
-                        <Skeleton width={100} height={16} className="mt-1" />
-
-                        <Spacing size={14} />
-
-                        {/* Description */}
-                        <div className="py-0.5 space-y-1">
-                            <Skeleton width="100%" height={14} />
-                            <Skeleton width="90%" height={14} />
-                            <Skeleton width="80%" height={14} />
-                        </div>
-
-                        {/* Stats */}
-                        <div className="flex flex-wrap gap-4 my-3">
-                            <Skeleton width={60} height={16} />
-                            <Skeleton width={60} height={16} />
-                            <Skeleton width={60} height={16} />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </Group>
-    )
-};

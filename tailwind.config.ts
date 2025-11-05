@@ -41,11 +41,11 @@ const config: Config = {
         'xl': '1280px',
         '2xl': '1536px',
         
-        'max-sm': { 'max': '640px' },
-        'max-md': { 'max': '768px' },
-        'max-lg': { 'max': '1024px' },
-        'max-xl': { 'max': '1280px' },
-        'max-2xl': { 'max': '1535px' },
+        'max-sm': { 'max': '639px' },
+        'max-md': { 'max': '767px' },
+        'max-lg': { 'max': '1023px' },
+        'max-xl': { 'max': '1279px' },
+        'max-2xl': { 'max': '1534px' },
 
         'sm-h': { 'raw': '(min-height: 480px)' },
         'md-h': { 'raw': '(min-height: 720px)' },

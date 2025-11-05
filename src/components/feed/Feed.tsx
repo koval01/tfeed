@@ -1,24 +1,35 @@
 "use client";
 
-import { type FC, useCallback, useEffect, useState } from "react";
+import { type FC, useCallback, useEffect, useMemo, useState } from "react";
+import debounce from 'lodash/debounce';
 
-import { useInfiniteScroll } from "@/hooks/services/useInfiniteScroll";
+import { useModal } from "@/contexts/ModalContext";
 import { usePosts } from "@/hooks/services/usePosts";
 import { useInterval } from "@/hooks/utils/useInterval";
+import { useChannelsStorage } from "@/hooks/utils/useChannelStorage";
 
 import type { Body } from "@/types";
 
-import { Panel, SplitLayout } from "@vkontakte/vkui";
+import {
+    Cell, Group, IconButton, List, Panel, Search, SplitLayout
+} from "@vkontakte/vkui";
+import { Icon28AddCircleOutline, Icon28RemoveCircleOutline } from "@vkontakte/icons";
 
 import {
     Posts as PostsSkeleton,
     Profile as ProfileSkeleton
 } from "@/components/feed/Skeleton";
 
+import { Avatar } from "@/components/avatar/Avatar";
+import { Posts } from "@/components/feed/post/Post";
+import { FullscreenModal } from "@/components/feed/Modal";
 import ErrorSnackbar from "@/components/error/ErrorSnackbar";
 import { FeedHeader } from "@/components/feed/header/FeedHeader";
-import { Posts } from "@/components/feed/post/Post";
 import { Profile as DesktopProfile } from "@/components/feed/profile/Desktop";
+
+import { usePreview } from "@/hooks/services/usePreview";
+
+import { t } from "i18next";
 
 interface FeedProps {
     /**
@@ -33,15 +44,62 @@ interface FeedProps {
 }
 
 /**
- * The Feed component displays a feed of posts with infinite scroll and error handling.
- *
- * @param props - Component props.
+ * The Feed component displays a feed of posts.
  */
 export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
-    const [channelUsername, setChannelUsername] = useState<string | undefined>(undefined);
     const [snackbar, setSnackbar] = useState<React.ReactElement | null>(null);
+    const { isModalOpen, closeModal } = useModal();
+    const [search, setSearch] = useState<string>('');
+    const [found, setFound] = useState<boolean>(false);
 
-    // Function to show error notifications
+    const {
+        channels,
+        channelsUsernames,
+        isLoading: isChannelsLoading,
+        addChannel,
+        removeChannel
+    } = useChannelsStorage();
+
+    const { data: previewData, loading: previewLoading, fetchPreview } = usePreview();
+
+    const debouncedSearch = useMemo(
+        () => debounce((searchValue: string) => {
+            if (searchValue && searchValue.length > 3 && searchValue.length < 32) {
+                fetchPreview(searchValue).catch(error => {
+                    console.error('Failed to fetch preview:', error);
+                });
+            }
+        }, 600),
+        [fetchPreview]
+    );
+
+    const setValidatedSearch = useCallback((value: string) => {
+        if (value === '') {
+            setSearch(value);
+            return;
+        }
+
+        const partialRegex = /^[a-zA-Z][a-zA-Z0-9_]{0,31}$/;
+        if (partialRegex.test(value)) {
+            setSearch(value);
+        }
+    }, []);
+
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value.toLowerCase();
+        setValidatedSearch(value);
+        debouncedSearch(value);
+    };
+
+    useEffect(() => {
+        return () => {
+            debouncedSearch.cancel();
+        };
+    }, [debouncedSearch]);
+
+    useEffect(() => setFound(true), [previewData]);
+    useEffect(() => setFound(false), [search]);
+
     const showErrorSnackbar = useCallback(
         (message: string, subtext?: string, Icon?: FC, iconColor?: string) => {
             if (!snackbar) {
@@ -59,30 +117,19 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
         [snackbar]
     );
 
-    // Custom hook to manage posts
     const {
         posts,
         isFetching,
-        isFetchingMore,
         refreshPosts,
-        loadMorePosts,
         initializePosts,
         isRefreshing
-    } = usePosts(channelUsername, showErrorSnackbar);
+    } = usePosts(showErrorSnackbar);
 
-    // Infinite scroll setup
-    useInfiniteScroll({
-        onLoadMore: loadMorePosts,
-        isLoading: isFetchingMore,
-    });
-
-    // Initialize posts and set the channel username on data change
     useEffect(() => {
         if (data) {
             initializePosts(data);
-            setChannelUsername(data.channel?.username);
         }
-    }, [data, initializePosts]);
+    }, [data, initializePosts, isLoading]);
 
     useInterval(() => {
         if (!isRefreshing) {
@@ -90,34 +137,116 @@ export const Feed: FC<FeedProps> = ({ data, isLoading }) => {
         }
     }, 1e3);
 
+    const handleAddChannel = () => {
+        if (search.trim()) {
+            const usernameRegex = /^[a-zA-Z][a-zA-Z0-9_]{3,31}$/;
+
+            if (!usernameRegex.test(search.trim())) {
+                showErrorSnackbar(t("Invalid username format"));
+                return;
+            }
+
+            const success = addChannel(search.trim());
+            if (success) {
+                setSearch('');
+            } else {
+                showErrorSnackbar(t("Channel already exists"));
+            }
+        }
+    };
+
+    const handleRemoveChannel = () => {
+        removeChannel(search);
+        setSearch('');
+    }
+
     return (
-        (<Panel>
-            {/* Header */}
-            <FeedHeader channel={data?.channel} isLoading={isLoading} />
-            {/* Main layout */}
+        <Panel>
+            <FeedHeader isLoading={isLoading} />
+            <FullscreenModal
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                title={t("My channels")}
+            >
+                <Group>
+                    <Search
+                        value={search}
+                        onChange={onChange}
+                        after={null}
+                        placeholder={t("Channel username")}
+                    />
+                    <List>
+                        {!search.length && channels.map((channel, index) => (
+                            <Cell
+                                key={`channel_${channel.username}_${index}`}
+                                mode="removable"
+                                before={<Avatar src={channel.avatar} />}
+                                onRemove={() => removeChannel(channel.username)}
+                                subtitle={`@${channel.username}`}
+                            >
+                                {channel.title}
+                            </Cell>
+                        ))}
+                        {search.length > 0 && !previewLoading && previewData && found && (
+                            <Cell
+                                before={<Avatar src={previewData.channel.avatar} />}
+                                after={
+                                    channelsUsernames.includes(search) ? (
+                                        <IconButton label={t("Remove")} onClick={handleRemoveChannel}>
+                                            <Icon28RemoveCircleOutline />
+                                        </IconButton>
+                                    ) : (
+                                        <IconButton label={t("Add")} onClick={handleAddChannel}>
+                                            <Icon28AddCircleOutline />
+                                        </IconButton>
+                                    )
+                                }
+                                subtitle={`@${search}`}
+                            >
+                                {previewData.channel.title}
+                            </Cell>
+                        )}
+                        {search.length > 0 && !previewData && !previewLoading && (
+                            <Cell disabled>
+                                {t("Nothing")}
+                            </Cell>
+                        )}
+                        {channels.length === 0 && !isChannelsLoading && (
+                            <Cell disabled>
+                                {t("No channels added")}
+                            </Cell>
+                        )}
+                        {isChannelsLoading && channels.length === 0 && (
+                            <Cell disabled>
+                                {t("Loading channels...")}
+                            </Cell>
+                        )}
+                        {previewLoading && (
+                            <Cell disabled>
+                                {t("Searching...")}
+                            </Cell>
+                        )}
+                    </List>
+                </Group>
+            </FullscreenModal>
             <SplitLayout center className="relative lg:right-8">
                 {isLoading ? (
-                    // Show skeletons during loading
-                    (<>
+                    <>
                         <PostsSkeleton />
                         <ProfileSkeleton />
-                    </>)
+                    </>
                 ) : (
-                    // Show posts and profile when data is ready
-                    (<>
+                    <>
                         <Posts
-                            channel={data.channel}
                             posts={posts}
                             onRefresh={refreshPosts}
                             isFetching={isFetching}
-                            isFetchingMore={isFetchingMore}
                         />
-                        <DesktopProfile channel={data.channel} />
-                    </>)
+                        <DesktopProfile />
+                    </>
                 )}
             </SplitLayout>
-            {/* Snackbar */}
             {snackbar}
-        </Panel>)
+        </Panel>
     );
 };
