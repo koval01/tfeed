@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@next/third-parties": "^16.0.1",
-    "@reduxjs/toolkit": "^2.9.0",
+    "@reduxjs/toolkit": "^2.11.2",
     "@vkontakte/icons": "^2.170.0",
     "@vkontakte/vkui": "^7.10.2",
     "axios": "^1.12.0",
