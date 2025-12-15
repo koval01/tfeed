@@ -66,8 +66,8 @@ importers:
         specifier: ^9.2.0
         version: 9.2.0(@types/react@19.2.6)(react@19.2.0)(redux@5.0.1)
       react-virtuoso:
-        specifier: ^4.14.1
-        version: 4.14.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        specifier: ^4.17.0
+        version: 4.17.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       redis:
         specifier: ^5.9.0
         version: 5.9.0
@@ -2693,6 +2693,7 @@ packages:
   next@15.4.7:
     resolution: {integrity: sha512-OcqRugwF7n7mC8OSYjvsZhhG1AYSvulor1EIUsIkbbEbf1qoE5EbH36Swj8WhF4cHqmDgkiam3z1c1W0J1Wifg==}
     engines: {node: ^18.18.0 || ^19.8.0 || >= 20.0.0}
+    deprecated: This version has a security vulnerability. Please upgrade to a patched version. See https://nextjs.org/blog/CVE-2025-66478 for more details.
     hasBin: true
     peerDependencies:
       '@opentelemetry/api': ^1.1.0
@@ -3033,8 +3034,8 @@ packages:
       redux:
         optional: true
 
-  react-virtuoso@4.14.1:
-    resolution: {integrity: sha512-NRUF1ak8lY+Tvc6WN9cce59gU+lilzVtOozP+pm9J7iHshLGGjsiAB4rB2qlBPHjFbcXOQpT+7womNHGDUql8w==}
+  react-virtuoso@4.17.0:
+    resolution: {integrity: sha512-od3pi2v13v31uzn5zPXC2u3ouISFCVhjFVFch2VvS2Cx7pWA2F1aJa3XhNTN2F07M3lhfnMnsmGeH+7wZICr7w==}
     peerDependencies:
       react: '>=16 || >=17 || >= 18 || >= 19'
       react-dom: '>=16 || >=17 || >= 18 || >=19'
@@ -6849,7 +6850,7 @@ snapshots:
       '@types/react': 19.2.6
       redux: 5.0.1
 
-  react-virtuoso@4.14.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  react-virtuoso@4.17.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
     dependencies:
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
