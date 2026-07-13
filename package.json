@@ -14,7 +14,7 @@
     "deploy": "pnpm run pages:build && wrangler pages deploy"
   },
   "dependencies": {
-    "@next/third-parties": "^16.0.1",
+    "@next/third-parties": "^16.2.10",
     "@reduxjs/toolkit": "^2.9.0",
     "@vkontakte/icons": "^2.170.0",
     "@vkontakte/vkui": "^7.10.2",
